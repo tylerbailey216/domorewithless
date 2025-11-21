@@ -658,6 +658,13 @@ code {
     .hero-visual {
         min-height: 320px;
     }
+    .floating-badge {
+        font-size: 0.78rem;
+        padding: 6px 12px;
+    }
+    .hero-shell .floating-badge {
+        width: 150px;
+    }
     .tree-header {
         flex-direction: column;
         align-items: flex-start;
@@ -678,5 +685,4 @@ a:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 3px;
 }
-
 

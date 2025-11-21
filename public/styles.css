@@ -1495,9 +1495,11 @@ a:focus-visible {
     }
     .hero-shell .floating-badge {
         position: absolute;
-        width: 170px;
+        width: 150px;
         text-align: center;
         pointer-events: auto;
+        font-size: 0.78rem;
+        padding: 6px 12px;
     }
     .hero-shell .floating-badge:nth-child(1) {
         top: 28%;
