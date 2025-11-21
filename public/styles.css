@@ -1415,35 +1415,6 @@ a:focus-visible {
 
 
 
- {
-    body {
-        padding: 20px 10px 32px;
-    }
-    .hero h1 {
-        font-size: 2rem;
-    }
-    .hero p {
-        font-size: 0.98rem;
-    }
-    .floating-badges {
-        display: none;
-    }
-    .tablet-stage {
-        transform: scale(0.8);
-    }
-    .tree-card,
-    .embed-card {
-        padding: 18px;
-    }
-    .tree-controls button {
-        flex: 1;
-    }
-    .affirmation-card blockquote {
-        font-size: 1.1rem;
-    }
-}
-
-
 @media (max-width: 720px) {
     body {
         padding: 28px 12px 42px;
@@ -1556,8 +1527,27 @@ a:focus-visible {
     .hero p {
         font-size: 0.98rem;
     }
-    .floating-badges {
-        display: none;
+    .hero-shell .floating-badge {
+        width: 130px;
+        font-size: 0.72rem;
+        padding: 6px 10px;
+        transform: translateY(-50%);
+    }
+    .hero-shell .floating-badge:nth-child(1) {
+        top: 20%;
+        left: 8px;
+    }
+    .hero-shell .floating-badge:nth-child(2) {
+        top: 20%;
+        right: 8px;
+    }
+    .hero-shell .floating-badge:nth-child(3) {
+        top: 84%;
+        left: 8px;
+    }
+    .hero-shell .floating-badge:nth-child(4) {
+        top: 84%;
+        right: 8px;
     }
     .tablet-stage {
         transform: scale(0.8);
