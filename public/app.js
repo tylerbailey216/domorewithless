@@ -275,7 +275,7 @@
 3. Update Bluetooth drivers from the PC vendor and reboot.`,
                                 tags: ['bluetooth'],
                                 links: [
-                                    { label: 'Microsoft: Fix Bluetooth problems', url: 'https://support.microsoft.com/windows/fix-bluetooth-problems-in-windows-10-0b7d4674-8109-59b7-b0f4-88fcd9a80604' },
+                                    { label: 'Microsoft: Bluetooth help', url: 'https://support.microsoft.com/search?query=bluetooth%20windows' },
                                 ],
                             },
                             {
@@ -295,11 +295,11 @@
                                 title: 'Bluetooth audio lag',
                                 summary: 'Sound delayed behind video.',
                                 response: `1. Disconnect and reconnect the headset, keeping only one paired at a time.
-2. Disable “Hands-Free Telephony” under device Services to force high-quality audio.
+2. Disable "Hands-Free Telephony" under device Services to force high-quality audio.
 3. Update Bluetooth and audio drivers, then reboot.`,
                                 tags: ['bluetooth', 'audio'],
                                 links: [
-                                    { label: 'Microsoft: Fix Bluetooth audio', url: 'https://support.microsoft.com/windows/fix-bluetooth-problems-in-windows-10-0b7d4674-8109-59b7-b0f4-88fcd9a80604' },
+                                    { label: 'Microsoft: Bluetooth audio help', url: 'https://support.microsoft.com/search?query=bluetooth%20audio%20windows' },
                                 ],
                             },
                         ],
