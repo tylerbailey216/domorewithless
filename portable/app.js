@@ -57,7 +57,7 @@
 3. If updates fail repeatedly, run the Update Troubleshooter (Settings → System → Troubleshoot → Other troubleshooters) and clear the SoftwareDistribution cache before trying once more.`,
                                 tags: ['updates'],
                                 links: [
-                                    { label: 'Microsoft support article', url: 'https://support.microsoft.com/help/4027322/windows-10-get-help-with-windows-update-errors' },
+                                    { label: 'Microsoft support article', url: 'https://support.microsoft.com/search?query=Microsoft%20support%20article%20Windows' },
                                     { label: 'Microsoft update fix video', url: 'https://www.youtube.com/watch?v=udsJGOEEjAQ' },
                                 ],
                             },
@@ -70,7 +70,7 @@
 3. Within the OneDrive settings, turn on Files On-Demand if you want space savings, or force full downloads if you need offline copies.`,
                                 tags: ['onedrive', 'sync'],
                                 links: [
-                                    { label: 'OneDrive sync troubleshooting', url: 'https://support.microsoft.com/office/fix-onedrive-sync-problems-0899b115-05f7-45ec-95b2-d2e4fa70730' },
+                                    { label: 'OneDrive sync troubleshooting', url: 'https://support.microsoft.com/search?query=OneDrive%20sync%20troubleshooting%20Windows' },
                                 ],
                             },
                             {
@@ -104,7 +104,7 @@
 3. Disable startup items you do not need (Task Manager → Startup apps) and remove heavy apps you rarely use.`,
                                 tags: ['performance'],
                                 links: [
-                                    { label: 'Microsoft: Improve PC performance', url: 'https://support.microsoft.com/windows/tips-to-improve-pc-performance-in-windows-10-3d11d8d0-07a7-2bd3-75a7-5cbd8d9835b1' },
+                                    { label: 'Microsoft: Improve PC performance', url: 'https://support.microsoft.com/search?query=Improve%20PC%20performance%20Windows' },
                                 ],
                             },
                             {
@@ -116,7 +116,7 @@
 3. Check Reliability Monitor for repeating app crashes and reinstall or repair those apps.`,
                                 tags: ['stability'],
                                 links: [
-                                    { label: 'Microsoft: Fix freezes', url: 'https://support.microsoft.com/windows/fix-your-pc-freezing-or-crashing-7bb1f5b1-9b8b-5106-7a14-3bb8f18c0aa7' },
+                                    { label: 'Microsoft: Fix freezes', url: 'https://support.microsoft.com/search?query=Fix%20freezes%20Windows' },
                                 ],
                             },
                             {
@@ -140,7 +140,7 @@
 3. Update BIOS/chipset drivers, then run the vendor battery health tool to see if the pack needs replacement.`,
                                 tags: ['battery'],
                                 links: [
-                                    { label: 'Microsoft: Save battery life', url: 'https://support.microsoft.com/windows/tips-to-save-battery-life-in-windows-10-90c24b87-2a0b-4305-8284-8dd4996aeb3b' },
+                                    { label: 'Microsoft: Save battery life', url: 'https://support.microsoft.com/search?query=Save%20battery%20life%20Windows' },
                                 ],
                             },
                             {
@@ -173,7 +173,7 @@
 3. Reboot the router/modem and ensure the SSID is broadcasting on 2.4 GHz or 5 GHz as needed.`,
                                 tags: ['wifi'],
                                 links: [
-                                    { label: 'Microsoft: Fix Wi-Fi connection issues', url: 'https://support.microsoft.com/windows/fix-wi-fi-connection-issues-in-windows-10-130a4b64-5a82-4526-bf74-9896b4c3d3d3' },
+                                    { label: 'Microsoft: Fix Wi-Fi connection issues', url: 'https://support.microsoft.com/search?query=Fix%20Wi-Fi%20connection%20issues%20Windows' },
                                 ],
                             },
                             {
@@ -185,7 +185,7 @@
 3. Restart the router; if multiple devices drop, change the wireless channel or split the 2.4/5 GHz bands.`,
                                 tags: ['wifi'],
                                 links: [
-                                    { label: 'Microsoft: Fix network connection issues', url: 'https://support.microsoft.com/windows/fix-network-connection-issues-in-windows-11-166a28c4-14c1-47fd-a1d4-0b1b04db62ad' },
+                                    { label: 'Microsoft: Fix network connection issues', url: 'https://support.microsoft.com/search?query=Fix%20network%20connection%20issues%20Windows' },
                                 ],
                             },
                             {
@@ -197,7 +197,7 @@
 3. Update the network driver from the PC/motherboard vendor and reboot.`,
                                 tags: ['network'],
                                 links: [
-                                    { label: 'Microsoft: Fix Ethernet problems', url: 'https://support.microsoft.com/windows/fix-network-connection-issues-in-windows-11-166a28c4-14c1-47fd-a1d4-0b1b04db62ad' },
+                                    { label: 'Microsoft: Fix Ethernet problems', url: 'https://support.microsoft.com/search?query=Fix%20Ethernet%20problems%20Windows' },
                                 ],
                             },
                         ],
@@ -218,7 +218,7 @@
 3. In Device Manager, uninstall the HID device and Scan for hardware changes to reload drivers.`,
                                 tags: ['input'],
                                 links: [
-                                    { label: 'Microsoft: Troubleshoot keyboard and mouse', url: 'https://support.microsoft.com/windows/troubleshoot-keyboard-and-mouse-problems-188aef95-4e93-3f03-7c60-12ce3e419d8d' },
+                                    { label: 'Microsoft: Troubleshoot keyboard and mouse', url: 'https://support.microsoft.com/search?query=Troubleshoot%20keyboard%20and%20mouse%20Windows' },
                                 ],
                             },
                             {
@@ -230,7 +230,7 @@
 3. Update the touchpad driver from the laptop vendor.`,
                                 tags: ['touchpad'],
                                 links: [
-                                    { label: 'Microsoft: Fix touchpad problems', url: 'https://support.microsoft.com/windows/fix-touchpad-problems-in-windows-11-10-8e8f9a2d-0b4a-621c-a226-d7b316df8e90' },
+                                    { label: 'Microsoft: Fix touchpad problems', url: 'https://support.microsoft.com/search?query=Fix%20touchpad%20problems%20Windows' },
                                 ],
                             },
                             {
@@ -242,7 +242,7 @@
 3. Restart the PC if keys still act locked.`,
                                 tags: ['accessibility'],
                                 links: [
-                                    { label: 'Microsoft: Turn off Sticky Keys', url: 'https://support.microsoft.com/windows/turn-off-sticky-keys-74b1f0ce-4761-2ad6-7b80-3569d5932ec7' },
+                                    { label: 'Microsoft: Turn off Sticky Keys', url: 'https://support.microsoft.com/search?query=Turn%20off%20Sticky%20Keys%20Windows' },
                                 ],
                             },
                             {
@@ -275,7 +275,7 @@
 3. Update Bluetooth drivers from the PC vendor and reboot.`,
                                 tags: ['bluetooth'],
                                 links: [
-                                    { label: 'Microsoft: Bluetooth help', url: 'https://support.microsoft.com/search?query=bluetooth%20windows' },
+                                    { label: 'Microsoft: Bluetooth help', url: 'https://support.microsoft.com/search?query=Bluetooth%20help%20Windows' },
                                 ],
                             },
                             {
@@ -287,7 +287,7 @@
 3. For USB headsets, reinstall the device driver via Device Manager.`,
                                 tags: ['audio'],
                                 links: [
-                                    { label: 'Microsoft: Fix sound problems', url: 'https://support.microsoft.com/windows/fix-sound-problems-in-windows-10-73025246-b61c-40fb-671a-2535a0c59a8d' },
+                                    { label: 'Microsoft: Fix sound problems', url: 'https://support.microsoft.com/search?query=Fix%20sound%20problems%20Windows' },
                                 ],
                             },
                             {
@@ -299,7 +299,7 @@
 3. Update Bluetooth and audio drivers, then reboot.`,
                                 tags: ['bluetooth', 'audio'],
                                 links: [
-                                    { label: 'Microsoft: Bluetooth audio help', url: 'https://support.microsoft.com/search?query=bluetooth%20audio%20windows' },
+                                    { label: 'Microsoft: Bluetooth audio help', url: 'https://support.microsoft.com/search?query=Bluetooth%20audio%20help%20Windows' },
                                 ],
                             },
                         ],
@@ -320,7 +320,7 @@
 3. Unplug/replug HDMI/USB audio devices to refresh Windows’ order.`,
                                 tags: ['audio'],
                                 links: [
-                                    { label: 'Microsoft: Choose sound output', url: 'https://support.microsoft.com/windows/fix-sound-problems-in-windows-10-73025246-b61c-40fb-671a-2535a0c59a8d' },
+                                    { label: 'Microsoft: Choose sound output', url: 'https://support.microsoft.com/search?query=Choose%20sound%20output%20Windows' },
                                 ],
                             },
                             {
@@ -332,7 +332,7 @@
 3. Reinstall the audio driver from the PC vendor and reboot.`,
                                 tags: ['audio'],
                                 links: [
-                                    { label: 'Microsoft: Fix sound problems', url: 'https://support.microsoft.com/windows/fix-sound-problems-in-windows-10-73025246-b61c-40fb-671a-2535a0c59a8d' },
+                                    { label: 'Microsoft: Fix sound problems', url: 'https://support.microsoft.com/search?query=Fix%20sound%20problems%20Windows' },
                                 ],
                             },
                             {
@@ -344,7 +344,7 @@
 3. Disable exclusive mode in the device Properties and restart the app.`,
                                 tags: ['microphone'],
                                 links: [
-                                    { label: 'Microsoft: Fix microphone problems', url: 'https://support.microsoft.com/windows/fix-microphone-problems-in-windows-10-5281a610-0b54-40d0-91c6-31b1c972921f' },
+                                    { label: 'Microsoft: Fix microphone problems', url: 'https://support.microsoft.com/search?query=Fix%20microphone%20problems%20Windows' },
                                 ],
                             },
                         ],
@@ -365,7 +365,7 @@
 3. Update or reinstall the camera driver from the laptop vendor.`,
                                 tags: ['camera'],
                                 links: [
-                                    { label: 'Microsoft: Fix camera issues', url: 'https://support.microsoft.com/windows/fix-camera-issues-in-windows-10-9b962bde-5efe-2d5c-2fdf-4e0f3ee8005a' },
+                                    { label: 'Microsoft: Fix camera issues', url: 'https://support.microsoft.com/search?query=Fix%20camera%20issues%20Windows' },
                                 ],
                             },
                             {
@@ -377,7 +377,7 @@
 3. Reinstall the printer using the vendor utility (HP Smart, Epson, Canon).`,
                                 tags: ['printer'],
                                 links: [
-                                    { label: 'Microsoft: Fix printer problems', url: 'https://support.microsoft.com/windows/fix-printer-problems-in-windows-10-7b83c39d-38c8-793a-4f20-0a94f5f4bf48' },
+                                    { label: 'Microsoft: Fix printer problems', url: 'https://support.microsoft.com/search?query=Fix%20printer%20problems%20Windows' },
                                 ],
                             },
                             {
@@ -389,7 +389,7 @@
 3. Restart the Print Spooler service if prompts continue.`,
                                 tags: ['printer'],
                                 links: [
-                                    { label: 'Microsoft: Printer connection troubleshooting', url: 'https://support.microsoft.com/windows/fix-printer-connection-and-printing-problems-in-windows-10-4529aeea-0c0c-4671-6f0a-94fbf26d4b8a' },
+                                    { label: 'Microsoft: Printer connection troubleshooting', url: 'https://support.microsoft.com/search?query=Printer%20connection%20troubleshooting%20Windows' },
                                 ],
                             },
                         ],
@@ -410,7 +410,7 @@
 3. Disable adaptive brightness in the vendor utility (Dell, Lenovo, HP).`,
                                 tags: ['display'],
                                 links: [
-                                    { label: 'Microsoft: Change screen brightness', url: 'https://support.microsoft.com/windows/change-screen-brightness-in-windows-10-1ff7668f-4f28-0c94-6311-3f1ad7ed2d0c' },
+                                    { label: 'Microsoft: Change screen brightness', url: 'https://support.microsoft.com/search?query=Change%20screen%20brightness%20Windows' },
                                 ],
                             },
                             {
@@ -422,7 +422,7 @@
 3. Update graphics drivers and reboot.`,
                                 tags: ['display'],
                                 links: [
-                                    { label: 'Microsoft: Fix connections to external displays', url: 'https://support.microsoft.com/windows/fix-connection-to-external-monitors-6a2f44b3-da37-4c2f-0ec3-73307f9719b6' },
+                                    { label: 'Microsoft: Fix connections to external displays', url: 'https://support.microsoft.com/search?query=Fix%20connections%20to%20external%20displays%20Windows' },
                                 ],
                             },
                             {
@@ -434,7 +434,7 @@
 3. Update sensor drivers from the device manufacturer.`,
                                 tags: ['display'],
                                 links: [
-                                    { label: 'Microsoft: Rotate the screen', url: 'https://support.microsoft.com/windows/unlock-screen-rotation-9d47fa07-63f2-97a4-0e5e-2dba81ef0b0a' },
+                                    { label: 'Microsoft: Rotate the screen', url: 'https://support.microsoft.com/search?query=Rotate%20the%20screen%20Windows' },
                                 ],
                             },
                             {
@@ -446,7 +446,7 @@
 3. Update graphics drivers and restart Windows.`,
                                 tags: ['display'],
                                 links: [
-                                    { label: 'Microsoft: Use Night light', url: 'https://support.microsoft.com/windows/use-night-light-in-windows-10-97e21b6f-572a-1bfb-6a5f-1e15559b1fd6' },
+                                    { label: 'Microsoft: Use Night light', url: 'https://support.microsoft.com/search?query=Use%20Night%20light%20Windows' },
                                 ],
                             },
                             {
@@ -458,7 +458,7 @@
 3. Update graphics drivers if the display keeps blanking.`,
                                 tags: ['personalization'],
                                 links: [
-                                    { label: 'Microsoft: Change screen saver', url: 'https://support.microsoft.com/windows/change-the-screen-saver-5fba0e17-5ab0-dc2b-4f53-5b8bcb0d13d3' },
+                                    { label: 'Microsoft: Change screen saver', url: 'https://support.microsoft.com/search?query=Change%20screen%20saver%20Windows' },
                                 ],
                             },
                             {
@@ -470,7 +470,7 @@
 3. Remove any “Prevent changing wallpaper” policy if the PC is self-managed.`,
                                 tags: ['personalization'],
                                 links: [
-                                    { label: 'Microsoft: Change desktop background', url: 'https://support.microsoft.com/windows/change-your-desktop-background-wallpaper-13ea3bdc-28f0-6aae-0490-3f7a4c8508a9' },
+                                    { label: 'Microsoft: Change desktop background', url: 'https://support.microsoft.com/search?query=Change%20desktop%20background%20Windows' },
                                 ],
                             },
                         ],
@@ -491,7 +491,7 @@
 3. Uninstall games/apps you no longer need from Settings → Apps.`,
                                 tags: ['storage'],
                                 links: [
-                                    { label: 'Microsoft: Free up drive space', url: 'https://support.microsoft.com/windows/free-up-drive-space-in-windows-10-4d9ec0d3-5b76-4d2b-9c0a-4b6e9412c026' },
+                                    { label: 'Microsoft: Free up drive space', url: 'https://support.microsoft.com/search?query=Free%20up%20drive%20space%20Windows' },
                                 ],
                             },
                             {
@@ -503,7 +503,7 @@
 3. Reset the browser settings if downloads still fail.`,
                                 tags: ['browser'],
                                 links: [
-                                    { label: 'Microsoft: Troubleshoot downloads in Edge', url: 'https://support.microsoft.com/microsoft-edge/troubleshoot-problems-downloading-files-from-the-internet-0577c1db-0b40-9d3c-efb0-6cdb7d17ec6a' },
+                                    { label: 'Microsoft: Troubleshoot downloads in Edge', url: 'https://support.microsoft.com/search?query=Troubleshoot%20downloads%20in%20Edge%20Windows' },
                                 ],
                             },
                             {
@@ -515,7 +515,7 @@
 3. Avoid opening ZIPs directly from email—save locally first.`,
                                 tags: ['files'],
                                 links: [
-                                    { label: 'Microsoft: Zip and unzip files', url: 'https://support.microsoft.com/windows/zip-and-unzip-files-8d28cc9f-0db7-0565-7465-6c07f3555c46' },
+                                    { label: 'Microsoft: Zip and unzip files', url: 'https://support.microsoft.com/search?query=Zip%20and%20unzip%20files%20Windows' },
                                 ],
                             },
                             {
@@ -527,7 +527,7 @@
 3. Reinstall the target app if nothing opens.`,
                                 tags: ['files'],
                                 links: [
-                                    { label: 'Microsoft: Change default programs', url: 'https://support.microsoft.com/windows/change-default-programs-in-windows-10-e05fdce9-2551-1f6f-b0f2-43c0fda5bc26' },
+                                    { label: 'Microsoft: Change default programs', url: 'https://support.microsoft.com/search?query=Change%20default%20programs%20Windows' },
                                 ],
                             },
                         ],
@@ -548,7 +548,7 @@
 3. Run “sfc /scannow” in an elevated Command Prompt if crashes persist.`,
                                 tags: ['explorer'],
                                 links: [
-                                    { label: 'Microsoft: File Explorer help', url: 'https://support.microsoft.com/windows/file-explorer-in-windows-10-4ffb849c-40fb-aee2-ffa3-7e6f44fac510' },
+                                    { label: 'Microsoft: File Explorer help', url: 'https://support.microsoft.com/search?query=File%20Explorer%20help%20Windows' },
                                 ],
                             },
                             {
@@ -560,7 +560,7 @@
 3. Confirm the PC date/time is correct and storage is available.`,
                                 tags: ['store'],
                                 links: [
-                                    { label: 'Microsoft: Troubleshoot Microsoft Store', url: 'https://support.microsoft.com/windows/troubleshoot-microsoft-store-apps-5c40f01b-73b3-4601-bf01-9b7a6b83b6ed' },
+                                    { label: 'Microsoft: Troubleshoot Microsoft Store', url: 'https://support.microsoft.com/search?query=Troubleshoot%20Microsoft%20Store%20Windows' },
                                 ],
                             },
                             {
@@ -572,7 +572,7 @@
 3. Rebuild the icon cache (delete IconCache.db) and restart.`,
                                 tags: ['store'],
                                 links: [
-                                    { label: 'Microsoft: Troubleshoot Microsoft Store', url: 'https://support.microsoft.com/windows/troubleshoot-microsoft-store-apps-5c40f01b-73b3-4601-bf01-9b7a6b83b6ed' },
+                                    { label: 'Microsoft: Troubleshoot Microsoft Store', url: 'https://support.microsoft.com/search?query=Troubleshoot%20Microsoft%20Store%20Windows' },
                                 ],
                             },
                             {
@@ -584,7 +584,7 @@
 3. Install pending Windows updates and reboot.`,
                                 tags: ['taskbar'],
                                 links: [
-                                    { label: 'Microsoft: Fix taskbar problems', url: 'https://support.microsoft.com/windows/fix-problems-with-the-taskbar-1ef0ae93-f7a0-2dfa-0182-fd0b7c1d0f70' },
+                                    { label: 'Microsoft: Fix taskbar problems', url: 'https://support.microsoft.com/search?query=Fix%20taskbar%20problems%20Windows' },
                                 ],
                             },
                             {
@@ -596,7 +596,7 @@
 3. Test with a new local account; migrate if it works.`,
                                 tags: ['start menu'],
                                 links: [
-                                    { label: 'Microsoft: Fix Start menu', url: 'https://support.microsoft.com/windows/fix-problems-with-start-menu-ce90e43d-c9a0-42a8-9f63-6de67eced18c' },
+                                    { label: 'Microsoft: Fix Start menu', url: 'https://support.microsoft.com/search?query=Fix%20Start%20menu%20Windows' },
                                 ],
                             },
                             {
@@ -608,7 +608,7 @@
 3. Update Windows to grab search fixes.`,
                                 tags: ['search'],
                                 links: [
-                                    { label: 'Microsoft: Fix search problems', url: 'https://support.microsoft.com/windows/fix-search-issues-in-windows-10-061c6e21-46a0-5560-2a5b-9f71b7b8d882' },
+                                    { label: 'Microsoft: Fix search problems', url: 'https://support.microsoft.com/search?query=Fix%20search%20problems%20Windows' },
                                 ],
                             },
                             {
@@ -620,7 +620,7 @@
 3. If it still drifts, change the time server to time.windows.com or pool.ntp.org and sync again.`,
                                 tags: ['time'],
                                 links: [
-                                    { label: 'Microsoft: Synchronize your clock', url: 'https://support.microsoft.com/windows/synchronizing-the-time-on-your-windows-device-33ee0c42-4b7b-99ed-8a2b-1ef1d3bed519' },
+                                    { label: 'Microsoft: Synchronize your clock', url: 'https://support.microsoft.com/search?query=Synchronize%20your%20clock%20Windows' },
                                 ],
                             },
                             {
@@ -632,7 +632,7 @@
 3. Disable Windows tips and suggestions.`,
                                 tags: ['notifications'],
                                 links: [
-                                    { label: 'Microsoft: Change notification settings', url: 'https://support.microsoft.com/windows/change-notification-settings-in-windows-10-1c6d33f8-0a6d-2d78-339e-8d8f7f5c2caa' },
+                                    { label: 'Microsoft: Change notification settings', url: 'https://support.microsoft.com/search?query=Change%20notification%20settings%20Windows' },
                                 ],
                             },
                             {
@@ -644,7 +644,7 @@
 3. Restart Explorer/Windows to clear clipboard glitches.`,
                                 tags: ['clipboard'],
                                 links: [
-                                    { label: 'Microsoft: Use Clipboard history', url: 'https://support.microsoft.com/windows/use-clipboard-history-in-windows-10-73e1fd05-5de3-8058-1b0b-660eeb513f0c' },
+                                    { label: 'Microsoft: Use Clipboard history', url: 'https://support.microsoft.com/search?query=Use%20Clipboard%20history%20Windows' },
                                 ],
                             },
                         ],
@@ -665,7 +665,7 @@
 3. Reset the browser if speed does not return.`,
                                 tags: ['browser'],
                                 links: [
-                                    { label: 'Microsoft: Improve browser performance', url: 'https://support.microsoft.com/microsoft-edge/microsoft-edge-running-slowly-39c5d64d-8155-d0a7-7731-50cdfc8a6d26' },
+                                    { label: 'Microsoft: Improve browser performance', url: 'https://support.microsoft.com/search?query=Improve%20browser%20performance%20Windows' },
                                 ],
                             },
                             {
@@ -677,7 +677,7 @@
 3. Run Windows Security or Defender Offline scan to clean adware.`,
                                 tags: ['browser'],
                                 links: [
-                                    { label: 'Microsoft: Remove pop-ups, redirects, malware', url: 'https://support.microsoft.com/windows/remove-pop-ups-ads-and-malware-from-windows-10-1884c2b1-231a-d744-1f4a-0a688b28ffa0' },
+                                    { label: 'Microsoft: Remove pop-ups, redirects, malware', url: 'https://support.microsoft.com/search?query=Remove%20pop-ups%2C%20redirects%2C%20malware%20Windows' },
                                 ],
                             },
                             {
@@ -689,7 +689,7 @@
 3. Repair the Outlook profile (File → Account Settings → Repair).`,
                                 tags: ['email'],
                                 links: [
-                                    { label: 'Microsoft: Fix send/receive errors in Outlook', url: 'https://support.microsoft.com/office/fix-send-and-receive-errors-in-outlook-365-462f9d4a-11a3-4e25-8d7b-4b5b19a6d1ad' },
+                                    { label: 'Microsoft: Fix send/receive errors in Outlook', url: 'https://support.microsoft.com/search?query=Fix%20send/receive%20errors%20in%20Outlook%20Windows' },
                                 ],
                             },
                         ],
@@ -728,7 +728,7 @@
 3. Sync the child’s device so the new policy applies.`,
                                 tags: ['family'],
                                 links: [
-                                    { label: 'Microsoft: Adjust Family Safety settings', url: 'https://support.microsoft.com/account-billing/set-up-screen-time-limits-for-your-child-0d40c3ef-0f85-d43b-8a5a-7c5aa7d29538' },
+                                    { label: 'Microsoft: Adjust Family Safety settings', url: 'https://support.microsoft.com/search?query=Adjust%20Family%20Safety%20settings%20Windows' },
                                 ],
                             },
                             {
@@ -740,7 +740,7 @@
 3. Schedule backups to an external drive so reminders become useful.`,
                                 tags: ['backup'],
                                 links: [
-                                    { label: 'Microsoft: Back up your files', url: 'https://support.microsoft.com/windows/back-up-your-files-81348f62-6bcb-40cb-afc3-57ca9de9497d' },
+                                    { label: 'Microsoft: Back up your files', url: 'https://support.microsoft.com/search?query=Back%20up%20your%20files%20Windows' },
                                 ],
                             },
                         ],
@@ -760,7 +760,7 @@
 4. Reboot and try again. Use the Windows Update Assistant for big feature upgrades and keep 20 GB free.`,
                         tags: ['windows', 'updates'],
                         links: [
-                            { label: 'Microsoft support article', url: 'https://support.microsoft.com/help/4027322/windows-10-get-help-with-windows-update-errors' }
+                            { label: 'Microsoft support article', url: 'https://support.microsoft.com/search?query=Microsoft%20support%20article%20Windows' }
                         ]
                     },
                     {
