@@ -442,10 +442,7 @@
       "Google"
     ],
     "video_links": {
-      "Google": {
-        "channel": "Google Workspace / YouTube Help",
-        "query": "Recover Google Account or Gmail"
-      }
+      "Google": "https://support.google.com/accounts/answer/7682439"
     },
     "notes": ""
   },
@@ -467,10 +464,7 @@
       "Apple"
     ],
     "video_links": {
-      "Apple": {
-        "channel": "Apple Support",
-        "query": "If you forgot your Apple ID password"
-      }
+      "Apple": "https://support.apple.com/HT201487"
     },
     "notes": ""
   },
@@ -937,10 +931,7 @@
       "HP"
     ],
     "video_links": {
-      "HP": {
-        "channel": "HP Support",
-        "query": "Install HP printer using HP Smart"
-      }
+      "HP": "https://support.hp.com/us-en/help/hp-smart"
     },
     "notes": ""
   },
@@ -959,10 +950,7 @@
       "Canon"
     ],
     "video_links": {
-      "Canon": {
-        "channel": "Canon USA",
-        "query": "Connect Canon printer to Wi‑Fi"
-      }
+      "Canon": "https://www.usa.canon.com/support"
     },
     "notes": ""
   },
@@ -982,10 +970,7 @@
       "Epson"
     ],
     "video_links": {
-      "Epson": {
-        "channel": "Epson Support",
-        "query": "Epson Scan 2 setup"
-      }
+      "Epson": "https://epson.com/Support"
     },
     "notes": ""
   },
@@ -1005,10 +990,7 @@
       "Netgear"
     ],
     "video_links": {
-      "Netgear": {
-        "channel": "NETGEAR",
-        "query": "Update Netgear router firmware"
-      }
+      "Netgear": "https://www.netgear.com/support/"
     },
     "notes": ""
   },
@@ -1029,10 +1011,7 @@
       "TP-Link"
     ],
     "video_links": {
-      "TP-Link": {
-        "channel": "TP-Link Global",
-        "query": "Set up TP-Link Deco mesh"
-      }
+      "TP-Link": "https://www.tp-link.com/support/faq/1422/"
     },
     "notes": ""
   },

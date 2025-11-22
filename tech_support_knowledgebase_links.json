@@ -449,10 +449,7 @@
       "Google"
     ],
     "video_links": {
-      "Google": {
-        "channel": "Google Workspace / YouTube Help",
-        "query": "Recover Google Account or Gmail"
-      },
+      "Google": "https://support.google.com/accounts/answer/7682439",
       "Google (video)": "https://www.youtube.com/watch?v=pvx6_FqfrwE",
       "Account Recovery": "https://accounts.google.com/signin/v2/recoveryidentifier"
     },
@@ -476,10 +473,7 @@
       "Apple"
     ],
     "video_links": {
-      "Apple": {
-        "channel": "Apple Support",
-        "query": "If you forgot your Apple ID password"
-      },
+      "Apple": "https://support.apple.com/HT201487",
       "Apple Support (video)": "https://www.youtube.com/watch?v=4w37whqIAJ0",
       "iforgot.apple.com": "https://iforgot.apple.com/"
     },
@@ -958,10 +952,7 @@
       "HP"
     ],
     "video_links": {
-      "HP": {
-        "channel": "HP Support",
-        "query": "Install HP printer using HP Smart"
-      },
+      "HP": "https://support.hp.com/us-en/help/hp-smart",
       "HP Support (video)": "https://www.youtube.com/watch?v=KB2KyCyftAY",
       "HP playlist": "https://www.youtube.com/playlist?list=PL1--vpgQOyas7gKpj4T7mDgiFz-srT-dx"
     },
@@ -982,10 +973,7 @@
       "Canon"
     ],
     "video_links": {
-      "Canon": {
-        "channel": "Canon USA",
-        "query": "Connect Canon printer to Wi‑Fi"
-      },
+      "Canon": "https://www.usa.canon.com/support",
       "Canon USA (video)": "https://www.youtube.com/watch?v=wHSOBVvzP5E",
       "Canon MX Series playlist": "https://www.youtube.com/playlist?list=PLp-znpQge8HxNE_XLNzBipd1WlTLhT2wj"
     },
@@ -1007,10 +995,7 @@
       "Epson"
     ],
     "video_links": {
-      "Epson": {
-        "channel": "Epson Support",
-        "query": "Epson Scan 2 setup"
-      },
+      "Epson": "https://epson.com/Support",
       "Epson Support & How-To (playlist)": "https://www.youtube.com/playlist?list=PLBDE491B25B739E0D",
       "Epson Support site": "https://epson.com/Support/sl/s"
     },
@@ -1032,10 +1017,7 @@
       "Netgear"
     ],
     "video_links": {
-      "Netgear": {
-        "channel": "NETGEAR",
-        "query": "Update Netgear router firmware"
-      },
+      "Netgear": "https://www.netgear.com/support/",
       "NETGEAR (video - Nighthawk app)": "https://www.youtube.com/watch?v=dOtTl-v0XZk",
       "NETGEAR KB (browser update)": "https://kb.netgear.com/23442/How-do-I-update-the-firmware-on-my-NETGEAR-router-with-a-web-browser"
     },
@@ -1058,10 +1040,7 @@
       "TP-Link"
     ],
     "video_links": {
-      "TP-Link": {
-        "channel": "TP-Link Global",
-        "query": "Set up TP-Link Deco mesh"
-      },
+      "TP-Link": "https://www.tp-link.com/support/faq/1422/",
       "TP-Link Deco playlist": "https://www.youtube.com/playlist?list=PLW_5HFrpMZg9QJVdT1Tzm4NC-PbFY7NgI"
     },
     "notes": ""
