@@ -417,10 +417,7 @@
       "Microsoft"
     ],
     "video_links": {
-      "Microsoft": {
-        "channel": "Microsoft Support",
-        "query": "Reset Microsoft account password"
-      }
+      "Microsoft": "https://support.microsoft.com/account-billing/reset-your-password-729e0b49-cbf2-2ea6-90b1-7b66705de8e5"
     },
     "notes": ""
   },
