@@ -827,6 +827,32 @@
                         ]
                     },
                     {
+                        id: 'iphone_wifi',
+                        title: 'iPhone Wi‑Fi will not connect',
+                        summary: 'Forget network, toggle radios.',
+                        response: `1. Toggle Airplane mode on/off, then Wi‑Fi off/on.
+2. Settings → Wi‑Fi → tap the (i) on your network → Forget This Network → rejoin with the password.
+3. Restart the router and the iPhone; try standing close to the router.
+4. If still stuck: Settings → General → Transfer or Reset → Reset → Reset Network Settings (this removes saved Wi‑Fi).`,
+                        tags: ['ios', 'wifi'],
+                        links: [
+                            { label: 'Apple Wi‑Fi basics', url: 'https://support.apple.com/HT202639' }
+                        ]
+                    },
+                    {
+                        id: 'iphone_storage',
+                        title: 'iPhone storage is full',
+                        summary: 'Offload apps and clear media.',
+                        response: `1. Settings → General → iPhone Storage: enable "Offload Unused Apps".
+2. Review Photos → Albums → Recently Deleted and empty it. Move big videos to iCloud/Drive.
+3. Delete old Messages threads with lots of media; clear Safari website data.
+4. Keep 5–10 GB free so updates install smoothly.`,
+                        tags: ['ios', 'storage'],
+                        links: [
+                            { label: 'Apple storage tips', url: 'https://support.apple.com/HT201656' }
+                        ]
+                    },
+                    {
                         id: 'mac_performance',
                         title: 'Mac running hot or slow',
                         summary: 'Safe Mode, Activity Monitor, updates.',
@@ -854,11 +880,24 @@
                         summary: 'Force restart + port care.',
                         response: `1. Force restart (Power + Volume Down for ~20 seconds).
 2. Inspect and clean the USB-C port. Try another cable/brick and a wall outlet.
-3. Boot into Safe Mode (hold Power, then press-and-hold “Power off”) to rule out third-party apps.
+3. Boot into Safe Mode (hold Power, then press-and-hold "Power off") to rule out third-party apps.
 4. Update Android and check Battery → Usage for rogue apps.`,
                         tags: ['android', 'power'],
                         links: [
                             { label: 'Google support: battery tips', url: 'https://support.google.com/android/answer/7664692' }
+                        ]
+                    },
+                    {
+                        id: 'android_wifi',
+                        title: 'Android Wi‑Fi will not connect',
+                        summary: 'Forget network + airplane toggle.',
+                        response: `1. Pull down Quick Settings: toggle Airplane on/off, then Wi‑Fi off/on.
+2. Settings → Network & internet → Wi‑Fi → your network → Forget, then rejoin with the correct password.
+3. Restart the router and the phone; stand close to the router for the test.
+4. If still stuck: Reset Wi‑Fi, mobile & Bluetooth (under System → Reset options).`,
+                        tags: ['android', 'wifi'],
+                        links: [
+                            { label: 'Android Wi‑Fi help', url: 'https://support.google.com/android/answer/9075847' }
                         ]
                     },
                     {
@@ -881,10 +920,23 @@
                         response: `1. Open Files by Google → Clean to remove cached media and duplicate downloads.
 2. Move large photos/videos to cloud or SD card. Clear app caches for social and messaging apps.
 3. Empty the trash in Photos/Drive and uninstall rarely used apps.
-4. Keep 10–15% free for smooth OTA updates.`,
+4. Keep 10-15% free for smooth OTA updates.`,
                         tags: ['android', 'storage'],
                         links: [
                             { label: 'Files by Google video', url: 'https://www.youtube.com/watch?v=lAnqp7VJ-c0' }
+                        ]
+                    },
+                    {
+                        id: 'android_apps_crashing',
+                        title: 'Apps keep crashing (Android)',
+                        summary: 'Update + clear cache.',
+                        response: `1. Play Store → tap your profile → Manage apps → Update all.
+2. Long-press the app → App info → Storage → Clear cache (not data). Reopen the app.
+3. Restart the phone; if it still crashes, uninstall/reinstall the app.
+4. Check storage (keep 5–10 GB free) and ensure a stable Wi‑Fi connection during updates.`,
+                        tags: ['android', 'apps'],
+                        links: [
+                            { label: 'Google Play help', url: 'https://support.google.com/googleplay/answer/7513003' }
                         ]
                     }
                 ]
