@@ -10,7 +10,7 @@
                 id: 'microsoft_windows',
                 title: 'Microsoft · Windows',
                 summary: 'Password resets, update loops, Teams calls.',
-                response: `Start here for Windows PCs, Microsoft 365 accounts, or Teams meetings. Navigation tip: click Start on the taskbar and type to search any setting; open Settings via the gear; Win + A opens Quick Settings to toggle Wi‑Fi/Bluetooth; right-click Start for Device Manager and Power options.`,
+                response: `Start here for Windows PCs, Microsoft 365 accounts, or Teams meetings. Navigation tip: click Start (Windows logo on taskbar) and type to search any setting; open Settings via the gear; Win + A opens Quick Settings to toggle Wi‑Fi/Bluetooth; right-click Start for Device Manager and Power options.`,
                 tags: ['windows', 'office'],
                 children: [
                     {
@@ -169,7 +169,7 @@
                                 title: 'Wi-Fi will not connect',
                                 summary: 'Password ok but Windows refuses to join.',
                                 response: `1. Toggle Airplane mode on then off (Win + A opens Quick Settings), then restart the PC.
-2. Forget the Wi-Fi network: Start > Settings (gear) > Network & internet > Wi-Fi > Manage known networks > pick your network > Forget, then reconnect with the password.
+2. Forget the Wi-Fi network: Start (Windows logo on taskbar) > Settings (gear) > Network & internet > Wi-Fi > Manage known networks > pick your network > Forget, then reconnect with the password.
 3. Reboot the router/modem and ensure the SSID is broadcasting on 2.4 GHz or 5 GHz as needed.`,
                                 tags: ['wifi'],
                                 links: [
