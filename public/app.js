@@ -384,8 +384,8 @@
                                 id: 'password_prompt_loop',
                                 title: 'Password prompt loop when printing/sharing',
                                 summary: 'Windows keeps asking for credentials.',
-                                response: `1. Remove saved credentials for the printer/share from Credential Manager.
-2. Re-add the printer with the correct username/password.
+                                response: `1. Remove saved credentials: Start (Windows logo on taskbar) > type Credential Manager > Windows Credentials > remove entries for the printer/share.
+2. Re-add the printer in Settings (gear icon) > Bluetooth & devices > Printers & scanners with the correct username/password.
 3. Restart the Print Spooler service if prompts continue.`,
                                 tags: ['printer'],
                                 links: [
@@ -830,7 +830,7 @@
                         id: 'iphone_wifi',
                         title: 'iPhone Wi‑Fi will not connect',
                         summary: 'Forget network, toggle radios.',
-                        response: `1. Open Control Center (swipe down from the top-right; two-toggle icon) and toggle Airplane mode on/off, then toggle WiFi off/on.
+                        response: `1. Open Control Center (swipe down from the top-right; two-toggle icon) and tap WiFi/Bluetooth there if faster and toggle Airplane mode on/off, then toggle WiFi off/on.
 2. Go to Settings (gear icon) > WiFi > tap the (i) next to your network > Forget This Network, then rejoin with the password.
 3. Restart the router and the iPhone; stand close to the router during reconnect.
 4. If still stuck: Settings > General > Transfer or Reset > Reset > Reset Network Settings (this removes saved WiFi and Bluetooth).`,
