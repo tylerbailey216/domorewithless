@@ -270,9 +270,10 @@
                                 id: 'bluetooth_not_pairing_simple',
                                 title: 'Bluetooth will not pair',
                                 summary: 'Devices cannot find each other.',
-                                response: `1. Turn Bluetooth off/on on both devices and remove the device from Bluetooth settings before re-pairing.
-2. Keep gadgets within a meter and away from 2.4 GHz interference.
-3. Update Bluetooth drivers from the PC vendor and reboot.`,
+                                response: `1. Open Quick Settings (Win(logo)+A) and toggle Bluetooth off/on on both devices.
+2. Remove/re-add: Start (Windows logo on taskbar) > Settings (gear icon) > Bluetooth & devices > Devices > select the device > Remove device, then pair again.
+3. Keep gadgets within ~1 meter and away from 2.4 GHz interference.
+4. Update the Bluetooth driver from the PC vendor site and reboot.`,
                                 tags: ['bluetooth'],
                                 links: [
                                     { label: 'Microsoft: Bluetooth help', url: 'https://support.microsoft.com/search?query=Bluetooth%20help%20Windows' },
@@ -282,9 +283,9 @@
                                 id: 'headphones_not_recognized',
                                 title: 'Headphones not recognized',
                                 summary: 'Plugged in but no audio.',
-                                response: `1. Plug in the headset firmly, then choose it from the sound output list.
-2. Disable audio enhancements under Sound settings.
-3. For USB headsets, reinstall the device driver via Device Manager.`,
+                                response: `1. Plug in the headset firmly, then click the taskbar speaker icon and pick that headset as output.
+2. Start (Windows logo on taskbar) > Settings (gear icon) > System > Sound > More sound settings > your headset > Properties > Enhancements: disable enhancements.
+3. For USB headsets: right-click Start > Device Manager > Sound, video and game controllers > your headset > Uninstall device, then unplug/replug to reinstall.`,
                                 tags: ['audio'],
                                 links: [
                                     { label: 'Microsoft: Fix sound problems', url: 'https://support.microsoft.com/search?query=Fix%20sound%20problems%20Windows' },
@@ -294,9 +295,9 @@
                                 id: 'bluetooth_audio_lag',
                                 title: 'Bluetooth audio lag',
                                 summary: 'Sound delayed behind video.',
-                                response: `1. Disconnect and reconnect the headset, keeping only one paired at a time.
-2. Disable "Hands-Free Telephony" under device Services to force high-quality audio.
-3. Update Bluetooth and audio drivers, then reboot.`,
+                                response: `1. Disconnect/reconnect the headset, keeping only one paired at a time.
+2. Start (Windows logo on taskbar) > Settings (gear icon) > Bluetooth & devices > Devices > your headset > More device settings > uncheck ?Hands-Free Telephony? to force high-quality audio.
+3. Update Bluetooth and audio drivers from your PC vendor, then reboot.`,
                                 tags: ['bluetooth', 'audio'],
                                 links: [
                                     { label: 'Microsoft: Bluetooth audio help', url: 'https://support.microsoft.com/search?query=Bluetooth%20audio%20help%20Windows' },
