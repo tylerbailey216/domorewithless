@@ -830,7 +830,7 @@
                         id: 'iphone_wifi',
                         title: 'iPhone Wi‑Fi will not connect',
                         summary: 'Forget network, toggle radios.',
-                        response: `1. Open Control Center (swipe down from the top-right) and toggle Airplane mode on/off, then toggle WiFi off/on.
+                        response: `1. Open Control Center (swipe down from the top-right; two-toggle icon) and toggle Airplane mode on/off, then toggle WiFi off/on.
 2. Go to Settings (gear icon) > WiFi > tap the (i) next to your network > Forget This Network, then rejoin with the password.
 3. Restart the router and the iPhone; stand close to the router during reconnect.
 4. If still stuck: Settings > General > Transfer or Reset > Reset > Reset Network Settings (this removes saved WiFi and Bluetooth).`,
@@ -871,7 +871,7 @@
                 id: 'android_google',
                 title: 'Android · Google',
                 summary: 'Charging, storage, account recovery.',
-                response: `These paths cover Pixel/Android devices plus Google account safety. Navigation tip: swipe down twice from the top for Quick Settings; long-press Wi‑Fi/Bluetooth tiles to open their settings; tap the gear to open Settings; use the search bar at the top of Settings to jump to any option.`,
+                response: `These paths cover Pixel/Android devices plus Google account safety. Navigation tip: swipe down twice from the top for Quick Settings (tile grid icons); long-press Wi‑Fi/Bluetooth tiles to open their settings; tap the gear to open Settings; use the search bar at the top of Settings to jump to any option.`,
                 tags: ['android', 'google'],
                 children: [
                     {
@@ -891,7 +891,7 @@
                         id: 'android_wifi',
                         title: 'Android Wi‑Fi will not connect',
                         summary: 'Forget network + airplane toggle.',
-                        response: `1. Swipe down twice from the top for Quick Settings and toggle Airplane on/off, then WiFi off/on.
+                        response: `1. Swipe down twice from the top for Quick Settings (tile grid icons) and toggle Airplane on/off, then WiFi off/on.
 2. Long-press the WiFi tile or go to Settings (gear icon) > Network & internet > Internet/WiFi > tap your network > Forget, then reconnect with the correct password.
 3. Restart the router and the phone; stand close to the router for the test.
 4. If still stuck: Settings > System > Reset options > Reset WiFi, mobile & Bluetooth (removes saved networks).`,
