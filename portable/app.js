@@ -31,7 +31,7 @@
 5. Document beep codes or LED flashes before contacting warranty support.`,
                         tags: ['power', 'hardware'],
                         links: [
-                            { label: 'HP Support - PC won’t start', url: 'https://support.hp.com/us-en/document/c00006110' },
+                            { label: "HP Support - PC won't start", url: 'https://support.hp.com/us-en/document/c00006110' },
                             { label: 'Microsoft help video', url: 'https://www.youtube.com/watch?v=J3LJkSgEBrw' },
                         ],
                             },
