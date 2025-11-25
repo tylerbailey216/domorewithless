@@ -364,11 +364,12 @@
                                 title: 'Webcam not detected',
                                 summary: 'Missing in Teams/Zoom.',
                                 response: `1. Close other apps that might own the camera, then reopen your meeting app.
-2. Settings → Privacy & security → Camera → allow desktop apps.
+2. Settings > Privacy & security > Camera > allow desktop apps.
 3. Update or reinstall the camera driver from the laptop vendor.`,
                                 tags: ['camera'],
                                 links: [
                                     { label: 'Microsoft: Fix camera issues', url: 'https://support.microsoft.com/search?query=Fix%20camera%20issues%20Windows' },
+                                    { label: 'Short demo: laptop camera not working', url: 'https://youtube.com/shorts/UetjQYD5b4M?feature=share' },
                                 ],
                             },
                             {
@@ -387,7 +388,7 @@
                                 id: 'password_prompt_loop',
                                 title: 'Password prompt loop when printing/sharing',
                                 summary: 'Windows keeps asking for credentials.',
-                                response: `1. Remove saved credentials: Start (Windows logo on taskbar) > type Credential Manager > Windows Credentials > remove entries for the printer/share.
+                                response: `1. Remove saved credentials: Start (Windows logo on taskbar) > type  Credential Manager  > Windows Credentials > remove entries for the printer/share.
 2. Re-add the printer in Settings (gear icon) > Bluetooth & devices > Printers & scanners with the correct username/password.
 3. Restart the Print Spooler service if prompts continue.`,
                                 tags: ['printer'],
@@ -833,10 +834,10 @@
                         id: 'iphone_wifi',
                         title: 'iPhone Wi‑Fi will not connect',
                         summary: 'Forget network, toggle radios.',
-                        response: `1. Open Control Center (swipe down from the top-right; two-toggle icon) and tap WiFi/Bluetooth there if faster and toggle Airplane mode on/off, then toggle WiFi off/on.
-2. Go to Settings (gear icon) > WiFi > tap the (i) next to your network > Forget This Network, then rejoin with the password.
+                        response: `1. Open Control Center (swipe down from the top-right; two-toggle icon) and tap Wi Fi/Bluetooth there if faster and toggle Airplane mode on/off, then toggle Wi Fi off/on.
+2. Go to Settings (gear icon) > Wi Fi > tap the (i) next to your network > Forget This Network, then rejoin with the password.
 3. Restart the router and the iPhone; stand close to the router during reconnect.
-4. If still stuck: Settings > General > Transfer or Reset > Reset > Reset Network Settings (this removes saved WiFi and Bluetooth).`,
+4. If still stuck: Settings > General > Transfer or Reset > Reset > Reset Network Settings (this removes saved Wi Fi and Bluetooth).`,
                         tags: ['ios', 'wifi'],
                         links: [
                             { label: 'Apple Wi‑Fi basics', url: 'https://support.apple.com/HT202639' }
@@ -849,7 +850,7 @@
                         response: `1. Open Settings (gear icon) > General > iPhone Storage, then turn on "Offload Unused Apps".
 2. Photos > Albums > Recently Deleted: empty it. Move large videos to iCloud/Drive if space is tight.
 3. Delete old Messages threads with lots of photos/videos; Settings > Safari > Clear History and Website Data.
-4. Keep 510 GB free so updates install smoothly.`,
+4. Keep 5 10 GB free so updates install smoothly.`,
                         tags: ['ios', 'storage'],
                         links: [
                             { label: 'Apple storage tips', url: 'https://support.apple.com/HT201656' }
@@ -894,10 +895,10 @@
                         id: 'android_wifi',
                         title: 'Android Wi‑Fi will not connect',
                         summary: 'Forget network + airplane toggle.',
-                        response: `1. Swipe down twice from the top for Quick Settings (tile grid icons) and toggle Airplane on/off, then WiFi off/on.
-2. Long-press the WiFi tile or go to Settings (gear icon) > Network & internet > Internet/WiFi > tap your network > Forget, then reconnect with the correct password.
+                        response: `1. Swipe down twice from the top for Quick Settings (tile grid icons) and toggle Airplane on/off, then Wi Fi off/on.
+2. Long-press the Wi Fi tile or go to Settings (gear icon) > Network & internet > Internet/Wi Fi > tap your network > Forget, then reconnect with the correct password.
 3. Restart the router and the phone; stand close to the router for the test.
-4. If still stuck: Settings > System > Reset options > Reset WiFi, mobile & Bluetooth (removes saved networks).`,
+4. If still stuck: Settings > System > Reset options > Reset Wi Fi, mobile & Bluetooth (removes saved networks).`,
                         tags: ['android', 'wifi'],
                         links: [
                             { label: 'Android Wi‑Fi help', url: 'https://support.google.com/android/answer/9075847' }
