@@ -271,8 +271,8 @@
                                 title: 'Bluetooth will not pair',
                                 summary: 'Devices cannot find each other.',
                                 response: `1. Open Quick Settings (Win(logo)+A) and toggle Bluetooth off/on on both devices.
-2. Remove/re-add: Start (Windows logo on taskbar) > Settings (gear icon) > Bluetooth & devices > Devices > select the device > Remove device, then pair again.
-3. Keep gadgets within ~1 meter and away from 2.4 GHz interference.
+2. Start (Windows logo on taskbar) > Settings (gear icon) > Bluetooth & devices > Devices: tap the device > Remove device; then Add device and pair again (put accessory in pairing mode).
+3. Keep gadgets within ~1 meter and away from 2.4 GHz interference; turn off extra paired devices nearby.
 4. Update the Bluetooth driver from the PC vendor site and reboot.`,
                                 tags: ['bluetooth'],
                                 links: [
