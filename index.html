@@ -75,12 +75,12 @@
             </div>
         </section>
 
-        <section class="tree-card" style="margin-top: 18px;">
+                <section class="tree-card" style="margin-top: 18px;">
             <div class="tree-header" style="align-items: flex-start; gap: 8px;">
                 <div>
                     <p class="node-path">Diagnostics</p>
-                    <h2>Quick checks & scripts</h2>
-                    <p class="node-summary">Click “Copy” to grab a safe PowerShell command, then paste it into Windows Terminal (Win(logo)+X > Windows Terminal) and press Enter.</p>
+                    <h2>Quick checks (no terminal)</h2>
+                    <p class="node-summary">One-click browser checks: latency test, device inventory, input tester, and screen info. No PowerShell needed.</p>
                 </div>
                 <div class="tree-controls" style="gap: 8px;">
                     <button class="ghost" id="pingTestBtn">Run ping test</button>
@@ -89,117 +89,105 @@
             </div>
             <div class="node-body" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px;">
                 <div class="child-card">
-                    <h3>How to run</h3>
-                    <p class="node-summary">1) Click a “Copy” button. 2) Press Win(logo)+X, open Windows Terminal (PowerShell). 3) Right-click to paste, press Enter. These commands only read system info or launch built-in troubleshooters.</p>
+                    <h3>Network check</h3>
+                    <p class="node-summary">Quick latency test to confirm internet reachability.</p>
+                    <button class="ghost" id="pingTestBtn2">Run ping test</button>
                 </div>
                 <div class="child-card">
-                    <h3>Wi‑Fi & network</h3>
-                    <p class="node-summary">Collect adapter info and test connectivity.</p>
-                    <button class="ghost" data-command="powershell -NoProfile -Command "powershell.exe -NoLogo -NoProfile -Command "ipconfig /all; ping 8.8.8.8; tracert 8.8.8.8""">Copy network script</button>
+                    <h3>Devices</h3>
+                    <p class="node-summary">List cameras, microphones, and speakers the browser can see.</p>
+                    <button class="ghost" id="deviceScanBtn">List devices</button>
+                    <pre class="node-summary" id="deviceScanResult" style="white-space: pre-wrap; min-height: 60px;"></pre>
                 </div>
                 <div class="child-card">
-                    <h3>Sound & mic</h3>
-                    <p class="node-summary">Launch Windows audio troubleshooters.</p>
-                    <button class="ghost" data-command="powershell -NoProfile -Command "powershell.exe -NoLogo -NoProfile -Command "msdt.exe /id AudioPlaybackDiagnostic""">Copy playback troubleshooter</button>
-                    <button class="ghost" data-command="powershell -NoProfile -Command "powershell.exe -NoLogo -NoProfile -Command "msdt.exe /id AudioRecordingDiagnostic""" style="margin-top: 6px;">Copy mic troubleshooter</button>
+                    <h3>Input tester</h3>
+                    <p class="node-summary">Press keys or click to see if input is detected.</p>
+                    <button class="ghost" id="inputTestBtn">Start input test</button>
+                    <pre class="node-summary" id="inputTestResult" style="white-space: pre-wrap; min-height: 60px;"></pre>
                 </div>
                 <div class="child-card">
-                    <h3>Bluetooth & input</h3>
-                    <p class="node-summary">List Bluetooth, keyboard, mouse devices.</p>
-                    <button class="ghost" data-command="powershell -NoProfile -Command "powershell.exe -NoLogo -NoProfile -Command "Get-PnpDevice -Class Bluetooth,Keyboard,Mouse | Format-Table -AutoSize""">Copy BT/input script</button>
-                </div>
-                <div class="child-card">
-                    <h3>Hardware & accessories</h3>
-                    <p class="node-summary">Show USB/HID devices for peripherals.</p>
-                    <button class="ghost" data-command="powershell -NoProfile -Command "powershell.exe -NoLogo -NoProfile -Command "Get-PnpDevice -Class USB,HIDClass | Format-Table -AutoSize""">Copy hardware script</button>
-                </div>
-                <div class="child-card">
-                    <h3>Camera & sharing</h3>
-                    <p class="node-summary">Open camera privacy and list printers/queues.</p>
-                    <button class="ghost" data-command="powershell.exe -NoLogo -NoProfile -Command "start ms-settings:privacy-webcam"">Copy camera settings launcher</button>
-                    <button class="ghost" data-command="powershell -NoProfile -Command "powershell.exe -NoLogo -NoProfile -Command "Get-PnpDevice -Class Camera | Format-Table -AutoSize; Get-Printer; Get-PrintJob -ComputerName localhost""" style="margin-top: 6px;">Copy camera/printer script</button>
-                </div>
-                <div class="child-card">
-                    <h3>Mouse, keyboard & touchpad</h3>
-                    <p class="node-summary">Check HID devices and touchpad settings.</p>
-                    <button class="ghost" data-command="powershell -NoProfile -Command "powershell.exe -NoLogo -NoProfile -Command "Get-PnpDevice -Class HIDClass,Keyboard,Mouse | Format-Table -AutoSize; start ms-settings:devices-touchpad""">Copy input script</button>
-                </div>
-                <div class="child-card">
-                    <h3>Display & personalization</h3>
-                    <p class="node-summary">Show resolution and current wallpaper.</p>
-                    <button class="ghost" data-command=\"Get-CimInstance Win32_VideoController | Select Name,CurrentHorizontalResolution,CurrentVerticalResolution; Get-ItemProperty 'HKCU:\\Control Panel\\Desktop' -Name WallPaper\">Copy display script</button>
-                </div>
-                <div class="child-card">
-                    <h3>Apps</h3>
-                    <p class="node-summary">Top CPU/RAM processes.</p>
-                    <button class="ghost" data-command="powershell -NoProfile -Command "powershell.exe -NoLogo -NoProfile -Command "Get-Process | Sort-Object CPU -Descending | Select -First 10 Name,CPU,Id; Get-Process | Sort-Object WS -Descending | Select -First 10 Name,WS,Id""">Copy apps script</button>
-                </div>
-                <div class="child-card">
-                    <h3>Browser cleanup</h3>
-                    <p class="node-summary">Open Edge clear-data page.</p>
-                    <button class="ghost" data-command="powershell -NoProfile -Command "powershell.exe -NoLogo -NoProfile -Command "start msedge://settings/clearBrowserData""">Copy browser cleanup</button>
-                </div>
-                <div class="child-card">
-                    <h3>Storage & performance</h3>
-                    <p class="node-summary">Check free space and disk health.</p>
-                    <button class="ghost" data-command="powershell -NoProfile -Command "powershell.exe -NoLogo -NoProfile -Command "Get-PSDrive -PSProvider FileSystem | Format-Table -AutoSize; wmic diskdrive get status""">Copy storage script</button>
+                    <h3>Screen & display</h3>
+                    <p class="node-summary">Show resolution, pixel density, and color mode.</p>
+                    <button class="ghost" id="screenInfoBtn">Show screen info</button>
+                    <pre class="node-summary" id="screenInfoResult" style="white-space: pre-wrap; min-height: 60px;"></pre>
                 </div>
             </div>
         </section>
 
-        <section class="vibe-section" id="affirmationExperience">
-            <div class="vibe-copy">
-                <p class="eyebrow">Mental reset</p>
-                <h2>Virtual phone affirmations</h2>
-                <p>
-                    Sometimes the fix is to pause for sixty seconds and hear a kind voice. Scroll into this lab to
-                    spin, tap, and read positive prompts before diving back into tough tickets.
-                </p>
-                <ul class="vibe-list">
-                    <li>Live loop of encouraging affirmations curated for late-night tech support sessions.</li>
-                    <li>Interactive 3D-inspired phone shell that reacts to your pointer drags.</li>
-                    <li>Quick action button cycles to the next vibe whenever you need another boost.</li>
-                </ul>
-                <div class="vibe-actions">
-                    <button type="button" class="ghost" id="affirmationNext">Inspire me again</button>
-                    <span class="vibe-caption">Gently scroll past the troubleshooting menus to reach this tool anytime.</span>
-                </div>
-            </div>
-            <div class="vibe-phone-column">
-                <div class="vibe-phone-glow"></div>
-                <div class="vibe-phone-stage" data-role="affirmation-stage">
-                    <div class="vibe-phone-rig" data-role="affirmation-rig">
-                        <div class="vibe-phone-shell">
-                            <span class="phone-signal"></span>
-                            <div class="vibe-phone-screen" id="affirmationScreen">
-                                <span class="screen-inner-shadow" aria-hidden="true"></span>
-                                <span class="screen-reflection" aria-hidden="true"></span>
-                                <div class="screen-status">
-                                <span id="affirmationTime">11:11</span>
-                                <span class="signal-indicator" aria-label="Signal strength">
-                                    <span class="signal-bar bar-1"></span>
-                                    <span class="signal-bar bar-2"></span>
-                                    <span class="signal-bar bar-3"></span>
-                                    <span class="signal-bar bar-4"></span>
-                                </span>
-                            </div>
-                                <div class="affirmation-tag speech-bubble bubble-tag bubble-layer-2" id="affirmationTag">Grounding</div>
-                                <blockquote class="speech-bubble bubble-message bubble-layer-3" id="affirmationText">Your calm is contagious.</blockquote>
-                                <p class="affirmation-meta speech-bubble bubble-meta bubble-layer-2" id="affirmationSource">- Message from 'G'</p>
-                                <div class="affirmation-ticker bubble-ticker" id="affirmationTicker"></div>
-                            </div>
-                            <div class="phone-notch">
-                                <span class="notch-speaker"></span>
-                                <span class="notch-camera"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
 
     </main>
     <script src="./public/app.js"></script>
+    <script>
+        (() => {
+            const pingBtns = [document.getElementById('pingTestBtn'), document.getElementById('pingTestBtn2')].filter(Boolean);
+            const pingResult = document.getElementById('pingResult');
+            const deviceBtn = document.getElementById('deviceScanBtn');
+            const deviceResult = document.getElementById('deviceScanResult');
+            const inputBtn = document.getElementById('inputTestBtn');
+            const inputResult = document.getElementById('inputTestResult');
+            const screenBtn = document.getElementById('screenInfoBtn');
+            const screenResult = document.getElementById('screenInfoResult');
+
+            const runPing = async () => {
+                if (!pingResult) return;
+                pingBtns.forEach(b => b.disabled = true);
+                pingResult.textContent = 'Testing...';
+                const start = performance.now();
+                try {
+                    await fetch('https://www.google.com/generate_204', { cache: 'no-store' });
+                    const ms = Math.round(performance.now() - start);
+                    pingResult.textContent = `Online, ~${ms} ms`;
+                } catch (e) {
+                    pingResult.textContent = 'Offline or blocked';
+                } finally {
+                    pingBtns.forEach(b => b.disabled = false);
+                }
+            };
+
+            pingBtns.forEach(btn => btn.addEventListener('click', runPing));
+
+            if (deviceBtn && deviceResult && navigator.mediaDevices?.enumerateDevices) {
+                deviceBtn.addEventListener('click', async () => {
+                    deviceBtn.disabled = true;
+                    deviceResult.textContent = 'Scanning...';
+                    try {
+                        const devices = await navigator.mediaDevices.enumerateDevices();
+                        const lines = devices.map(d => `${d.kind}: ${d.label || 'Unnamed'} (${d.deviceId.slice(0,6)}...)`);
+                        deviceResult.textContent = lines.length ? lines.join('
+') : 'No devices reported.';
+                    } catch (e) {
+                        deviceResult.textContent = 'Device list blocked by browser permissions.';
+                    } finally {
+                        deviceBtn.disabled = false;
+                    }
+                });
+            }
+
+            if (inputBtn && inputResult) {
+                const handler = (msg) => {
+                    const now = new Date().toLocaleTimeString();
+                    inputResult.textContent = `[${now}] ${msg}`;
+                };
+                inputBtn.addEventListener('click', () => {
+                    handler('Listening for key presses and clicks...');
+                });
+                window.addEventListener('keydown', (e) => handler(`Key: ${e.key}`));
+                window.addEventListener('mousedown', (e) => handler(`Mouse click: button ${e.button}`));
+            }
+
+            if (screenBtn && screenResult) {
+                screenBtn.addEventListener('click', () => {
+                    const { width, height } = window.screen;
+                    const dpr = window.devicePixelRatio || 1;
+                    const dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                    screenResult.textContent = `Resolution: ${width} x ${height}
+Device pixel ratio: ${dpr}
+Color scheme: ${dark ? 'Dark' : 'Light'}`;
+                });
+            }
+        })();
+    </script>
+
     <script>
         (() => {
             const pingBtn = document.getElementById('pingTestBtn');
