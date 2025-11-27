@@ -1461,13 +1461,27 @@ a:focus-visible {
         right: -140px;
         transform: translateY(-50%);
         align-items: center;
-        gap: 12px;
+        justify-content: center;
+        flex-direction: column;
+        gap: 14px;
+        width: 220px;
     }
     .hero-shell .floating-badge {
         position: relative;
-        width: 200px;
+        width: 100%;
         text-align: center;
         pointer-events: none;
+        white-space: normal;
+        line-height: 1.3;
+    }
+    .tablet-interactive-hint {
+        position: absolute;
+        bottom: -22px;
+        left: 50%;
+        transform: translateX(-50%);
+        margin-top: 0;
+        width: 100%;
+        text-align: center;
     }
 }
 
