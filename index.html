@@ -56,6 +56,7 @@
                         <div class="floating-badge">I forgot my password</div>
                         <div class="floating-badge">My phone is being weird</div>
                     </div>
+                    <div class="tablet-interactive-hint">Tap or click the tablet to interact</div>
                 </div>
             </div>
         </section>
@@ -437,6 +438,11 @@
                     el.style.display = hide ? 'none' : '';
                 });
                 document.querySelectorAll('.tablet-screen-logo').forEach((el) => {
+                    el.style.display = hide ? 'none' : '';
+                    el.style.visibility = hide ? 'hidden' : '';
+                    el.style.opacity = hide ? '0' : '';
+                });
+                document.querySelectorAll('.tablet-interactive-hint').forEach((el) => {
                     el.style.display = hide ? 'none' : '';
                     el.style.visibility = hide ? 'hidden' : '';
                     el.style.opacity = hide ? '0' : '';

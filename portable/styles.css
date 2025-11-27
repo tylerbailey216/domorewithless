@@ -331,6 +331,16 @@ body::before {
     z-index: 0; /* keep badges beneath the tablet */
 }
 
+.tablet-interactive-hint {
+    margin-top: 10px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.8);
+    letter-spacing: 0.02em;
+    opacity: 0.85;
+    pointer-events: none;
+}
+
 .floating-badge {
     font-size: 0.85rem;
     background: rgba(0, 246, 255, 0.16);
@@ -698,6 +708,10 @@ code {
     /* Ensure badges stay hidden on very small screens */
     .hero-shell .floating-badges {
         display: none !important;
+    }
+    .tablet-interactive-hint {
+        font-size: 0.82rem;
+        margin-top: 8px;
     }
     .tree-header {
         flex-direction: column;
