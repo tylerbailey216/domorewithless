@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tech Support Bro · It's LIT🔥</title>
     <link rel="stylesheet" href="./public/styles.css">
+    <style>
+        /* Force-hide floating badges and tablet logo on small screens */
+        .floating-badges { display: none !important; }
+        .tablet-screen-logo { display: none !important; visibility: hidden !important; opacity: 0 !important; }
+        @media (min-width: 1025px) {
+            .floating-badges { display: flex !important; }
+        }
+    </style>
 </head>
 <body>
     <main class="layout">
