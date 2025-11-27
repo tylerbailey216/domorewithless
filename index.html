@@ -442,11 +442,6 @@
                     el.style.visibility = hide ? 'hidden' : '';
                     el.style.opacity = hide ? '0' : '';
                 });
-                document.querySelectorAll('.tablet-interactive-hint').forEach((el) => {
-                    el.style.display = hide ? 'none' : '';
-                    el.style.visibility = hide ? 'hidden' : '';
-                    el.style.opacity = hide ? '0' : '';
-                });
             };
             applyVisibility();
             window.addEventListener('resize', applyVisibility);

@@ -239,13 +239,14 @@ body::before {
 }
 
 .tablet-interactive-hint {
-    margin-top: 10px;
+    margin-top: 12px;
     text-align: center;
     font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.86);
     letter-spacing: 0.02em;
-    opacity: 0.85;
+    opacity: 0.9;
     pointer-events: none;
+    position: static;
 }
 
 .tablet-shadow {
@@ -1467,13 +1468,6 @@ a:focus-visible {
         width: 200px;
         text-align: center;
         pointer-events: none;
-    }
-    .tablet-interactive-hint {
-        position: absolute;
-        bottom: -18px;
-        left: 50%;
-        transform: translateX(-50%);
-        margin-top: 0;
     }
 }
 
