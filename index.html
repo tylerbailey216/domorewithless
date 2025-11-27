@@ -420,6 +420,24 @@
             setInterval(updateTime, 15000);
         })();
     </script>
+    <script>
+        // Force-hide floating badges and front tablet logo on small viewports
+        (() => {
+            const applyVisibility = () => {
+                const hide = window.innerWidth < 1025;
+                document.querySelectorAll('.floating-badges').forEach((el) => {
+                    el.style.display = hide ? 'none' : '';
+                });
+                document.querySelectorAll('.tablet-screen-logo').forEach((el) => {
+                    el.style.display = hide ? 'none' : '';
+                    el.style.visibility = hide ? 'hidden' : '';
+                    el.style.opacity = hide ? '0' : '';
+                });
+            };
+            applyVisibility();
+            window.addEventListener('resize', applyVisibility);
+        })();
+    </script>
 </body>
 </html>
 
