@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tech Support Bro</title>
-    <link rel="stylesheet" href="./public/styles.css">
+    <link rel="stylesheet" href="./publi./public/styles.css">
 </head>
 <body>
     <main class="layout">
@@ -29,8 +29,8 @@
                         </div>
                         <div class="tablet-screen">
                             <video autoplay muted loop playsinline>
-                                <source src="./public/ITChatBuddyAvatar.mp4" type="video/mp4">
-                                <source src="./public/ITChatBuddyAvatar.mov" type="video/quicktime">
+                                <source src="./publi./public/ITChatBuddyAvatar.mp4" type="video/mp4">
+                                <source src="./publi./public/ITChatBuddyAvatar.mov" type="video/quicktime">
                                 Your browser does not support inline video playback.
                             </video>
                             <h2 class="tablet-title">Tech Support Bro</h2>
@@ -57,38 +57,38 @@
         </div>
     </div>
     <div class="utilities-grid">
-        <div class="utility-card">
-            <h3>📄 PDF mini-suite</h3>
+                <div class="utility-card">
+                    <h3>PDF mini-suite</h3>
             <p>Merge, split, sign, and fill PDFs without leaving the page.</p>
             <button class="ghost" type="button" data-target="#tool-pdf" aria-label="Open PDF tool">Open</button>
         </div>
-        <div class="utility-card">
-            <h3>🖼️ Screenshots & images</h3>
+                <div class="utility-card">
+                    <h3>Screenshots & images</h3>
             <p>Capture/annotate, resize, or compress images for sharing.</p>
             <button class="ghost" type="button" data-target="#tool-image" aria-label="Open image tool">Open</button>
         </div>
-        <div class="utility-card">
-            <h3>⌨️ Snippets & canned replies</h3>
+                <div class="utility-card">
+                    <h3>Snippets & canned replies</h3>
             <p>Save quick text snippets and paste canned responses with one click.</p>
             <button class="ghost" type="button" data-target="#tool-snippets" aria-label="Open snippets tool">Open</button>
         </div>
-        <div class="utility-card">
-            <h3>🔗 Short links + QR</h3>
+                <div class="utility-card">
+                    <h3>Short links + QR</h3>
             <p>Create short links with basic click counts and matching QR codes.</p>
             <button class="ghost" type="button" data-target="#tool-links" aria-label="Open link tool">Open</button>
         </div>
-        <div class="utility-card">
-            <h3>🕑 Time zones & scheduling</h3>
+                <div class="utility-card">
+                    <h3>Time zones & scheduling</h3>
             <p>Find overlap across time zones and draft a scheduler blurb.</p>
             <button class="ghost" type="button" data-target="#tool-time" aria-label="Open time zone tool">Open</button>
         </div>
-        <div class="utility-card">
-            <h3>📊 CSV cleanup + OCR</h3>
+                <div class="utility-card">
+                    <h3>CSV cleanup + OCR</h3>
             <p>Trim/dedupe CSVs and convert images/PDFs to text with OCR.</p>
             <button class="ghost" type="button" data-target="#tool-data" aria-label="Open data tool">Open</button>
         </div>
-        <div class="utility-card">
-            <h3>🔒 Passwords & pastebin</h3>
+                <div class="utility-card">
+                    <h3>Passwords & pastebin</h3>
             <p>Generate strong passwords and share short-lived secure snippets.</p>
             <button class="ghost" type="button" data-target="#tool-security" aria-label="Open security tool">Open</button>
         </div>
@@ -102,15 +102,15 @@
         </div>
     </div>
     <div class="utilities-grid">
-        <div class="utility-card" id="tool-pdf">
-            <h3>📄 PDF mini-suite</h3>
+                <div class="utility-card" id="tool-pdf">
+                    <h3>PDF mini-suite</h3>
             <p>Merge or split PDFs here; signing/filling support coming next.</p>
             <input id="pdfInput" type="file" accept="application/pdf" multiple aria-label="PDF files">
             <button class="ghost" type="button" id="pdfProcess">Merge / Split (coming soon)</button>
             <div id="pdfOutput" class="node-summary"></div>
         </div>
-        <div class="utility-card" id="tool-image">
-            <h3>🖼️ Screenshots & images</h3>
+                <div class="utility-card" id="tool-image">
+                    <h3>Screenshots & images</h3>
             <p>Drop an image to resize/compress. Annotate with your screenshot tool, then upload.</p>
             <input id="imageInput" type="file" accept="image/*" aria-label="Image file">
             <div style="display:flex; gap:8px; flex-wrap:wrap;">
@@ -121,29 +121,29 @@
             <div id="imageInfo" class="node-summary"></div>
             <a id="imageDownload" class="ghost" style="display:none; margin-top:6px;" download="compressed.jpg">Download image</a>
         </div>
-        <div class="utility-card" id="tool-snippets">
-            <h3>⌨️ Snippets & replies</h3>
+                <div class="utility-card" id="tool-snippets">
+                    <h3>Snippets & replies</h3>
             <p>Save a quick reply and copy it with one tap.</p>
             <textarea id="snippetInput" rows="3" placeholder="Type your canned reply..."></textarea>
             <button class="ghost" type="button" id="snippetCopy">Copy snippet</button>
         </div>
-        <div class="utility-card" id="tool-links">
-            <h3>🔗 Short links + QR</h3>
+                <div class="utility-card" id="tool-links">
+                    <h3>Short links + QR</h3>
             <p>Paste a URL, generate a short link + QR.</p>
             <input type="url" id="linkInput" placeholder="https://example.com" aria-label="Long URL">
             <button class="ghost" type="button" id="linkMake">Generate</button>
             <div id="linkOutput" class="node-summary"></div>
             <img id="qrImage" alt="QR code" style="display:none; width:120px; height:120px; border-radius: 10px; border:1px solid rgba(255,255,255,0.08);">
         </div>
-        <div class="utility-card" id="tool-time">
-            <h3>🕑 Time zones</h3>
+                <div class="utility-card" id="tool-time">
+                    <h3>Time zones</h3>
             <p>Pick two zones and see local time for each.</p>
             <input type="text" id="tzA" placeholder="e.g., America/New_York" aria-label="Time zone A">
             <input type="text" id="tzB" placeholder="e.g., Europe/London" aria-label="Time zone B">
             <div id="tzOutput" class="node-summary">Enter IANA zones to compare.</div>
         </div>
-        <div class="utility-card" id="tool-data">
-            <h3>📊 CSV cleanup + OCR</h3>
+                <div class="utility-card" id="tool-data">
+                    <h3>CSV cleanup + OCR</h3>
             <p>Upload CSV to trim/dedupe; upload image/PDF for OCR (placeholder).</p>
             <input id="dataFile" type="file" accept=".csv, text/csv, application/pdf, image/*" aria-label="CSV or image">
             <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;">
@@ -152,8 +152,8 @@
             </div>
             <textarea id="dataOutput" rows="4" placeholder="Cleaned CSV will appear here..."></textarea>
         </div>
-        <div class="utility-card" id="tool-security">
-            <h3>🔒 Passwords & pastebin</h3>
+                <div class="utility-card" id="tool-security">
+                    <h3>Passwords & pastebin</h3>
             <p>Generate a strong password and copy it.</p>
             <input type="text" id="pwdOutput" readonly aria-label="Generated password">
             <div style="display:flex; gap:8px; flex-wrap:wrap;">
@@ -267,6 +267,10 @@
     <script src="./app.js"></script>
     <script>
         (() => {
+            // Always start at top; prevent scroll restoration
+            if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+            window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+
             const scrollButtons = document.querySelectorAll('[data-target]');
             scrollButtons.forEach((btn) => {
                 btn.addEventListener('click', () => {
