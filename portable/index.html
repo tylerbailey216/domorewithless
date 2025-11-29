@@ -84,14 +84,29 @@
             <button class="ghost" type="button" data-target="#tool-time" aria-label="Open time zone tool">Open</button>
         </div>
                 <div class="utility-card">
-                    <h3>CSV cleanup + OCR</h3>
-            <p>Trim/dedupe CSVs and convert images/PDFs to text with OCR.</p>
-            <button class="ghost" type="button" data-target="#tool-data" aria-label="Open data tool">Open</button>
+                    <h3>Email signatures</h3>
+            <p>Draft a clean signature with role, phone, and linkscopy in one tap.</p>
+            <button class="ghost" type="button" data-target="#tool-signature" aria-label="Open email signature tool">Open</button>
         </div>
                 <div class="utility-card">
-                    <h3>Passwords & pastebin</h3>
-            <p>Generate strong passwords and share short-lived secure snippets.</p>
-            <button class="ghost" type="button" data-target="#tool-security" aria-label="Open security tool">Open</button>
+                    <h3>Wi-Fi/business QR</h3>
+            <p>Create a QR for Wi-Fi (SSID/password) or a quick contact/URL badge.</p>
+            <button class="ghost" type="button" data-target="#tool-qr" aria-label="Open QR tool">Open</button>
+        </div>
+                <div class="utility-card">
+                    <h3>Secure notes</h3>
+            <p>Encrypt/decrypt short notes locally in your browser.</p>
+            <button class="ghost" type="button" data-target="#tool-secure" aria-label="Open secure notes tool">Open</button>
+        </div>
+                <div class="utility-card">
+                    <h3>Image metadata scrub</h3>
+            <p>Strip EXIF/metadata from images before sharing.</p>
+            <button class="ghost" type="button" data-target="#tool-exif" aria-label="Open EXIF tool">Open</button>
+        </div>
+                <div class="utility-card">
+                    <h3>Spell check helper</h3>
+            <p>Use your browser spell-check with a clean canvas and quick copy.</p>
+            <button class="ghost" type="button" data-target="#tool-spell" aria-label="Open spell tool">Open</button>
         </div>
     </div>
 </section><section class="tree-card utilities-section" id="utilities-panels">
@@ -144,23 +159,58 @@
             <input type="text" id="tzB" placeholder="e.g., Europe/London" aria-label="Time zone B">
             <div id="tzOutput" class="node-summary">Enter IANA zones to compare.</div>
         </div>
-                <div class="utility-card" id="tool-data">
-                    <h3>CSV cleanup + OCR</h3>
-            <p>Upload CSV to trim/dedupe; upload image/PDF for OCR (placeholder).</p>
-            <input id="dataFile" type="file" accept=".csv, text/csv, application/pdf, image/*" aria-label="CSV or image">
-            <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;">
-                <button class="ghost" type="button" id="dataClean">Clean CSV</button>
-                <button class="ghost" type="button" id="dataOCR">Run OCR (coming soon)</button>
-            </div>
-            <textarea id="dataOutput" rows="4" placeholder="Cleaned CSV will appear here..."></textarea>
-        </div>
-                <div class="utility-card" id="tool-security">
-                    <h3>Passwords & pastebin</h3>
-            <p>Generate a strong password and copy it.</p>
-            <input type="text" id="pwdOutput" readonly aria-label="Generated password">
+                <div class="utility-card" id="tool-signature">
+                    <h3>Email signatures</h3>
+            <p>Fill in your details and copy a tidy signature block.</p>
+            <input type="text" id="sigName" placeholder="Name" aria-label="Name">
+            <input type="text" id="sigTitle" placeholder="Title / Team" aria-label="Title">
+            <input type="text" id="sigPhone" placeholder="Phone" aria-label="Phone">
+            <input type="url" id="sigLink" placeholder="Link (optional)" aria-label="Link">
+            <textarea id="sigPreview" rows="4" readonly placeholder="Signature preview will appear here"></textarea>
             <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                <button class="ghost" type="button" id="pwdGen">Generate</button>
-                <button class="ghost" type="button" id="pwdCopy">Copy</button>
+                <button class="ghost" type="button" id="sigBuild">Build</button>
+                <button class="ghost" type="button" id="sigCopy">Copy</button>
+            </div>
+        </div>
+                <div class="utility-card" id="tool-qr">
+                    <h3>Wi-Fi/business QR</h3>
+            <p>Create QR codes for Wi-Fi access or a business URL.</p>
+            <select id="qrMode" aria-label="QR mode">
+                <option value="wifi">Wi-Fi</option>
+                <option value="link">Business/URL</option>
+            </select>
+            <input type="text" id="qrSsid" placeholder="Wi-Fi SSID or Label" aria-label="SSID or label">
+            <input type="text" id="qrPass" placeholder="Wi-Fi password (hidden)" aria-label="Wi-Fi password">
+            <input type="url" id="qrUrl" placeholder="Business/URL" aria-label="URL" style="display:none;">
+            <button class="ghost" type="button" id="qrMake">Generate QR</button>
+            <img id="qrOut" alt="QR code" style="display:none; width:140px; height:140px; border-radius: 10px; border:1px solid rgba(255,255,255,0.08);">
+        </div>
+                <div class="utility-card" id="tool-secure">
+                    <h3>Secure notes</h3>
+            <p>Encrypt/decrypt a short note locally with a passphrase.</p>
+            <textarea id="secPlain" rows="3" placeholder="Enter note"></textarea>
+            <input type="password" id="secKey" placeholder="Passphrase">
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <button class="ghost" type="button" id="secEncrypt">Encrypt</button>
+                <button class="ghost" type="button" id="secDecrypt">Decrypt</button>
+            </div>
+            <textarea id="secCipher" rows="3" placeholder="Ciphertext/result appears here"></textarea>
+        </div>
+                <div class="utility-card" id="tool-exif">
+                    <h3>Image metadata scrub</h3>
+            <p>Remove EXIF/metadata by re-encoding the image locally.</p>
+            <input id="exifInput" type="file" accept="image/*" aria-label="Image file">
+            <button class="ghost" type="button" id="exifStrip">Strip metadata</button>
+            <div id="exifInfo" class="node-summary"></div>
+            <a id="exifDownload" class="ghost" style="display:none; margin-top:6px;" download="clean-image.jpg">Download cleaned image</a>
+        </div>
+                <div class="utility-card" id="tool-spell">
+                    <h3>Spell check helper</h3>
+            <p>Type or paste text; use browser spell-check and copy.</p>
+            <textarea id="spellArea" rows="5" spellcheck="true" placeholder="Your text..."></textarea>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <button class="ghost" type="button" id="spellCopy">Copy text</button>
+                <button class="ghost" type="button" id="spellClear">Clear</button>
             </div>
         </div>
     </div>
@@ -423,6 +473,194 @@
                 }
             });
 
+            // Email signature builder
+            const sigName = document.getElementById('sigName');
+            const sigTitle = document.getElementById('sigTitle');
+            const sigPhone = document.getElementById('sigPhone');
+            const sigLink = document.getElementById('sigLink');
+            const sigPreview = document.getElementById('sigPreview');
+            const sigBuild = document.getElementById('sigBuild');
+            const sigCopy = document.getElementById('sigCopy');
+            const buildSig = () => {
+                const name = (sigName?.value || '').trim();
+                const title = (sigTitle?.value || '').trim();
+                const phone = (sigPhone?.value || '').trim();
+                const link = (sigLink?.value || '').trim();
+                const parts = [];
+                if (name) parts.push(name);
+                if (title) parts.push(title);
+                if (phone) parts.push(` ${phone}`);
+                if (link) parts.push(link);
+                const result = parts.join('\n');
+                if (sigPreview) sigPreview.value = result || 'Add details to build your signature.';
+                return result;
+            };
+            sigBuild?.addEventListener('click', buildSig);
+            sigCopy?.addEventListener('click', async () => {
+                const text = buildSig();
+                try {
+                    await navigator.clipboard.writeText(text);
+                    sigCopy.textContent = 'Copied';
+                    setTimeout(() => (sigCopy.textContent = 'Copy'), 1200);
+                } catch (e) {
+                    alert('Copy failed. You can copy manually:\n\n' + text);
+                }
+            });
+
+            // Wi-Fi / business QR
+            const qrMode = document.getElementById('qrMode');
+            const qrSsid = document.getElementById('qrSsid');
+            const qrPass = document.getElementById('qrPass');
+            const qrUrl = document.getElementById('qrUrl');
+            const qrMake = document.getElementById('qrMake');
+            const qrOut = document.getElementById('qrOut');
+            const toggleQrFields = () => {
+                const mode = qrMode?.value || 'wifi';
+                const showWifi = mode === 'wifi';
+                if (qrPass) qrPass.style.display = showWifi ? 'block' : 'none';
+                if (qrSsid) qrSsid.placeholder = showWifi ? 'Wi-Fi SSID or Label' : 'Label (optional)';
+                if (qrUrl) qrUrl.style.display = showWifi ? 'none' : 'block';
+            };
+            qrMode?.addEventListener('change', toggleQrFields);
+            toggleQrFields();
+            qrMake?.addEventListener('click', () => {
+                const mode = qrMode?.value || 'wifi';
+                if (mode === 'wifi') {
+                    const ssid = (qrSsid?.value || '').trim();
+                    const pass = (qrPass?.value || '').trim();
+                    if (!ssid) {
+                        alert('Enter the Wi-Fi network name (SSID).');
+                        return;
+                    }
+                    const payload = `WIFI:T:WPA;S:${ssid};P:${pass};H:false;`;
+                    if (qrOut) {
+                        qrOut.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(payload)}`;
+                        qrOut.style.display = 'block';
+                    }
+                } else {
+                    const url = (qrUrl?.value || '').trim();
+                    if (!url) {
+                        alert('Enter a URL to generate a QR.');
+                        return;
+                    }
+                    if (qrOut) {
+                        qrOut.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(url)}`;
+                        qrOut.style.display = 'block';
+                    }
+                }
+            });
+
+            // Secure notes (AES-GCM in-browser)
+            const secPlain = document.getElementById('secPlain');
+            const secKey = document.getElementById('secKey');
+            const secEncrypt = document.getElementById('secEncrypt');
+            const secDecrypt = document.getElementById('secDecrypt');
+            const secCipher = document.getElementById('secCipher');
+            const textToBytes = (str) => new TextEncoder().encode(str);
+            const bytesToBase64 = (bytes) => btoa(String.fromCharCode(...bytes));
+            const base64ToBytes = (b64) => Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+            const deriveKey = async (pass) => {
+                const enc = new TextEncoder();
+                const keyMaterial = await crypto.subtle.importKey('raw', enc.encode(pass), { name: 'PBKDF2' }, false, ['deriveKey']);
+                return crypto.subtle.deriveKey(
+                    { name: 'PBKDF2', salt: enc.encode('tsb-secure-notes'), iterations: 100000, hash: 'SHA-256' },
+                    keyMaterial,
+                    { name: 'AES-GCM', length: 256 },
+                    false,
+                    ['encrypt', 'decrypt']
+                );
+            };
+            secEncrypt?.addEventListener('click', async () => {
+                const plain = secPlain?.value || '';
+                const pass = secKey?.value || '';
+                if (!plain || !pass) {
+                    alert('Enter a note and passphrase first.');
+                    return;
+                }
+                const iv = crypto.getRandomValues(new Uint8Array(12));
+                const key = await deriveKey(pass);
+                const encrypted = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, textToBytes(plain));
+                const payload = `${bytesToBase64(iv)}:${bytesToBase64(new Uint8Array(encrypted))}`;
+                if (secCipher) secCipher.value = payload;
+            });
+            secDecrypt?.addEventListener('click', async () => {
+                const payload = secCipher?.value || '';
+                const pass = secKey?.value || '';
+                if (!payload || !pass) {
+                    alert('Enter ciphertext and passphrase first.');
+                    return;
+                }
+                const [ivB64, dataB64] = payload.split(':');
+                if (!ivB64 || !dataB64) {
+                    alert('Ciphertext format invalid.');
+                    return;
+                }
+                const iv = base64ToBytes(ivB64);
+                const data = base64ToBytes(dataB64);
+                try {
+                    const key = await deriveKey(pass);
+                    const decrypted = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, data);
+                    const text = new TextDecoder().decode(decrypted);
+                    if (secPlain) secPlain.value = text;
+                } catch (e) {
+                    alert('Decryption failed. Check passphrase or data.');
+                }
+            });
+
+            // EXIF/metadata stripper
+            const exifInput = document.getElementById('exifInput');
+            const exifStrip = document.getElementById('exifStrip');
+            const exifInfo = document.getElementById('exifInfo');
+            const exifDownload = document.getElementById('exifDownload');
+            exifStrip?.addEventListener('click', () => {
+                const file = exifInput?.files?.[0];
+                if (!file) {
+                    if (exifInfo) exifInfo.textContent = 'Choose an image first.';
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0);
+                        canvas.toBlob((blob) => {
+                            if (blob) {
+                                const url = URL.createObjectURL(blob);
+                                if (exifDownload) {
+                                    exifDownload.href = url;
+                                    exifDownload.style.display = 'inline-flex';
+                                }
+                                if (exifInfo) exifInfo.textContent = 'Metadata stripped. Download the cleaned image.';
+                            }
+                        }, 'image/jpeg', 0.92);
+                    };
+                    img.src = e.target?.result;
+                };
+                reader.readAsDataURL(file);
+            });
+
+            // Spell-check helper
+            const spellArea = document.getElementById('spellArea');
+            const spellCopy = document.getElementById('spellCopy');
+            const spellClear = document.getElementById('spellClear');
+            spellCopy?.addEventListener('click', async () => {
+                const text = spellArea?.value || '';
+                try {
+                    await navigator.clipboard.writeText(text);
+                    spellCopy.textContent = 'Copied';
+                    setTimeout(() => (spellCopy.textContent = 'Copy text'), 1200);
+                } catch (e) {
+                    alert('Copy failed. You can copy manually:\n\n' + text);
+                }
+            });
+            spellClear?.addEventListener('click', () => {
+                if (spellArea) spellArea.value = '';
+            });
+
             const linkInput = document.getElementById('linkInput');
             const linkMake = document.getElementById('linkMake');
             const linkOutput = document.getElementById('linkOutput');
@@ -474,25 +712,6 @@
             };
             tzA?.addEventListener('change', updateTZ);
             tzB?.addEventListener('change', updateTZ);
-
-            const dataFile = document.getElementById('dataFile');
-            const dataClean = document.getElementById('dataClean');
-            const dataOutput = document.getElementById('dataOutput');
-            dataClean?.addEventListener('click', () => {
-                const file = dataFile?.files?.[0];
-                if (!file) {
-                    dataOutput.value = 'Choose a CSV file first.';
-                    return;
-                }
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const text = e.target?.result || '';
-                    const rows = text.split(/\r?\n/).map((r) => r.trim()).filter(Boolean);
-                    const cleaned = Array.from(new Set(rows)).join('\n');
-                    dataOutput.value = cleaned;
-                };
-                reader.readAsText(file);
-            });
 
             const imageInput = document.getElementById('imageInput');
             const imageMax = document.getElementById('imageMax');
