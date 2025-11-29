@@ -688,20 +688,27 @@
                 try {
                     parsed = new URL(value);
                 } catch {
-                    findings.push('Not a valid URL.');
+                    findings.push({ level: 'red', text: 'Not a valid URL.' });
                     return findings;
                 }
                 const host = parsed.hostname.toLowerCase();
                 const tld = host.split('.').pop() || '';
-                if (parsed.protocol !== 'https:') findings.push('Uses HTTP instead of HTTPS.');
-                if (looksLikeIp(host)) findings.push('Uses a bare IP instead of a hostname.');
-                if (hasPunycode(host)) findings.push('Hostname contains punycode (look-alike domain risk).');
-                if (countDots(host) >= 4) findings.push('Many subdomains detected.');
-                if (suspiciousTlds.has(tld)) findings.push(`TLD ${tld} is often abused; verify source.`);
-                if (looksShortener(host)) findings.push('Link shortener detected; destination hidden.');
-                if (parsed.username || parsed.password) findings.push('URL contains embedded credentials (phishing risk).');
-                if (!findings.length) findings.push('No obvious red flags found, but still proceed carefully.');
+                if (parsed.protocol !== 'https:') findings.push({ level: 'yellow', text: 'Uses HTTP instead of HTTPS.' });
+                if (looksLikeIp(host)) findings.push({ level: 'yellow', text: 'Uses a bare IP instead of a hostname.' });
+                if (hasPunycode(host)) findings.push({ level: 'yellow', text: 'Hostname contains punycode (look-alike domain risk).' });
+                if (countDots(host) >= 4) findings.push({ level: 'yellow', text: 'Many subdomains detected.' });
+                if (suspiciousTlds.has(tld)) findings.push({ level: 'yellow', text: `TLD ${tld} is often abused; verify source.` });
+                if (looksShortener(host)) findings.push({ level: 'yellow', text: 'Link shortener detected; destination hidden.' });
+                if (parsed.username || parsed.password) findings.push({ level: 'red', text: 'URL contains embedded credentials (phishing risk).' });
+                if (!findings.length) findings.push({ level: 'green', text: 'No obvious red flags found, but still proceed carefully.' });
                 return findings;
+            };
+            const badgeFor = (level) => {
+                const color = level === 'red' ? '#e74c3c' : level === 'yellow' ? '#f1c40f' : '#2ecc71';
+                return `<span style="display:inline-flex;align-items:center;gap:8px;margin:2px 0;">
+                    <span style="width:10px;height:10px;border-radius:50%;background:${color};flex-shrink:0;"></span>
+                    <span>${level.toUpperCase()}</span>
+                </span>`;
             };
             urlCheck?.addEventListener('click', () => {
                 const val = urlInput?.value.trim();
@@ -710,7 +717,7 @@
                     return;
                 }
                 const res = checkUrl(val);
-                urlResult.innerHTML = res.map((r) => `- ${r}`).join('<br>');
+                urlResult.innerHTML = res.map((r) => `${badgeFor(r.level)} ${r.text}`).join('<br>');
             });
 
             const linkInput = document.getElementById('linkInput');
