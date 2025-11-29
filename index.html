@@ -1,10 +1,11 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tech Support Bro</title>
     <link rel="stylesheet" href="./public/styles.css">
+    <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
 </head>
 <body>
     <main class="layout">
@@ -59,7 +60,7 @@
     <div class="utilities-grid">
                 <div class="utility-card">
                     <h3>PDF mini-suite</h3>
-            <p>Merge, split, sign, and fill PDFs without leaving the page.</p>
+            <p>Turn images or plain text into a PDF. Everything stays in your browser.</p>
             <button class="ghost" type="button" data-target="#tool-pdf" aria-label="Open PDF tool">Open</button>
         </div>
                 <div class="utility-card">
@@ -104,10 +105,11 @@
     <div class="utilities-grid">
                 <div class="utility-card" id="tool-pdf">
                     <h3>PDF mini-suite</h3>
-            <p>Merge or split PDFs here; signing/filling support coming next.</p>
-            <input id="pdfInput" type="file" accept="application/pdf" multiple aria-label="PDF files">
-            <button class="ghost" type="button" id="pdfProcess">Merge / Split (coming soon)</button>
+            <p>Create a PDF from images or plain text right here in the browser.</p>
+            <input id="pdfInput" type="file" accept="image/*,text/plain" multiple aria-label="Files to turn into PDF">
+            <button class="ghost" type="button" id="pdfProcess">Create PDF</button>
             <div id="pdfOutput" class="node-summary"></div>
+            <a id="pdfDownload" class="ghost" style="display:none; margin-top:6px;" download="converted.pdf">Download PDF</a>
         </div>
                 <div class="utility-card" id="tool-image">
                     <h3>Screenshots & images</h3>
@@ -169,12 +171,12 @@
                 <div>
                     <p class="node-path">Start here</p>
                     <h2>How this tool works</h2>
-                    <p class="node-summary">Tap â€œStart troubleshootingâ€ first, then pick your category. Follow the branching steps, and use Back or Start over anytime.</p>
+                    <p class="node-summary">Tap "Start troubleshooting" first, then pick your category. Follow the branching steps, and use Back or Start over anytime.</p>
                 </div>
             </div>
             <div class="node-body">
                 <div class="node-response">
-                    <strong>What to expect:</strong> click â€œStart troubleshooting,â€ choose your device/issue, then follow clear step-by-step actions with official links. Use Back to adjust or Start over to reset. Nothing is stored or sentâ€”everything runs in your browser.
+                    <strong>What to expect:</strong> click "Start troubleshooting," choose your device/issue, then follow clear step-by-step actions with official links. Use Back to adjust or Start over to reset. Nothing is stored or sent?everything runs in your browser.
                     <ul class="node-summary" style="margin-top: 10px; text-align: left;">
                         <li>[WiFi] toggles: Windows Start > Settings > Network & Internet > Wi-Fi; iOS Settings > Wi-Fi; Android quick settings pull-down.</li>
                         <li>[Gear] Settings opens device menus (Windows gear icon, iOS/Android Settings app).</li>
@@ -281,6 +283,108 @@
                         setTimeout(() => target.classList.remove('pulse'), 650);
                     }
                 });
+            });
+
+            const pdfInput = document.getElementById('pdfInput');
+            const pdfProcess = document.getElementById('pdfProcess');
+            const pdfOutput = document.getElementById('pdfOutput');
+            const pdfDownload = document.getElementById('pdfDownload');
+            const readFile = (file, mode = 'arraybuffer') =>
+                new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onerror = () => reject(reader.error || new Error('Read failed'));
+                    reader.onload = () => resolve(reader.result);
+                    if (mode === 'text') reader.readAsText(file);
+                    else if (mode === 'dataurl') reader.readAsDataURL(file);
+                    else reader.readAsArrayBuffer(file);
+                });
+
+            pdfProcess?.addEventListener('click', async () => {
+                if (!pdfOutput) return;
+                if (!window.PDFLib) {
+                    pdfOutput.textContent = 'PDF engine failed to load. Please retry.';
+                    return;
+                }
+                const files = Array.from(pdfInput?.files || []);
+                if (!files.length) {
+                    pdfOutput.textContent = 'Choose one or more images or a .txt file to convert.';
+                    if (pdfDownload) pdfDownload.style.display = 'none';
+                    return;
+                }
+                const { PDFDocument, StandardFonts } = PDFLib;
+                const pdfDoc = await PDFDocument.create();
+                const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+                let added = 0;
+                let skipped = 0;
+
+                for (const file of files) {
+                    if (file.type.startsWith('image/')) {
+                        try {
+                            const bytes = new Uint8Array(await readFile(file, 'arraybuffer'));
+                            const image = file.type.includes('png')
+                                ? await pdfDoc.embedPng(bytes)
+                                : await pdfDoc.embedJpg(bytes);
+                            const { width, height } = image.scale(1);
+                            const page = pdfDoc.addPage([width, height]);
+                            page.drawImage(image, { x: 0, y: 0, width, height });
+                            added++;
+                        } catch (e) {
+                            skipped++;
+                        }
+                    } else if (file.type === 'text/plain') {
+                        const text = await readFile(file, 'text');
+                        const wrapLine = (str) => {
+                            const words = str.split(' ');
+                            const lines = [];
+                            let current = '';
+                            const maxWidth = 500;
+                            for (const word of words) {
+                                const test = current ? `${current} ${word}` : word;
+                                if (font.widthOfTextAtSize(test, 12) > maxWidth) {
+                                    lines.push(current || word);
+                                    current = word;
+                                } else {
+                                    current = test;
+                                }
+                            }
+                            if (current) lines.push(current);
+                            return lines;
+                        };
+                        const lines = text.split(/\r?\n/).flatMap((ln) => wrapLine(ln));
+                        let page = pdfDoc.addPage([612, 792]);
+                        const maxWidth = 500;
+                        const lineHeight = 18;
+                        let y = page.getHeight() - 60;
+                        for (const ln of lines) {
+                            if (y < 60) {
+                                page = pdfDoc.addPage([612, 792]);
+                                y = page.getHeight() - 60;
+                            }
+                            page.drawText(ln, { x: 50, y, size: 12, font, maxWidth });
+                            y -= lineHeight;
+                        }
+                        added++;
+                    } else {
+                        skipped++;
+                    }
+                }
+
+                if (!added) {
+                    pdfOutput.textContent = 'No supported files were added. Use images or .txt files.';
+                    if (pdfDownload) pdfDownload.style.display = 'none';
+                    return;
+                }
+
+                const pdfBytes = await pdfDoc.save();
+                const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+                const url = URL.createObjectURL(blob);
+                if (pdfDownload) {
+                    pdfDownload.href = url;
+                    pdfDownload.style.display = 'inline-flex';
+                }
+                pdfOutput.textContent = skipped
+                    ? `Built a PDF with ${added} file(s). Skipped ${skipped} unsupported type(s).`
+                    : `Built a PDF with ${added} file(s).`;
             });
 
             const snippetInput = document.getElementById('snippetInput');
