@@ -18,6 +18,8 @@
                         Escalate to Garin
                     </a>
                 </div>
+                <p class="node-summary" style="margin-top:8px;">A free, browser-only toolkit to fix common tech issues and speed up everyday office work.</p>
+                <p class="node-summary">Built for home users, students, and small offices.</p>
             </div>
             <div class="hero-visual">
                 <div class="grid-lines"></div>
@@ -32,7 +34,7 @@
                             <video autoplay muted loop playsinline>
                                 <source src="./public/ITChatBuddyAvatar.mp4" type="video/mp4">
                                 <source src="./public/ITChatBuddyAvatar.mov" type="video/quicktime">
-                                Your browser does not support inline video playback.
+                                <a href="https://www.youtube.com" target="_blank" rel="noopener">Open demo video</a>
                             </video>
                             <h2 class="tablet-title">Tech Support Bro</h2>
                             <span class="tablet-caption">"What can I fix for you today?"</span>
@@ -52,7 +54,7 @@
         <section class="tree-card utilities-section">
     <div class="tree-header">
         <div>
-            <p class="node-path">Utilities hub</p>
+            <p class="node-path">Office utilities</p>
             <h2>Quick office tools</h2>
             <p class="node-summary">Open a tool to get fast, guided actions. Start troubleshooting remains below.</p>
         </div>
@@ -147,7 +149,7 @@
 </section><section class="tree-card utilities-section" id="utilities-panels">
     <div class="tree-header">
         <div>
-            <p class="node-path">Tools</p>
+            <p class="node-path">Office utilities</p>
             <h2>Swiss army toolset</h2>
             <p class="node-summary">Simple panels you can tap to get the job done. Copy/download as you go.</p>
         </div>
@@ -323,7 +325,7 @@
         <section class="tree-card">
             <div class="tree-header">
                 <div>
-                    <p class="node-path">Start here</p>
+                    <p class="node-path">Guided troubleshooting</p>
                     <h2>How this tool works</h2>
                     <p class="node-summary">Tap "Start troubleshooting" first, then pick your category. Follow the branching steps, and use Back or Start over anytime.</p>
                 </div>
@@ -812,6 +814,15 @@
                 urlResult.innerHTML = res.map((r) => `${badgeFor(r.level)} ${r.text}`).join('<br>');
             });
 
+            // About / disclaimer for heuristics
+            const urlDisclaimerTarget = document.getElementById('urlResult');
+            if (urlDisclaimerTarget) {
+                const note = document.createElement('div');
+                note.className = 'node-summary';
+                note.textContent = 'These checks are heuristic only and cannot guarantee safety.';
+                urlDisclaimerTarget.insertAdjacentElement('beforebegin', note);
+            }
+
             // Receipt generator
             const recBiz = document.getElementById('recBiz');
             const recItem = document.getElementById('recItem');
@@ -1026,6 +1037,10 @@
                 }
                 const res = loginHeuristics(val);
                 loginResult.innerHTML = res.map((r) => `${badgeFor(r.level)} ${r.text}`).join('<br>');
+                const note = document.createElement('div');
+                note.className = 'node-summary';
+                note.textContent = 'Heuristic only: always verify the domain and use your normal security checks.';
+                loginResult.insertAdjacentElement('afterend', note);
             });
 
             // Meeting countdown
@@ -1056,6 +1071,30 @@
                 updateMeet();
                 meetTimer = setInterval(updateMeet, 1000);
             });
+
+            // About G / Tech Support Bro
+            (() => {
+                const aboutHost = document.getElementById('treePanel');
+                if (!aboutHost) return;
+                const about = document.createElement('section');
+                about.className = 'tree-card';
+                about.innerHTML = `
+                    <div class="tree-header">
+                        <div>
+                            <p class="node-path">About</p>
+                            <h2>Who is Tech Support Bro?</h2>
+                            <p class="node-summary">Built by Garin Bailey, Senior IT Specialist (field-tested support, no data collection).</p>
+                        </div>
+                    </div>
+                    <div class="node-body">
+                        <div class="node-response">
+                            <p>I help people solve everyday tech problems without collecting their data. This tool runs in your browser only and is not a replacement for your company IT policies.</p>
+                            <p style="margin-top:8px;">Connect: <a href="https://www.linkedin.com/in/gbailey216/" target="_blank" rel="noopener">LinkedIn</a></p>
+                        </div>
+                    </div>
+                `;
+                aboutHost.insertAdjacentElement('beforebegin', about);
+            })();
 
             const linkInput = document.getElementById('linkInput');
             const linkMake = document.getElementById('linkMake');
