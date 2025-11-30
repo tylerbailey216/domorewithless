@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tech Support Bro</title>
-    <link rel="stylesheet" href="./public/styles.css?v=tsb1">
+    <link rel="stylesheet" href="./public/styles.css?v=tsb2">
     <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
     <style>
         .floating-nav {
@@ -472,12 +472,28 @@
             </div>
         </section>
 
+        <section class="tree-card" id="about">
+            <div class="tree-header">
+                <div>
+                    <p class="node-path">About</p>
+                    <h2>Who is Tech Support Bro?</h2>
+                    <p class="node-summary">Built by Garin Bailey, Senior IT Specialist (field-tested support, no data collection).</p>
+                </div>
+            </div>
+            <div class="node-body">
+                <div class="node-response">
+                    <p>I help people solve everyday tech problems without collecting their data. This tool runs in your browser only and is not a replacement for your company IT policies.</p>
+                    <p style="margin-top:8px;">Connect: <a href="https://www.linkedin.com/in/gbailey216/" target="_blank" rel="noopener">LinkedIn</a></p>
+                </div>
+            </div>
+        </section>
+
         <section class="privacy-note" id="privacy">
             Privacy: We don't collect personal data. This tool runs locally in your browser; no analytics or telemetry are sent.
         </section>
 
     </main>
-    <script src="./public/app.js?v=tsb1"></script>
+    <script src="./public/app.js?v=tsb2"></script>
     <script>
         (() => {
             // Always start at top; prevent scroll restoration
@@ -1126,31 +1142,6 @@
                 updateMeet();
                 meetTimer = setInterval(updateMeet, 1000);
             });
-
-            // About G / Tech Support Bro
-            (() => {
-                const aboutHost = document.getElementById('treePanel');
-                if (!aboutHost) return;
-                const about = document.createElement('section');
-                about.className = 'tree-card';
-                about.id = 'about';
-                about.innerHTML = `
-                    <div class="tree-header">
-                        <div>
-                            <p class="node-path">About</p>
-                            <h2>Who is Tech Support Bro?</h2>
-                            <p class="node-summary">Built by Garin Bailey, Senior IT Specialist (field-tested support, no data collection).</p>
-                        </div>
-                    </div>
-                    <div class="node-body">
-                        <div class="node-response">
-                            <p>I help people solve everyday tech problems without collecting their data. This tool runs in your browser only and is not a replacement for your company IT policies.</p>
-                            <p style="margin-top:8px;">Connect: <a href="https://www.linkedin.com/in/gbailey216/" target="_blank" rel="noopener">LinkedIn</a></p>
-                        </div>
-                    </div>
-                `;
-                aboutHost.insertAdjacentElement('beforebegin', about);
-            })();
 
             const linkInput = document.getElementById('linkInput');
             const linkMake = document.getElementById('linkMake');
