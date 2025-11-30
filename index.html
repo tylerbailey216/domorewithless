@@ -105,8 +105,49 @@
                 </div>
             </div>
         </section>
-
-        <section class="tree-card utilities-section" id="tools">
+<section class="tree-card">
+            <div class="tree-header">
+                <div>
+                    <p class="node-path">Guided troubleshooting</p>
+                    <h2>How this tool works</h2>
+                    <p class="node-summary">Tap "Start troubleshooting" first, then pick your category. Follow the branching steps, and use Back or Start over anytime.</p>
+                </div>
+            </div>
+            <div class="node-body">
+                <div class="node-response">
+                    <strong>What to expect:</strong> click "Start troubleshooting," choose your device/issue, then follow clear step-by-step actions with official links. Use Back to adjust or Start over to reset. Nothing is stored or sent?everything runs in your browser.
+                    <ul class="node-summary" style="margin-top: 10px; text-align: left;">
+                        <li>[WiFi] toggles: Windows Start > Settings > Network & Internet > Wi-Fi; iOS Settings > Wi-Fi; Android quick settings pull-down.</li>
+                        <li>[Gear] Settings opens device menus (Windows gear icon, iOS/Android Settings app).</li>
+                        <li>[Power] Restart: hold power button, choose Restart (or Settings > System > Restart).</li>
+                        <li>[Back] Use Back/Start over anytime to change direction.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+<section class="tree-card" id="troubleshooting">
+            <div class="tree-header">
+                <div>
+                    <p class="node-path" id="nodePath">Start</p>
+                    <h2 id="nodeTitle">Choose a Help Topic</h2>
+                    <p class="node-summary" id="nodeSummary">Click "Start troubleshooting" to load the root of the decision tree.</p>
+                </div>
+                <div class="tree-controls">
+                    <button class="ghost" id="backBtn" disabled>Back</button>
+                    <button class="ghost" id="restartBtn" disabled>Start over</button>
+                    <button class="ghost" id="copyPlanBtn" disabled>Copy plan</button>
+                </div>
+            </div>
+            <div class="node-body">
+                <div class="node-response" id="nodeResponse">
+                    The offline instructions will appear here after you pick a branch.
+                </div>
+                <div class="node-tags" id="nodeTags"></div>
+                <div class="node-links" id="nodeLinks"></div>
+                <div class="node-children" id="nodeChildren"></div>
+            </div>
+        </section>
+<section class="tree-card utilities-section" id="tools">
     <div class="tree-header">
         <div>
             <p class="node-path">Office utilities</p>
@@ -201,7 +242,8 @@
             <button class="ghost" type="button" data-target="#tool-countdown" aria-label="Open meeting countdown">Open</button>
         </div>
     </div>
-</section><section class="tree-card utilities-section" id="utilities-panels">
+</section>
+<section class="tree-card utilities-section" id="utilities-panels">
     <div class="tree-header">
         <div>
             <p class="node-path">Office utilities</p>
@@ -378,50 +420,6 @@
         </div>
     </div>
 </section>
-
-        <section class="tree-card">
-            <div class="tree-header">
-                <div>
-                    <p class="node-path">Guided troubleshooting</p>
-                    <h2>How this tool works</h2>
-                    <p class="node-summary">Tap "Start troubleshooting" first, then pick your category. Follow the branching steps, and use Back or Start over anytime.</p>
-                </div>
-            </div>
-            <div class="node-body">
-                <div class="node-response">
-                    <strong>What to expect:</strong> click "Start troubleshooting," choose your device/issue, then follow clear step-by-step actions with official links. Use Back to adjust or Start over to reset. Nothing is stored or sent?everything runs in your browser.
-                    <ul class="node-summary" style="margin-top: 10px; text-align: left;">
-                        <li>[WiFi] toggles: Windows Start > Settings > Network & Internet > Wi-Fi; iOS Settings > Wi-Fi; Android quick settings pull-down.</li>
-                        <li>[Gear] Settings opens device menus (Windows gear icon, iOS/Android Settings app).</li>
-                        <li>[Power] Restart: hold power button, choose Restart (or Settings > System > Restart).</li>
-                        <li>[Back] Use Back/Start over anytime to change direction.</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <section class="tree-card" id="troubleshooting">
-            <div class="tree-header">
-                <div>
-                    <p class="node-path" id="nodePath">Start</p>
-                    <h2 id="nodeTitle">Choose a Help Topic</h2>
-                    <p class="node-summary" id="nodeSummary">Click "Start troubleshooting" to load the root of the decision tree.</p>
-                </div>
-                <div class="tree-controls">
-                    <button class="ghost" id="backBtn" disabled>Back</button>
-                    <button class="ghost" id="restartBtn" disabled>Start over</button>
-                    <button class="ghost" id="copyPlanBtn" disabled>Copy plan</button>
-                </div>
-            </div>
-            <div class="node-body">
-                <div class="node-response" id="nodeResponse">
-                    The offline instructions will appear here after you pick a branch.
-                </div>
-                <div class="node-tags" id="nodeTags"></div>
-                <div class="node-links" id="nodeLinks"></div>
-                <div class="node-children" id="nodeChildren"></div>
-            </div>
-        </section>
 
         <section class="vibe-section" id="wellness">
             <div class="vibe-copy">
