@@ -6,15 +6,63 @@
     <title>Tech Support Bro</title>
     <link rel="stylesheet" href="./styles.css">
     <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+    <style>
+        .floating-nav {
+            position: fixed;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding: 10px;
+            background: rgba(16, 18, 30, 0.88);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+        }
+        .floating-nav a {
+            color: #9fe8ff;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 13px;
+            padding: 6px 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .floating-nav a:hover {
+            background: rgba(159, 232, 255, 0.12);
+        }
+        @media (max-width: 768px) {
+            .floating-nav {
+                top: auto;
+                bottom: 14px;
+                right: 10px;
+                transform: none;
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 6px;
+                width: calc(100% - 32px);
+                justify-content: center;
+            }
+            .floating-nav a {
+                font-size: 12px;
+                padding: 6px 8px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <nav style="position:sticky;top:0;z-index:999;display:flex;gap:12px;align-items:center;padding:10px 14px;background:rgba(16,18,30,0.8);backdrop-filter:blur(8px);">
-        <a href="#tools" style="color:#9fe8ff;text-decoration:none;font-weight:600;">Tools</a>
-        <a href="#troubleshooting" style="color:#9fe8ff;text-decoration:none;font-weight:600;">Troubleshooting</a>
-        <a href="#wellness" style="color:#9fe8ff;text-decoration:none;font-weight:600;">Wellness</a>
-        <a href="#about" style="color:#9fe8ff;text-decoration:none;font-weight:600;">About</a>
-        <a href="#privacy" style="color:#9fe8ff;text-decoration:none;font-weight:600;">Privacy</a>
-    </nav>
+    <div class="floating-nav">
+        <a href="#tools">Tools</a>
+        <a href="#troubleshooting">Troubleshooting</a>
+        <a href="#wellness">Wellness</a>
+        <a href="#about">About</a>
+        <a href="#privacy">Privacy</a>
+    </div>
     <main class="layout">
         <section class="hero hero-shell">
             <div class="hero-content">
