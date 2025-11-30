@@ -1281,7 +1281,7 @@
     });
 
     if (els.startBtn) {
-        els.startBtn.addEventListener('click', () => {
+        [els.startBtn, document.getElementById('inlineStartBtn')].forEach(btn => btn && btn.addEventListener('click', () => {
             startTree();
         });
     }
