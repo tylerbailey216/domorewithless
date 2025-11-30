@@ -1307,6 +1307,51 @@
         response: 'Pick a lane above to load your first branch.'
     }];
     render();
+
+    // Affirmations / virtual phone loop
+    (() => {
+        const affirmations = [
+            { tag: 'Grounding', text: 'Your calm is contagious.', source: '- Message from G' },
+            { tag: 'Momentum', text: 'Tiny fixes stack up. Keep going.', source: '- Message from G' },
+            { tag: 'Breather', text: 'Pause, sip water, then solve.', source: '- Message from G' },
+            { tag: 'Clarity', text: 'One step, then the next. You got this.', source: '- Message from G' },
+            { tag: 'Focus', text: 'Mute the noise. Fix the signal.', source: '- Message from G' },
+        ];
+        const tagEl = document.getElementById('affirmationTag');
+        const textEl = document.getElementById('affirmationText');
+        const srcEl = document.getElementById('affirmationSource');
+        const timeEl = document.getElementById('affirmationTime');
+        const tickerEl = document.getElementById('affirmationTicker');
+        const nextBtn = document.getElementById('affirmationNext');
+        let idx = 0;
+
+        const updateTime = () => {
+            if (!timeEl) return;
+            const now = new Date();
+            const hh = now.getHours().toString().padStart(2, '0');
+            const mm = now.getMinutes().toString().padStart(2, '0');
+            timeEl.textContent = `${hh}:${mm}`;
+        };
+
+        const renderAffirmation = () => {
+            const a = affirmations[idx % affirmations.length];
+            if (tagEl) tagEl.textContent = a.tag;
+            if (textEl) textEl.textContent = a.text;
+            if (srcEl) srcEl.textContent = a.source;
+            if (tickerEl) tickerEl.textContent = a.text;
+        };
+
+        const nextAffirmation = () => {
+            idx = (idx + 1) % affirmations.length;
+            renderAffirmation();
+        };
+
+        updateTime();
+        renderAffirmation();
+        setInterval(updateTime, 30 * 1000);
+        setInterval(nextAffirmation, 10 * 1000);
+        if (nextBtn) nextBtn.addEventListener('click', nextAffirmation);
+    })();
 })();
 
 const initTabletInteraction = () => {
