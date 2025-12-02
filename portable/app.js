@@ -33,6 +33,7 @@
                         links: [
                             { label: "HP Support - PC won't start", url: 'https://support.hp.com/us-en/document/c00006110' },
                             { label: 'Microsoft help video', url: 'https://www.youtube.com/watch?v=J3LJkSgEBrw' },
+                            { label: "Short demo: laptop won't turn on", url: 'https://youtube.com/shorts/oy--tpvsO7M' },
                         ],
                             },
                             {
@@ -59,6 +60,7 @@
                                 links: [
                                     { label: 'Microsoft support article', url: 'https://support.microsoft.com/search?query=Microsoft%20support%20article%20Windows' },
                                     { label: 'Microsoft update fix video', url: 'https://www.youtube.com/watch?v=udsJGOEEjAQ' },
+                                    { label: 'Short demo: run Windows Update', url: 'https://youtube.com/shorts/LD-o5PaWIk0?feature=share' },
                                 ],
                             },
                             {
@@ -1161,7 +1163,9 @@
         
         // Replace "Choose a Help Topic" with image (zoom: 40%, centered, with hover effects)
         if (node.title === 'Choose a Help Topic') {
-            els.title.innerHTML = '<img src="./chooseahelptopic.png" alt="Choose a Help Topic" class="help-topic-image">';
+            const isLight = document.body.classList.contains('theme-light');
+            const src = isLight ? './chooseahelptopicBLACK.png' : './chooseahelptopicWHITE.png';
+            els.title.innerHTML = `<img src="${src}" alt="Choose a Help Topic" class="help-topic-image">`;
         } else {
             els.title.textContent = node.title;
         }
@@ -1283,6 +1287,7 @@
     [els.startBtn, document.getElementById('inlineStartBtn')].forEach(btn => btn && btn.addEventListener('click', () => {
         startTree();
     }));
+    // Auto-load the tree on page ready so the UI always initializes even if the button click is blocked.
     startTree();
 
     // Optional embed button (may not exist in all versions)
@@ -1402,8 +1407,9 @@ const initTabletInteraction = () => {
     let rotationX = -8;
     let rotationY = 22;
     let isDragging = false;
-    let lastMouseX = 0;
-    let lastMouseY = 0;
+    let lastPointerX = 0;
+    let lastPointerY = 0;
+    let activePointerId = null;
     let idleTimer = null;
     let isAutoRotating = false;
     let autoRotateFrame = null;
@@ -1453,61 +1459,51 @@ const initTabletInteraction = () => {
         }, 3000); // Start auto-rotate after 3 seconds of inactivity
     };
 
-    let activePointerId = null;
-
-    const handlePointerDown = (event) => {
-        event.preventDefault();
-        isDragging = true;
-        activePointerId = event.pointerId;
-        lastMouseX = event.clientX;
-        lastMouseY = event.clientY;
-        resetIdleTimer();
-        document.body.style.cursor = 'grabbing';
-        if (stage.setPointerCapture) {
-            stage.setPointerCapture(activePointerId);
-        }
-    };
-
     const handlePointerMove = (event) => {
         if (!isDragging || event.pointerId !== activePointerId) {
             return;
         }
-        const deltaX = event.clientX - lastMouseX;
-        const deltaY = event.clientY - lastMouseY;
-        rotationY += deltaX * 0.5;
-        rotationX -= deltaY * 0.5;
+        const deltaX = event.clientX - lastPointerX;
+        const deltaY = event.clientY - lastPointerY;
+        rotationY += deltaX * 0.45;
+        rotationX -= deltaY * 0.45;
         rotationX = Math.max(-45, Math.min(45, rotationX));
         applyTransform();
-        lastMouseX = event.clientX;
-        lastMouseY = event.clientY;
+        lastPointerX = event.clientX;
+        lastPointerY = event.clientY;
     };
 
-    const handlePointerUp = (event) => {
+    const endPointerDrag = (event) => {
         if (!isDragging || event.pointerId !== activePointerId) {
             return;
         }
         isDragging = false;
         document.body.style.cursor = '';
         activePointerId = null;
-        if (stage.releasePointerCapture) {
-            stage.releasePointerCapture(event.pointerId);
-        }
+        window.removeEventListener('pointermove', handlePointerMove, true);
+        window.removeEventListener('pointerup', endPointerDrag, true);
+        window.removeEventListener('pointercancel', endPointerDrag, true);
         resetIdleTimer();
     };
 
-    const dragTargets = [stage, model, ...stage.querySelectorAll('*')];
-    dragTargets.forEach((element) => {
-        element.addEventListener('pointerdown', handlePointerDown, { capture: true, passive: false });
-    });
-
-    stage.addEventListener('pointermove', handlePointerMove);
-    stage.addEventListener('pointerup', handlePointerUp);
-    stage.addEventListener('pointercancel', handlePointerUp);
-    stage.addEventListener('pointerleave', (event) => {
-        if (isDragging) {
-            handlePointerUp(event);
+    const beginPointerDrag = (event) => {
+        if (event.button !== undefined && event.button !== 0) {
+            return;
         }
-    });
+        event.preventDefault();
+        resetIdleTimer();
+        isDragging = true;
+        activePointerId = event.pointerId;
+        lastPointerX = event.clientX;
+        lastPointerY = event.clientY;
+        document.body.style.cursor = 'grabbing';
+        window.addEventListener('pointermove', handlePointerMove, true);
+        window.addEventListener('pointerup', endPointerDrag, true);
+        window.addEventListener('pointercancel', endPointerDrag, true);
+    };
+
+    stage.addEventListener('pointerdown', beginPointerDrag, { passive: false });
+    model.addEventListener('pointerdown', beginPointerDrag, { passive: false });
 
     // Add hover effect when not dragging
     stage.addEventListener('mouseenter', () => {
