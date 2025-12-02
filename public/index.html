@@ -59,52 +59,21 @@
     <div class="floating-nav">
         <a href="#tools">Tools</a>
         <a href="#treePanel">Troubleshooting</a>
-        <a href="#wellness">Wellness</a>
         <a href="#about">About</a>
         <a href="#privacy">Privacy</a>
         <button id="themeToggle" class="ghost">Toggle light/dark</button>
     </div>
     <main class="layout">
         <section class="hero hero-shell">
-            <div class="hero-content">
-                <img src="./domorewithlesslogoWHITE.png" alt="Do More With Less" class="hero-logo theme-dark-only">
-                <img src="./domorewithlesslogoBLACK.png" alt="Do More With Less" class="hero-logo theme-light-only">
-                <div class="hero-actions">
+            <div class="hero-content" style="align-items:center; text-align:center;">
+                <img src="./domorewithlesslogoWHITE.png" alt="Do More With Less" class="hero-logo theme-dark-only" style="max-width: 420px; width: 100%; height: auto;">
+                <p class="node-summary" style="margin-top:8px;">Do More With Less Â· simple tech tools to keep your digital life flowing.</p>
+                <p class="node-summary">Calm, browser-only troubleshooting for home users, students, and small offices.</p>
+                <div class="hero-actions" style="justify-content:center;">
                     <button id="startTree" class="primary">Start troubleshooting</button>
                     <a class="secondary" href="https://docs.google.com/forms/d/e/1FAIpQLSfoxhKvog1UU0YnpnK1U1toIyQkNborx3IAVtJOpc-5VwKhAg/viewform?usp=dialog" target="_blank" rel="noopener">
                         Escalate to Garin
                     </a>
-                </div>
-                <p class="node-summary" style="margin-top:8px;">Do More With Less Â· simple tech tools to keep your digital life flowing.</p>
-                <p class="node-summary">Calm, browser-only troubleshooting for home users, students, and small offices.</p>
-            </div>
-            <div class="hero-visual">
-                <div class="grid-lines"></div>
-                <div class="tablet-stage" id="tabletStage">
-                    <div class="tablet-shadow"></div>
-                    <div class="tablet" id="tabletModel">
-                        <div class="tablet-face"></div>
-                        <div class="tablet-back">
-                            <img class="tablet-back-logo theme-dark-only" draggable="false" src="./domorewithlesslogoWHITE.png" alt="Do More With Less logo">
-                            <img class="tablet-back-logo theme-light-only" draggable="false" src="./domorewithlesslogoBLACK.png" alt="Do More With Less logo">
-                        </div>
-                        <div class="tablet-screen">
-                            <video autoplay muted loop playsinline>
-                                <source src="./public/ITChatBuddyAvatar.mp4" type="video/mp4">
-                                <source src="./public/ITChatBuddyAvatar.mov" type="video/quicktime">
-                                <a href="https://www.youtube.com" target="_blank" rel="noopener">Open demo video</a>
-                            </video>
-                            <h2 class="tablet-title">Do More With Less</h2>
-                            <span class="tablet-caption">simple tools, calm fixes.</span>
-                            <div class="tablet-screen-indicator"></div>
-                        </div>
-                    </div>
-                    <div class="floating-badges">
-                        <div class="floating-badge">Fix my home Wi-Fi</div>
-                        <div class="floating-badge">Speed up my laptop</div>
-                        <div class="floating-badge">Reset forgotten passwords</div>
-                    </div>
-                    <div class="tablet-interactive-hint">Tap or click the tablet to interact</div>
                 </div>
             </div>
         </section>
@@ -250,7 +219,7 @@
     <div class="tree-header">
         <div>
             <p class="node-path">Office utilities</p>
-            <h2>Office Bro Utility Belt</h2>
+            <h2>Your Digital Toolbox</h2>
             <p class="node-summary">Simple panels you can tap to get the job done. Copy/download as you go.</p>
         </div>
     </div>
@@ -423,57 +392,6 @@
         </div>
     </div>
 </section>
-
-        <section class="vibe-section" id="wellness">
-            <div class="vibe-copy">
-                <p class="eyebrow">Mental reset</p>
-                <h2>Virtual phone affirmations</h2>
-                <p>
-                    Sometimes the fix is to pause for sixty seconds and hear a kind voice. Scroll into this lab to
-                    spin, tap, and read positive prompts before diving back into tough tickets.
-                </p>
-                <ul class="vibe-list">
-                    <li>Live loop of encouraging affirmations curated for late-night tech support sessions.</li>
-                    <li>Interactive 3D-inspired phone shell that reacts to your pointer drags.</li>
-                    <li>Quick action button cycles to the next vibe whenever you need another boost.</li>
-                </ul>
-                <div class="vibe-actions">
-                    <button type="button" class="ghost" id="affirmationNext">Inspire me again</button>
-                    <span class="vibe-caption">Gently scroll past the troubleshooting menus to reach this tool anytime.</span>
-                </div>
-            </div>
-            <div class="vibe-phone-column">
-                <div class="vibe-phone-glow"></div>
-                <div class="vibe-phone-stage" data-role="affirmation-stage">
-                    <div class="vibe-phone-rig" data-role="affirmation-rig">
-                        <div class="vibe-phone-shell">
-                            <span class="phone-signal"></span>
-                            <div class="vibe-phone-screen" id="affirmationScreen">
-                                <span class="screen-inner-shadow" aria-hidden="true"></span>
-                                <span class="screen-reflection" aria-hidden="true"></span>
-                                <div class="screen-status">
-                                <span id="affirmationTime">11:11</span>
-                                <span class="signal-indicator" aria-label="Signal strength">
-                                    <span class="signal-bar bar-1"></span>
-                                    <span class="signal-bar bar-2"></span>
-                                    <span class="signal-bar bar-3"></span>
-                                    <span class="signal-bar bar-4"></span>
-                                </span>
-                            </div>
-                                <div class="affirmation-tag speech-bubble bubble-tag bubble-layer-2" id="affirmationTag">Grounding</div>
-                                <blockquote class="speech-bubble bubble-message bubble-layer-3" id="affirmationText">Your calm is contagious.</blockquote>
-                                <p class="affirmation-meta speech-bubble bubble-meta bubble-layer-2" id="affirmationSource">- Message from 'G'</p>
-                                <div class="affirmation-ticker bubble-ticker" id="affirmationTicker"></div>
-                            </div>
-                            <div class="phone-notch">
-                                <span class="notch-speaker"></span>
-                                <span class="notch-camera"></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <section class="tree-card" id="about">
             <div class="tree-header">
