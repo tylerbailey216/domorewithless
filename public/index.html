@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tech Support Bro</title>
+    <title>Do More With Less</title>
     <link rel="stylesheet" href="./styles.css?v=tsb3">
     <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
     <style>
@@ -62,19 +62,21 @@
         <a href="#wellness">Wellness</a>
         <a href="#about">About</a>
         <a href="#privacy">Privacy</a>
+        <button id="themeToggle" class="ghost">Toggle light/dark</button>
     </div>
     <main class="layout">
         <section class="hero hero-shell">
             <div class="hero-content">
-                <img src="./techsupportbrologo.png" alt="Tech Support Bro" class="hero-logo">
+                <img src="./domorewithlesslogoWHITE.png" alt="Do More With Less" class="hero-logo theme-dark-only">
+                <img src="./domorewithlesslogoBLACK.png" alt="Do More With Less" class="hero-logo theme-light-only">
                 <div class="hero-actions">
                     <button id="startTree" class="primary">Start troubleshooting</button>
                     <a class="secondary" href="https://docs.google.com/forms/d/e/1FAIpQLSfoxhKvog1UU0YnpnK1U1toIyQkNborx3IAVtJOpc-5VwKhAg/viewform?usp=dialog" target="_blank" rel="noopener">
                         Escalate to Garin
                     </a>
                 </div>
-                <p class="node-summary" style="margin-top:8px;">A free, browser-only toolkit to fix common tech issues and speed up everyday office work.</p>
-                <p class="node-summary">Built for home users, students, and small offices.</p>
+                <p class="node-summary" style="margin-top:8px;">Do More With Less Â· simple tech tools to keep your digital life flowing.</p>
+                <p class="node-summary">Calm, browser-only troubleshooting for home users, students, and small offices.</p>
             </div>
             <div class="hero-visual">
                 <div class="grid-lines"></div>
@@ -83,7 +85,8 @@
                     <div class="tablet" id="tabletModel">
                         <div class="tablet-face"></div>
                         <div class="tablet-back">
-                            <img class="tablet-back-logo" draggable="false" src="./techsupportbrologo.png" alt="Tech Support Bro logo">
+                            <img class="tablet-back-logo theme-dark-only" draggable="false" src="./domorewithlesslogoWHITE.png" alt="Do More With Less logo">
+                            <img class="tablet-back-logo theme-light-only" draggable="false" src="./domorewithlesslogoBLACK.png" alt="Do More With Less logo">
                         </div>
                         <div class="tablet-screen">
                             <video autoplay muted loop playsinline>
@@ -91,8 +94,8 @@
                                 <source src="./public/ITChatBuddyAvatar.mov" type="video/quicktime">
                                 <a href="https://www.youtube.com" target="_blank" rel="noopener">Open demo video</a>
                             </video>
-                            <h2 class="tablet-title">Tech Support Bro</h2>
-                            <span class="tablet-caption">"What can I fix for you today?"</span>
+                            <h2 class="tablet-title">Do More With Less</h2>
+                            <span class="tablet-caption">simple tools, calm fixes.</span>
                             <div class="tablet-screen-indicator"></div>
                         </div>
                     </div>
@@ -476,7 +479,7 @@
             <div class="tree-header">
                 <div>
                     <p class="node-path">About</p>
-                    <h2>Who is Tech Support Bro?</h2>
+                    <h2>Who is Do More With Less?</h2>
                     <p class="node-summary">Built by Garin Bailey, Senior IT Specialist (field-tested support, no data collection).</p>
                 </div>
             </div>
@@ -499,6 +502,20 @@
             // Always start at top; prevent scroll restoration
             if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
             window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+
+            // Theme toggle
+            const body = document.body;
+            const toggle = document.getElementById('themeToggle');
+            const saved = localStorage.getItem('dmwl-theme');
+            if (saved === 'light') body.classList.add('theme-light');
+            const apply = () => {
+                const isLight = body.classList.contains('theme-light');
+                localStorage.setItem('dmwl-theme', isLight ? 'light' : 'dark');
+            };
+            toggle?.addEventListener('click', () => {
+                body.classList.toggle('theme-light');
+                apply();
+            });
 
             const scrollButtons = document.querySelectorAll('[data-target]');
             scrollButtons.forEach((btn) => {
@@ -1248,7 +1265,6 @@
     </script>
 </body>
 </html>
-
 
 
 

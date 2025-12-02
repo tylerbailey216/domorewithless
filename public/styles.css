@@ -40,17 +40,28 @@
 
 :root {
     color-scheme: dark;
-    --bg: radial-gradient(circle at 10% 20%, rgba(0, 246, 255, 0.18), transparent 55%),
-           radial-gradient(circle at 90% 10%, rgba(255, 0, 255, 0.18), transparent 60%),
-           linear-gradient(135deg, #090014 0%, #14072d 60%, #05000e 100%);
-    --panel: rgba(17, 13, 33, 0.9);
-    --panel-strong: rgba(19, 16, 38, 0.95);
-    --border: rgba(255, 255, 255, 0.08);
-    --accent: #00f6ff;
-    --accent-soft: rgba(0, 246, 255, 0.15);
-    --text: #f8f6ff;
-    --text-muted: rgba(248, 246, 255, 0.7);
-    --shadow: 0 60px 120px -60px rgba(0, 0, 0, 0.9);
+    --bg: linear-gradient(135deg, #0f1418 0%, #0b1114 50%, #0a0e10 100%);
+    --panel: rgba(18, 22, 26, 0.92);
+    --panel-strong: rgba(14, 18, 22, 0.95);
+    --border: rgba(255, 255, 255, 0.06);
+    --accent: #6ec4a7;
+    --accent-soft: rgba(110, 196, 167, 0.16);
+    --text: #eef2f4;
+    --text-muted: rgba(238, 242, 244, 0.7);
+    --shadow: 0 50px 100px -60px rgba(0, 0, 0, 0.8);
+}
+
+body.theme-light {
+    color-scheme: light;
+    --bg: linear-gradient(135deg, #f7f8f9 0%, #eef1f4 50%, #e9edef 100%);
+    --panel: rgba(255, 255, 255, 0.92);
+    --panel-strong: rgba(255, 255, 255, 0.96);
+    --border: rgba(10, 18, 30, 0.08);
+    --accent: #3a7c62;
+    --accent-soft: rgba(58, 124, 98, 0.12);
+    --text: #0e171f;
+    --text-muted: rgba(14, 23, 31, 0.7);
+    --shadow: 0 40px 80px -50px rgba(0, 0, 0, 0.18);
 }
 
 * {
@@ -70,18 +81,6 @@ body {
     overflow-x: hidden;
 }
 
-body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background: url('./techsupportbrologo.png') no-repeat center;
-    background-size: min(70vw, 900px);
-    opacity: 0.08;
-    filter: drop-shadow(0 40px 80px rgba(0, 0, 0, 0.6));
-    pointer-events: none;
-    z-index: 0;
-}
-
 .layout {
     width: min(1040px, 100%);
     display: flex;
@@ -92,6 +91,11 @@ body::before {
     margin: 0 auto;
     padding: 0 20px;
 }
+
+.theme-light-only { display: none; }
+.theme-dark-only { display: inline-block; }
+body.theme-light .theme-light-only { display: inline-block; }
+body.theme-light .theme-dark-only { display: none; }
 
 .hero {
     background: var(--panel);
