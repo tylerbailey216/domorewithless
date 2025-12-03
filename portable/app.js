@@ -1166,7 +1166,7 @@
             const isLight = document.body.classList.contains('theme-light');
             const path = window.location.pathname;
             const base = (path.includes('/public') || path.includes('/portable')) ? '.' : './public';
-            const src = isLight ? `${base}/chooseahelptopicWHITE.png` : `${base}/chooseahelptopicBLACK.png`;
+            const src = isLight ? `${base}/chooseahelptopicWHITE.png` : `${base}/chooseahelptopictextonlyWHITE.png`;
             els.title.innerHTML = `<img src="${src}" alt="Choose a Help Topic" class="help-topic-image">`;
         } else {
             els.title.textContent = node.title;
