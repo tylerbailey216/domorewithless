@@ -1164,7 +1164,7 @@
         // Replace "Choose a Help Topic" with image (zoom: 40%, centered, with hover effects)
         if (node.title === 'Choose a Help Topic') {
             const isLight = document.body.classList.contains('theme-light');
-            const src = isLight ? './chooseahelptopicBLACK.png' : './chooseahelptopicWHITE.png';
+            const src = isLight ? './chooseahelptopicWHITE.png' : './chooseahelptopicBLACK.png';
             els.title.innerHTML = `<img src="${src}" alt="Choose a Help Topic" class="help-topic-image">`;
         } else {
             els.title.textContent = node.title;

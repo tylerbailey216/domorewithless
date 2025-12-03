@@ -1662,8 +1662,18 @@ a:focus-visible {
     .tree-controls {
         width: 100%;
         justify-content: space-between;
-        gap: 10px;
-    }
+    gap: 10px;
+}
+
+body.theme-light .utility-card {
+    background: rgba(255,255,255,0.9);
+    border: 1px solid rgba(0,0,0,0.06);
+    box-shadow: 0 16px 40px -28px rgba(0,0,0,0.22);
+}
+
+body.theme-light .utilities-section {
+    background: transparent;
+}
     .node-children {
         grid-template-columns: 1fr;
     }
