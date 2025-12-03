@@ -40,7 +40,7 @@
 
 :root {
     color-scheme: dark;
-    --bg: linear-gradient(135deg, #0f1418 0%, #0b1114 50%, #0a0e10 100%);
+    --bg: #000000;
     --panel: rgba(18, 22, 26, 0.92);
     --panel-strong: rgba(14, 18, 22, 0.95);
     --border: rgba(255, 255, 255, 0.06);
@@ -92,10 +92,10 @@ body {
     padding: 0 20px;
 }
 
-.theme-light-only { display: none; }
-.theme-dark-only { display: inline-block; }
-body.theme-light .theme-light-only { display: inline-block; }
-body.theme-light .theme-dark-only { display: none; }
+.theme-light-only { display: none !important; }
+.theme-dark-only { display: inline-block !important; }
+body.theme-light .theme-light-only { display: inline-block !important; }
+body.theme-light .theme-dark-only { display: none !important; }
 
 .hero {
     background: var(--panel);
