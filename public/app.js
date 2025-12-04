@@ -1,7 +1,7 @@
 (() => {
     const DECISION_TREE = {
         id: 'root',
-        title: 'What do you need to fix?',
+        title: "Tell us what's happening",
         summary: 'Choose a category to load a deterministic troubleshooting plan.',
         response: `Pick the area closest to your situation. Each branch gives you field-tested steps plus official resources you can watch offline later.`,
         tags: [],
@@ -1308,7 +1308,7 @@
 
     // Initialize with a placeholder so the UI feels live even before first click.
     state.history = [{
-        breadcrumb: "Tell 'G' What's Happening",
+        breadcrumb: "Tell us what's happening",
         title: 'Choose a Help Topic',
         summary: 'Click "Start troubleshooting" to begin.',
         response: 'Pick a lane above to load your first branch.'
