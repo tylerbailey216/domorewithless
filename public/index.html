@@ -36,6 +36,20 @@
         .floating-nav a:hover {
             background: rgba(159, 232, 255, 0.12);
         }
+        .floating-nav #themeToggle {
+            font-weight: 800;
+            background: rgba(255, 255, 255, 0.08);
+            color: #f6f8fb;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            padding: 8px 12px;
+            border-radius: 10px;
+        }
+        body.theme-light .floating-nav #themeToggle {
+            background: rgba(58, 124, 98, 0.15);
+            color: #0e171f;
+            border: 1px solid rgba(14, 23, 31, 0.15);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        }
         @media (max-width: 768px) {
             .floating-nav {
                 top: auto;
