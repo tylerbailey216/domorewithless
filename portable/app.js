@@ -1308,7 +1308,7 @@
 
     // Initialize with a placeholder so the UI feels live even before first click.
     state.history = [{
-        breadcrumb: "Tell us what's happening",
+        breadcrumb: 'Start',
         title: 'Choose a Help Topic',
         summary: 'Click "Start troubleshooting" to begin.',
         response: 'Pick a lane above to load your first branch.'
