@@ -1158,9 +1158,9 @@
 
     const render = () => {
         const node = getCurrentNode();
-        // Use breadcrumb field if available, otherwise use title. Show a simple "Start" at the root to avoid duplicate headings.
+        // Use breadcrumb field if available; hide the breadcrumb at the root to prevent duplicate headings.
         els.path.textContent = state.history.length === 1
-            ? 'Start'
+            ? ''
             : state.history.map((item) => item.breadcrumb || item.title).join(' / ');
         
         // Replace "Choose a Help Topic" with image (zoom: 40%, centered, with hover effects)
