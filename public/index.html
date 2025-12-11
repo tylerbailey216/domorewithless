@@ -263,6 +263,7 @@
                 <button class="ghost" type="button" id="docxClear">Clear</button>
             </div>
             <div id="docxStatus" class="node-summary"></div>
+            <a id="docxDownload" class="ghost" style="display:none; margin-top:6px;" download>Download PDF</a>
             <div id="docxPreview" aria-hidden="true" style="position:absolute; left:-9999px; top:-9999px; max-width:800px;"></div>
         </div>
                 <div class="utility-card" id="tool-image">
@@ -1221,7 +1222,9 @@
             const docxClear = document.getElementById('docxClear');
             const docxStatus = document.getElementById('docxStatus');
             const docxPreview = document.getElementById('docxPreview');
+            const docxDownload = document.getElementById('docxDownload');
             let docxFile = null;
+            let docxUrl = null;
 
             const setStatus = (msg) => { if (docxStatus) docxStatus.textContent = msg || ''; };
             const resetPreview = () => { if (docxPreview) docxPreview.innerHTML = ''; };
@@ -1231,6 +1234,13 @@
                 resetPreview();
                 setStatus('');
                 if (docxConvert) docxConvert.disabled = true;
+                if (docxDownload) {
+                    if (docxUrl) URL.revokeObjectURL(docxUrl);
+                    docxUrl = null;
+                    docxDownload.style.display = 'none';
+                    docxDownload.removeAttribute('href');
+                    docxDownload.removeAttribute('download');
+                }
             };
 
             docxInput?.addEventListener('change', () => {
@@ -1281,8 +1291,18 @@
                     const baseName = docxFile.name.replace(/\.docx$/i, '');
                     await pdf.html(docxPreview, {
                         callback: (doc) => {
-                            doc.save(`${baseName}.pdf`);
-                            setStatus('Done. PDF downloaded.');
+                            // Build a blob and show a download link; also auto-click for convenience
+                            const blob = doc.output('blob');
+                            if (docxUrl) URL.revokeObjectURL(docxUrl);
+                            docxUrl = URL.createObjectURL(blob);
+                            if (docxDownload) {
+                                docxDownload.href = docxUrl;
+                                docxDownload.download = `${baseName}.pdf`;
+                                docxDownload.style.display = 'inline-flex';
+                                // attempt auto-download; if blocked, link is visible
+                                docxDownload.click();
+                            }
+                            setStatus('Ready. If the download didn\'t start, tap "Download PDF".');
                         },
                         margin: [40, 40, 40, 40],
                         autoPaging: 'text',
