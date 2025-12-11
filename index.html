@@ -1,275 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Do More With Less · Word to PDF</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <!-- Minimal, scoped styling for the Word → PDF tool -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Do More With Less</title>
+  <meta http-equiv="refresh" content="0; url=public/index.html">
   <style>
-    :root {
-      --dmwl-bg: #f7f7f7;
-      --dmwl-border: #dddddd;
-      --dmwl-text: #222222;
-      --dmwl-muted: #666666;
-      --dmwl-accent: #222222;
-      --dmwl-radius: 10px;
-      --dmwl-gap: 0.75rem;
-      --dmwl-font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-
     body {
       margin: 0;
-      padding: 1.5rem;
-      font-family: var(--dmwl-font);
-      background: #ffffff;
-      color: var(--dmwl-text);
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: #0f1116;
+      color: #f5f7fa;
     }
-
-    .dmwl-word2pdf-wrapper {
-      max-width: 640px;
-      margin: 0 auto;
+    a {
+      color: #9fe8ff;
+      text-decoration: none;
+      font-weight: 700;
+      border: 1px solid rgba(255,255,255,0.16);
+      padding: 10px 16px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.08);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
     }
-
-    .dmwl-word2pdf-card {
-      background: var(--dmwl-bg);
-      border: 1px solid var(--dmwl-border);
-      border-radius: var(--dmwl-radius);
-      padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: var(--dmwl-gap);
+    .card {
+      text-align: center;
+      padding: 32px 28px;
+      border-radius: 20px;
+      background: rgba(16,18,30,0.92);
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.55);
+      max-width: 420px;
+      margin: 24px;
     }
-
-    .dmwl-word2pdf-title {
-      font-size: 1.2rem;
-      font-weight: 600;
-      margin: 0;
-    }
-
-    .dmwl-word2pdf-subtitle {
-      margin: 0;
-      font-size: 0.95rem;
-      color: var(--dmwl-muted);
-      line-height: 1.5;
-    }
-
-    .dmwl-word2pdf-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      align-items: center;
-    }
-
-    .dmwl-file-label {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.55rem 0.95rem;
-      border-radius: 999px;
-      border: 1px dashed var(--dmwl-border);
-      background: #ffffff;
-      cursor: pointer;
-      font-size: 0.9rem;
-    }
-
-    .dmwl-file-label span {
-      white-space: nowrap;
-    }
-
-    .dmwl-file-label input[type="file"] {
-      display: none;
-    }
-
-    .dmwl-word2pdf-button {
-      padding: 0.55rem 1.1rem;
-      border-radius: 999px;
-      border: 1px solid var(--dmwl-accent);
-      background: var(--dmwl-accent);
-      color: #ffffff;
-      font-size: 0.9rem;
-      cursor: pointer;
-      transition: opacity 0.15s ease, transform 0.05s ease;
-    }
-
-    .dmwl-word2pdf-button:hover:not(:disabled) {
-      opacity: 0.9;
-      transform: translateY(-1px);
-    }
-
-    .dmwl-word2pdf-button:disabled {
-      opacity: 0.4;
-      cursor: default;
-    }
-
-    .dmwl-word2pdf-status {
-      font-size: 0.85rem;
-      color: var(--dmwl-muted);
-      min-height: 1.2em;
-    }
-
-    .dmwl-word2pdf-note {
-      margin: 0;
-      font-size: 0.8rem;
-      color: var(--dmwl-muted);
-      line-height: 1.5;
-    }
-
-    .dmwl-word2pdf-note strong {
-      font-weight: 600;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      body {
-        background: #111111;
-        color: #f5f5f5;
-      }
-      .dmwl-word2pdf-card {
-        background: #181818;
-        border-color: #333333;
-      }
-      .dmwl-file-label {
-        background: #111111;
-        border-color: #333333;
-        color: #f5f5f5;
-      }
-      .dmwl-word2pdf-button {
-        background: #f5f5f5;
-        color: #111111;
-        border-color: #f5f5f5;
-      }
-      .dmwl-word2pdf-status,
-      .dmwl-word2pdf-note {
-        color: #aaaaaa;
-      }
-    }
+    p { margin: 0 0 16px; color: rgba(245,247,250,0.8); }
   </style>
 </head>
 <body>
-  <main class="dmwl-word2pdf-wrapper">
-    <section id="word-to-pdf-tool" class="dmwl-word2pdf-card">
-      <header>
-        <h1 class="dmwl-word2pdf-title">Word to PDF (browser-only)</h1>
-        <p class="dmwl-word2pdf-subtitle">
-          Convert simple Word (.docx) documents to PDF directly in your browser.
-          No uploads, no logins, no tracking.
-        </p>
-      </header>
-
-      <div class="dmwl-word2pdf-row">
-        <label for="dmwlDocxInput" class="dmwl-file-label">
-          <span>Choose a .docx file</span>
-          <input type="file" id="dmwlDocxInput" accept=".docx" />
-        </label>
-
-        <button id="dmwlConvertBtn" class="dmwl-word2pdf-button" disabled>
-          Convert to PDF
-        </button>
-      </div>
-
-      <p id="dmwlWordToPdfStatus" class="dmwl-word2pdf-status"></p>
-
-      <!-- Hidden render container (used to layout the HTML before converting to PDF) -->
-      <div id="dmwlDocxPreview"
-           style="position:absolute; left:-9999px; top:-9999px; max-width:800px;"></div>
-
-      <p class="dmwl-word2pdf-note">
-        <strong>Note:</strong> This browser-only converter works best with basic
-        .docx documents such as letters, resumes, and simple reports. Complex layouts,
-        heavy tables, or older .doc files may not convert perfectly.
-      </p>
-    </section>
-  </main>
-
-  <!-- jsPDF (UMD build with html() helper) -->
-  <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer">
-  </script>
-
-  <!-- Mammoth.js for docx → HTML in the browser -->
-  <script src="https://unpkg.com/mammoth/mammoth.browser.min.js"></script>
-
-  <script>
-    (function () {
-      const fileInput = document.getElementById('dmwlDocxInput');
-      const convertBtn = document.getElementById('dmwlConvertBtn');
-      const statusEl = document.getElementById('dmwlWordToPdfStatus');
-      const previewEl = document.getElementById('dmwlDocxPreview');
-
-      let selectedFile = null;
-
-      function setStatus(message) {
-        statusEl.textContent = message || '';
-      }
-
-      fileInput.addEventListener('change', () => {
-        const file = fileInput.files && fileInput.files[0];
-
-        if (!file) {
-          selectedFile = null;
-          convertBtn.disabled = true;
-          setStatus('');
-          return;
-        }
-
-        if (!file.name.toLowerCase().endsWith('.docx')) {
-          selectedFile = null;
-          convertBtn.disabled = true;
-          setStatus('Please choose a .docx file.');
-          return;
-        }
-
-        selectedFile = file;
-        convertBtn.disabled = false;
-        setStatus('Ready to convert.');
-      });
-
-      convertBtn.addEventListener('click', async () => {
-        if (!selectedFile) return;
-
-        convertBtn.disabled = true;
-        setStatus('Converting… this may take a moment in your browser.');
-
-        try {
-          // Read the .docx file into an ArrayBuffer
-          const arrayBuffer = await selectedFile.arrayBuffer();
-
-          // Convert .docx → HTML using Mammoth
-          const result = await window.mammoth.convertToHtml({ arrayBuffer });
-          const html = result.value || '';
-
-          // Place the HTML into the hidden preview container so the browser can layout it
-          previewEl.innerHTML = html;
-
-          // Allow the browser to render before snapshotting for PDF
-          await new Promise(requestAnimationFrame);
-
-          // Create a jsPDF instance
-          const { jsPDF } = window.jspdf;
-          const pdf = new jsPDF('p', 'pt', 'a4');
-
-          pdf.html(previewEl, {
-            margin: [40, 40, 40, 40],
-            autoPaging: 'text',
-            x: 0,
-            y: 0,
-            windowWidth: 800,
-            callback: function (doc) {
-              const baseName = selectedFile.name.replace(/\.docx$/i, '');
-              doc.save(baseName + '.pdf');
-              setStatus('Done. Your PDF has been downloaded.');
-              convertBtn.disabled = false;
-            }
-          });
-        } catch (err) {
-          console.error(err);
-          setStatus('Sorry — something went wrong converting this document.');
-          convertBtn.disabled = !selectedFile;
-        }
-      });
-    })();
-  </script>
+  <div class="card">
+    <p>Loading the full experience…</p>
+    <a href="public/index.html">Open Do More With Less</a>
+  </div>
 </body>
 </html>
