@@ -6,8 +6,8 @@
     <title>Do More With Less</title>
     <link rel="stylesheet" href="./styles.css?v=tsb8">
     <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-8vZ9yQ0KrbB3m2oTmRObR2OZ4JtzdHuZ40E8VJyZGFUT1XlI++Go0J3+iHvJzi10BGSAdoo6gWQBaNV++1WgAQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://unpkg.com/mammoth/mammoth.browser.min.js"></script>
+    <script src="./libs/jspdf.umd.min.js"></script>
+    <script src="./libs/mammoth.browser.min.js"></script>
     <style>
         .floating-nav {
             position: fixed;
@@ -1246,7 +1246,7 @@
                     return;
                 }
                 if (!window.mammoth || !window.jspdf) {
-                    setStatus('Converter not loaded. Please retry.');
+                    setStatus('Converter not loaded. Try a hard refresh; the converter loads locally.');
                     return;
                 }
                 try {
