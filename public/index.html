@@ -1220,9 +1220,11 @@
             let docxFile = null;
 
             const setStatus = (msg) => { if (docxStatus) docxStatus.textContent = msg || ''; };
+            const resetPreview = () => { if (docxPreview) docxPreview.innerHTML = ''; };
 
             docxInput?.addEventListener('change', () => {
                 const file = docxInput.files?.[0];
+                resetPreview();
                 if (!file) {
                     docxFile = null;
                     docxConvert.disabled = true;
@@ -1277,7 +1279,11 @@
                     console.error(err);
                     setStatus('Sorry—conversion failed. Try a simpler .docx.');
                 } finally {
+                    // reset state so user can select/convert again
                     docxConvert.disabled = false;
+                    if (docxInput) docxInput.value = '';
+                    docxFile = null;
+                    resetPreview();
                 }
             });
         })();
