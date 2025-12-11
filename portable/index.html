@@ -420,7 +420,7 @@
     </div>
     <div class="node-body" style="display:flex; gap:14px; flex-wrap:wrap; align-items:center;">
         <a class="ghost" href="https://www.paypal.me/garinbailey1" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; padding:10px 14px;">
-            <img src="./support-paypal.svg" alt="PayPal" style="width:28px; height:28px;">
+            <img src="./support-paypal.svg" alt="PayPal" style="width:32px; height:32px; border-radius:8px; background: linear-gradient(180deg, #eef1f8 0%, #dfe2e8 100%); padding:4px;">
             <span>@garinbailey1</span>
         </a>
         <a class="ghost" href="https://cash.app/$gbailey216" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; gap:8px; padding:10px 14px;">
@@ -466,8 +466,9 @@
             // Theme toggle
             const body = document.body;
             const toggle = document.getElementById('themeToggle');
-            const saved = localStorage.getItem('dmwl-theme');
-            if (saved === 'light') body.classList.add('theme-light');
+            // Default to light on every visit
+            body.classList.add('theme-light');
+            localStorage.setItem('dmwl-theme', 'light');
             const apply = () => {
                 const isLight = body.classList.contains('theme-light');
                 localStorage.setItem('dmwl-theme', isLight ? 'light' : 'dark');
