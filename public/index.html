@@ -258,7 +258,10 @@
                     <h3>Word to PDF (browser-only)</h3>
             <p>Convert simple .docx files to PDF locally. Best for basic layouts; nothing leaves your browser.</p>
             <input id="docxInput" type="file" accept=".docx" aria-label="Word .docx file">
-            <button class="ghost" type="button" id="docxConvert" disabled>Convert to PDF</button>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <button class="ghost" type="button" id="docxConvert" disabled>Convert to PDF</button>
+                <button class="ghost" type="button" id="docxClear">Clear</button>
+            </div>
             <div id="docxStatus" class="node-summary"></div>
             <div id="docxPreview" aria-hidden="true" style="position:absolute; left:-9999px; top:-9999px; max-width:800px;"></div>
         </div>
@@ -1215,12 +1218,20 @@
         (() => {
             const docxInput = document.getElementById('docxInput');
             const docxConvert = document.getElementById('docxConvert');
+            const docxClear = document.getElementById('docxClear');
             const docxStatus = document.getElementById('docxStatus');
             const docxPreview = document.getElementById('docxPreview');
             let docxFile = null;
 
             const setStatus = (msg) => { if (docxStatus) docxStatus.textContent = msg || ''; };
             const resetPreview = () => { if (docxPreview) docxPreview.innerHTML = ''; };
+            const clearDocx = () => {
+                docxFile = null;
+                if (docxInput) docxInput.value = '';
+                resetPreview();
+                setStatus('');
+                if (docxConvert) docxConvert.disabled = true;
+            };
 
             docxInput?.addEventListener('change', () => {
                 const file = docxInput.files?.[0];
@@ -1230,6 +1241,10 @@
                     docxConvert.disabled = true;
                     setStatus('');
                     return;
+                }
+                // Basic size guard: very large docs may fail in browser-only mode
+                if (file.size > 5 * 1024 * 1024) {
+                    setStatus('File is large. If it fails, try a smaller/simpler .docx.');
                 }
                 if (!file.name.toLowerCase().endsWith('.docx')) {
                     docxFile = null;
@@ -1277,14 +1292,17 @@
                     });
                 } catch (err) {
                     console.error(err);
-                    setStatus('Sorry—conversion failed. Try a simpler .docx.');
+                    setStatus('Conversion failed. This works best on basic .docx (text, simple formatting).');
                 } finally {
-                    // reset state so user can select/convert again
+                    // reset state so user can select/convert again (including same file)
                     docxConvert.disabled = false;
-                    if (docxInput) docxInput.value = '';
-                    docxFile = null;
-                    resetPreview();
+                    clearDocx();
                 }
+            });
+
+            docxClear?.addEventListener('click', () => {
+                clearDocx();
+                setStatus('File cleared.');
             });
         })();
     </script>
