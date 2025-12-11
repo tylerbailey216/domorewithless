@@ -6,6 +6,8 @@
     <title>Do More With Less</title>
     <link rel="stylesheet" href="./styles.css?v=tsb8">
     <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-8vZ9yQ0KrbB3m2oTmRObR2OZ4JtzdHuZ40E8VJyZGFUT1XlI++Go0J3+iHvJzi10BGSAdoo6gWQBaNV++1WgAQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://unpkg.com/mammoth/mammoth.browser.min.js"></script>
     <style>
         .floating-nav {
             position: fixed;
@@ -246,6 +248,14 @@
             <button class="ghost" type="button" id="pdfProcess">Create PDF</button>
             <div id="pdfOutput" class="node-summary"></div>
             <a id="pdfDownload" class="ghost" style="display:none; margin-top:6px;" download="converted.pdf">Download PDF</a>
+        </div>
+                <div class="utility-card" id="tool-docx">
+                    <h3>Word to PDF (browser-only)</h3>
+            <p>Convert simple .docx files to PDF locally. Best for basic layouts; nothing leaves your browser.</p>
+            <input id="docxInput" type="file" accept=".docx" aria-label="Word .docx file">
+            <button class="ghost" type="button" id="docxConvert" disabled>Convert to PDF</button>
+            <div id="docxStatus" class="node-summary"></div>
+            <div id="docxPreview" aria-hidden="true" style="position:absolute; left:-9999px; top:-9999px; max-width:800px;"></div>
         </div>
                 <div class="utility-card" id="tool-image">
                     <h3>Screenshots & images</h3>
@@ -1193,6 +1203,77 @@
                     img.src = e.target?.result;
                 };
                 reader.readAsDataURL(file);
+            });
+        })();
+
+        // Word to PDF (browser-only, .docx only)
+        (() => {
+            const docxInput = document.getElementById('docxInput');
+            const docxConvert = document.getElementById('docxConvert');
+            const docxStatus = document.getElementById('docxStatus');
+            const docxPreview = document.getElementById('docxPreview');
+            let docxFile = null;
+
+            const setStatus = (msg) => { if (docxStatus) docxStatus.textContent = msg || ''; };
+
+            docxInput?.addEventListener('change', () => {
+                const file = docxInput.files?.[0];
+                if (!file) {
+                    docxFile = null;
+                    docxConvert.disabled = true;
+                    setStatus('');
+                    return;
+                }
+                if (!file.name.toLowerCase().endsWith('.docx')) {
+                    docxFile = null;
+                    docxConvert.disabled = true;
+                    setStatus('Please select a .docx file.');
+                    return;
+                }
+                docxFile = file;
+                docxConvert.disabled = false;
+                setStatus('Ready to convert.');
+            });
+
+            docxConvert?.addEventListener('click', async () => {
+                if (!docxFile) {
+                    setStatus('Choose a .docx file first.');
+                    return;
+                }
+                if (!window.mammoth || !window.jspdf) {
+                    setStatus('Converter not loaded. Please retry.');
+                    return;
+                }
+                try {
+                    docxConvert.disabled = true;
+                    setStatus('Converting… please wait.');
+                    const arrayBuffer = await docxFile.arrayBuffer();
+                    const result = await window.mammoth.convertToHtml({ arrayBuffer });
+                    const html = result?.value || '';
+                    if (docxPreview) docxPreview.innerHTML = html;
+
+                    await new Promise(requestAnimationFrame);
+
+                    const { jsPDF } = window.jspdf;
+                    const pdf = new jsPDF('p', 'pt', 'a4');
+                    const baseName = docxFile.name.replace(/\.docx$/i, '');
+                    await pdf.html(docxPreview, {
+                        callback: (doc) => {
+                            doc.save(`${baseName}.pdf`);
+                            setStatus('Done. PDF downloaded.');
+                        },
+                        margin: [40, 40, 40, 40],
+                        autoPaging: 'text',
+                        x: 0,
+                        y: 0,
+                        windowWidth: 800
+                    });
+                } catch (err) {
+                    console.error(err);
+                    setStatus('Sorry—conversion failed. Try a simpler .docx.');
+                } finally {
+                    docxConvert.disabled = false;
+                }
             });
         })();
     </script>
