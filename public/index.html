@@ -74,7 +74,6 @@
 <body>
     <div class="floating-nav">
         <a href="#tools">Tools</a>
-        <a href="#treePanel">Troubleshooting</a>
         <a href="#about">About</a>
         <a href="#privacy">Privacy</a>
         <button id="themeToggle" class="ghost">Toggle light/dark</button>
@@ -87,53 +86,11 @@
                 <p class="node-summary" style="margin-top:8px;">Do More With Less · simple tech tools to keep your digital life flowing.</p>
                 <p class="node-summary">Calm, browser-only troubleshooting for home users, students, and small offices.</p>
                 <div class="hero-actions" style="justify-content:center;">
-                    <button id="startTree" class="primary">Start troubleshooting</button>
+                    <button class="primary" data-target="#tools">Open tools</button>
                     <a class="secondary" href="https://docs.google.com/forms/d/e/1FAIpQLSfoxhKvog1UU0YnpnK1U1toIyQkNborx3IAVtJOpc-5VwKhAg/viewform?usp=dialog" target="_blank" rel="noopener">
                         Escalate to Garin
                     </a>
                 </div>
-            </div>
-        </section>
-<section class="tree-card">
-            <div class="tree-header">
-                <div>
-                    <p class="node-path">Guided troubleshooting</p>
-                    <h2>How this tool works</h2>
-                    <p class="node-summary">Tap "Start troubleshooting" first, then pick your category. Follow the branching steps, and use Back or Start over anytime.</p>
-                </div>
-            </div>
-            <div class="node-body">
-                <div class="node-response">
-                    <strong>What to expect:</strong> click <button type="button" id="inlineStartBtn" class="primary" style="padding:6px 12px; font-size:0.95rem;">Start troubleshooting</button>, choose your device/issue, then follow clear step-by-step actions with official links. Use Back to adjust or Start over to reset. Nothing is stored or sent?everything runs in your browser.
-                    <ul class="node-summary" style="margin-top: 10px; text-align: left;">
-                        <li>[WiFi] toggles: Windows Start > Settings > Network & Internet > Wi-Fi; iOS Settings > Wi-Fi; Android quick settings pull-down.</li>
-                        <li>[Gear] Settings opens device menus (Windows gear icon, iOS/Android Settings app).</li>
-                        <li>[Power] Restart: hold power button, choose Restart (or Settings > System > Restart).</li>
-                        <li>[Back] Use Back/Start over anytime to change direction.</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-        <section class="tree-card" id="treePanel">
-            <div class="tree-header">
-                <div>
-                    <p class="node-path" id="nodePath">Start</p>
-                    <h2 id="nodeTitle">Choose a Help Topic</h2>
-                    <p class="node-summary" id="nodeSummary">Click "Start troubleshooting" to load the root of the decision tree.</p>
-                </div>
-                <div class="tree-controls">
-                    <button class="ghost" id="backBtn" disabled>Back</button>
-                    <button class="ghost" id="restartBtn" disabled>Start over</button>
-                    <button class="ghost" id="copyPlanBtn" disabled>Copy plan</button>
-                </div>
-            </div>
-            <div class="node-body">
-                <div class="node-response" id="nodeResponse">
-                    The offline instructions will appear here after you pick a branch.
-                </div>
-                <div class="node-tags" id="nodeTags"></div>
-                <div class="node-links" id="nodeLinks"></div>
-                <div class="node-children" id="nodeChildren"></div>
             </div>
         </section>
 <section class="tree-card utilities-section" id="tools">
@@ -141,7 +98,7 @@
         <div>
             <p class="node-path">Office utilities</p>
             <h2>Quick office tools</h2>
-            <p class="node-summary">Open a tool to get fast, guided actions. Start troubleshooting remains below.</p>
+            <p class="node-summary">Open a tool to get fast, guided actions. Everything runs locally in your browser.</p>
         </div>
     </div>
     <div class="utilities-grid">
@@ -385,45 +342,35 @@
         </div>
                 <div class="utility-card" id="tool-random">
                     <h3>Randomizer</h3>
-            <p>Roll a calm pair of true 3D cubes in-browser.</p>
-            <div class="dice-roller-card randomizer-tile">
-                <div class="scene duo" aria-hidden="true">
-                    <div class="die-glow"></div>
-                    <div class="heroOverlay" id="pairOverlay"></div>
-                    <div class="cube cubeA" id="pairCubeA">
-                        <div class="face f1"><span class="num">1</span></div>
-                        <div class="face f2"><span class="num">2</span></div>
-                        <div class="face f3"><span class="num">3</span></div>
-                        <div class="face f4"><span class="num">4</span></div>
-                        <div class="face f5"><span class="num">5</span></div>
-                        <div class="face f6"><span class="num">6</span></div>
-                    </div>
-                    <div class="cube cubeB" id="pairCubeB">
-                        <div class="face f1"><span class="num">1</span></div>
-                        <div class="face f2"><span class="num">2</span></div>
-                        <div class="face f3"><span class="num">3</span></div>
-                        <div class="face f4"><span class="num">4</span></div>
-                        <div class="face f5"><span class="num">5</span></div>
-                        <div class="face f6"><span class="num">6</span></div>
-                    </div>
+            <p>Roll a calm pair of glassy 3D cubes in-browser.</p>
+            <div class="rand3d-card">
+              <div class="rand3d-stage">
+                <div class="rand3d-scene" aria-hidden="true" tabindex="0" id="rand3dScene">
+                  <div class="rand3d-cube rand3dA" id="rand3dCubeA">
+                    <div class="rand3d-face f1"><span class="num">1</span></div>
+                    <div class="rand3d-face f2"><span class="num">2</span></div>
+                    <div class="rand3d-face f3"><span class="num">3</span></div>
+                    <div class="rand3d-face f4"><span class="num">4</span></div>
+                    <div class="rand3d-face f5"><span class="num">5</span></div>
+                    <div class="rand3d-face f6"><span class="num">6</span></div>
+                  </div>
+                  <div class="rand3d-cube rand3dB" id="rand3dCubeB">
+                    <div class="rand3d-face f1"><span class="num">1</span></div>
+                    <div class="rand3d-face f2"><span class="num">2</span></div>
+                    <div class="rand3d-face f3"><span class="num">3</span></div>
+                    <div class="rand3d-face f4"><span class="num">4</span></div>
+                    <div class="rand3d-face f5"><span class="num">5</span></div>
+                    <div class="rand3d-face f6"><span class="num">6</span></div>
+                  </div>
                 </div>
-                <div class="dice-meta">
-                    <div class="dice-shapes" id="diceShapeList"></div>
-                    <div class="dice-meta-line">
-                        <span>Die</span>
-                        <strong id="pairDieLabel">D6</strong>
-                    </div>
-                    <div class="dice-meta-line">
-                        <span>Last roll</span>
-                        <strong id="pairResult">—</strong>
-                    </div>
-                    <div class="dice-meta-line">
-                        <span>Sum</span>
-                        <strong id="pairSum">—</strong>
-                    </div>
-                    <button class="ghost" type="button" id="pairRollBtn">Roll both</button>
-                    <div class="pair-note">Browser-only randomness. Tap to roll again.</div>
-                </div>
+              </div>
+              <div class="rand3d-meta">
+                <div class="rand3d-meta-line"><span>Die</span><strong id="rand3dDieLabel">D6</strong></div>
+                <div class="rand3d-meta-line"><span>Last roll</span><strong id="rand3dResult">– / –</strong></div>
+                <div class="rand3d-meta-line"><span>Sum</span><strong id="rand3dSum">–</strong></div>
+                <button class="ghost rand3d-btn" type="button" id="rand3dRollBtn">Roll both</button>
+                <div class="pair-note">Browser-only randomness. Tap to roll again.</div>
+              </div>
             </div>
         </div>
                 <div class="utility-card" id="tool-login">
@@ -1076,28 +1023,16 @@
             });
             updateSW();
 
-            // Randomizer: paired translucent dice
-            const pairCubeA = document.getElementById('pairCubeA');
-            const pairCubeB = document.getElementById('pairCubeB');
-            const pairRollBtn = document.getElementById('pairRollBtn');
-            const pairResult = document.getElementById('pairResult');
-            const pairSum = document.getElementById('pairSum');
-            const pairOverlay = document.getElementById('pairOverlay');
-            const pairDieLabel = document.getElementById('pairDieLabel');
-            const diceShapeList = document.getElementById('diceShapeList');
-            const pairScene = document.querySelector('.scene.duo');
-            const dieLabel = document.getElementById('dieFaceLabel');
+            // Randomizer: glassy paired D6 cubes (browser-only)
+            const randScene = document.getElementById('rand3dScene');
+            const randCubeA = document.getElementById('rand3dCubeA');
+            const randCubeB = document.getElementById('rand3dCubeB');
+            const randRollBtn = document.getElementById('rand3dRollBtn');
+            const randResult = document.getElementById('rand3dResult');
+            const randSum = document.getElementById('rand3dSum');
+            const randDieLabel = document.getElementById('rand3dDieLabel');
 
-            const diceOptions = [
-                { key: 'd4', sides: 4 },
-                { key: 'd6', sides: 6 },
-                { key: 'd8', sides: 8 },
-                { key: 'd10', sides: 10 },
-                { key: 'd12', sides: 12 },
-                { key: 'd20', sides: 20 }
-            ];
-            let currentDie = 'd6';
-            const pairFaceRotation = (value) => {
+            const rotationForD6 = (value) => {
                 switch (value) {
                     case 1: return { x: 0, y: 0 };
                     case 2: return { x: 0, y: 180 };
@@ -1108,131 +1043,51 @@
                     default: return { x: 0, y: 0 };
                 }
             };
-            const spinPairCube = (el, value, animate = true) => {
+
+            const baseTilt = { x: -18, y: 30, z: -6 };
+            const spinCube = (el, value, animate = true) => {
                 if (!el) return;
-                const rot = pairFaceRotation(value);
+                const rot = rotationForD6(value);
                 const extraX = animate ? (Math.floor(Math.random() * 3) + 1) * 360 : 0;
                 const extraY = animate ? (Math.floor(Math.random() * 3) + 1) * 360 : 0;
-                const tiltZ = animate ? (Math.random() * 8 - 4) : 0;
+                const tiltZ = animate ? (Math.random() * 12 - 6) : 0;
                 if (!animate) el.style.transition = 'none';
-                el.style.transform = `translate(-50%, -50%) rotateX(${rot.x + extraX}deg) rotateY(${rot.y + extraY}deg) rotateZ(${tiltZ}deg)`;
+                el.style.transform = `translate(-50%, -50%) rotateX(${baseTilt.x + rot.x + extraX}deg) rotateY(${baseTilt.y + rot.y + extraY}deg) rotateZ(${baseTilt.z + tiltZ}deg)`;
                 if (!animate) requestAnimationFrame(() => { el.style.transition = ''; });
             };
 
-            const rollPair = () => {
-                if (!pairCubeA || !pairCubeB || !pairRollBtn || !pairResult || !pairSum) return;
-                const sides = diceOptions.find((d) => d.key === currentDie)?.sides || 6;
-                pairRollBtn.disabled = true;
-                const a = Math.floor(Math.random() * sides) + 1;
-                const b = Math.floor(Math.random() * sides) + 1;
-                const visualA = Math.min(a, 6);
-                const visualB = Math.min(b, 6);
-                pairCubeA.classList.add('rolling');
-                pairCubeB.classList.add('rolling');
-                spinPairCube(pairCubeA, visualA, true);
-                spinPairCube(pairCubeB, visualB, true);
+            const rollRand = () => {
+                if (!randCubeA || !randCubeB || !randRollBtn || !randResult || !randSum) return;
+                randRollBtn.disabled = true;
+                const a = Math.floor(Math.random() * 6) + 1;
+                const b = Math.floor(Math.random() * 6) + 1;
+                randCubeA.classList.add('rolling');
+                randCubeB.classList.add('rolling');
+                spinCube(randCubeA, a, true);
+                spinCube(randCubeB, b, true);
                 setTimeout(() => {
-                    pairCubeA.classList.remove('rolling');
-                    pairCubeB.classList.remove('rolling');
-                    if (pairResult) pairResult.textContent = `${a} / ${b}`;
-                    if (pairSum) pairSum.textContent = String(a + b);
-                    pairRollBtn.disabled = false;
-                }, 720);
+                    randCubeA.classList.remove('rolling');
+                    randCubeB.classList.remove('rolling');
+                    randResult.textContent = `${a} / ${b}`;
+                    randSum.textContent = String(a + b);
+                    randRollBtn.disabled = false;
+                }, 820);
             };
-            pairRollBtn?.addEventListener('click', rollPair);
-            pairScene?.addEventListener('click', rollPair);
-            pairScene?.addEventListener('keydown', (e) => {
+
+            randRollBtn?.addEventListener('click', rollRand);
+            randScene?.addEventListener('click', rollRand);
+            randScene?.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                     e.preventDefault();
-                    rollPair();
+                    rollRand();
                 }
             });
-            if (pairScene) pairScene.tabIndex = 0;
-            spinPairCube(pairCubeA, 1, false);
-            spinPairCube(pairCubeB, 2, false);
-
-            const getDieSVG = (key) => {
-                switch (key) {
-                    case 'd4':
-                        return `<svg viewBox="0 0 100 100" aria-hidden="true">
-                          <path d="M50 12 L90 82 L10 82 Z"></path>
-                          <path d="M50 12 L50 82"></path>
-                          <path d="M10 82 L90 82"></path>
-                        </svg>`;
-                    case 'd6':
-                        return `<svg viewBox="0 0 100 100" aria-hidden="true">
-                          <rect x="18" y="18" width="64" height="64" rx="14"></rect>
-                          <path d="M18 50 H82"></path>
-                          <path d="M50 18 V82"></path>
-                        </svg>`;
-                    case 'd8':
-                        return `<svg viewBox="0 0 100 100" aria-hidden="true">
-                          <path d="M50 10 L86 50 L50 90 L14 50 Z"></path>
-                          <path d="M50 10 L50 90"></path>
-                          <path d="M14 50 H86"></path>
-                        </svg>`;
-                    case 'd10':
-                        return `<svg viewBox="0 0 100 100" aria-hidden="true">
-                          <path d="M50 8 L86 38 L72 90 L28 90 L14 38 Z"></path>
-                          <path d="M50 8 L50 90"></path>
-                          <path d="M14 38 L86 38"></path>
-                        </svg>`;
-                    case 'd12':
-                        return `<svg viewBox="0 0 100 100" aria-hidden="true">
-                          <path d="M50 10 L80 26 L90 55 L72 86 L28 86 L10 55 L20 26 Z"></path>
-                          <path d="M50 10 L50 86"></path>
-                          <path d="M20 26 L80 26"></path>
-                          <path d="M10 55 L90 55"></path>
-                        </svg>`;
-                    case 'd20':
-                        return `<svg viewBox="0 0 100 100" aria-hidden="true">
-                          <path d="M50 10 L92 78 L8 78 Z"></path>
-                          <path d="M50 10 L50 78"></path>
-                          <path d="M8 78 L50 44 L92 78"></path>
-                        </svg>`;
-                    default:
-                        return '';
-                }
-            };
-
-            const selectDie = (key) => {
-                currentDie = key;
-                if (pairDieLabel) pairDieLabel.textContent = key.toUpperCase();
-                if (diceShapeList) {
-                    [...diceShapeList.querySelectorAll('.shape-btn')].forEach((btn) => {
-                        btn.classList.toggle('active', btn.dataset.key === key);
-                    });
-                }
-                if (pairOverlay) {
-                    if (key === 'd6') {
-                        pairOverlay.innerHTML = '';
-                        pairOverlay.classList.remove('show');
-                    } else {
-                        const icon = getDieSVG(key);
-                        pairOverlay.innerHTML = `
-                            <div class="overlay-face">
-                                <div class="overlay-icon">${icon}</div>
-                                <div class="overlay-die-label">${key.toUpperCase()}</div>
-                            </div>
-                        `;
-                        pairOverlay.classList.add('show');
-                    }
-                }
-            };
-
-            if (diceShapeList) {
-                diceShapeList.innerHTML = '';
-                diceOptions.forEach((opt) => {
-                    const btn = document.createElement('button');
-                    btn.type = 'button';
-                    btn.className = 'shape-btn';
-                    btn.dataset.key = opt.key;
-                    btn.textContent = opt.key.toUpperCase();
-                    btn.addEventListener('click', () => selectDie(opt.key));
-                    diceShapeList.appendChild(btn);
-                });
-            }
-            selectDie('d6');
+            if (randScene) randScene.tabIndex = 0;
+            if (randDieLabel) randDieLabel.textContent = 'D6';
+            spinCube(randCubeA, 1, false);
+            spinCube(randCubeB, 2, false);
+            if (randResult) randResult.textContent = 'Ready';
+            if (randSum) randSum.textContent = '-';
 
             // Fake login detector (URL heuristics)
             const loginUrl = document.getElementById('loginUrl');

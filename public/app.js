@@ -1064,6 +1064,7 @@
         embedCode: document.getElementById('embedCode'),
         panel: document.getElementById('treePanel')
     };
+    const treeEnabled = !!els.panel;
 
     const lineWrap = (text = '') => text.replace(/\s+/g, ' ').trim();
 
@@ -1154,6 +1155,9 @@
         return summaryHtml + stepsHtml;
     };
 
+    if (!treeEnabled) {
+        console.log('Troubleshooting tree disabled: UI elements not present.');
+    } else {
     const getCurrentNode = () => state.history[state.history.length - 1];
 
     const render = () => {
@@ -1316,6 +1320,7 @@
         response: 'Pick a lane above to load your first branch.'
     }];
     render();
+    }
 
     // Affirmations / virtual phone loop
     (() => {
