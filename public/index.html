@@ -205,7 +205,10 @@
             <input id="pdfInput" type="file" accept="image/*,text/plain" multiple aria-label="Files to turn into PDF">
             <button class="ghost" type="button" id="pdfProcess">Create PDF</button>
             <div id="pdfOutput" class="node-summary"></div>
-            <a id="pdfDownload" class="ghost" style="display:none; margin-top:6px;" download="converted.pdf">Download PDF</a>
+            <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;">
+                <button class="ghost" type="button" id="pdfDownloadBtn" disabled>Download PDF</button>
+                <a id="pdfDownload" class="ghost" style="display:none;" download="converted.pdf">Download PDF</a>
+            </div>
         </div>
                 <div class="utility-card" id="tool-image">
                     <h3>Screenshots & images</h3>
@@ -236,8 +239,40 @@
                 <div class="utility-card" id="tool-time">
                     <h3>Time zones</h3>
             <p>Pick two zones and see local time for each.</p>
-            <input type="text" id="tzA" placeholder="e.g., America/New_York" aria-label="Time zone A">
-            <input type="text" id="tzB" placeholder="e.g., Europe/London" aria-label="Time zone B">
+            <div style="display:flex; flex-direction:column; gap:8px;">
+                <label style="font-weight:600; color:var(--text-muted);">Zone A</label>
+                <select id="tzA" aria-label="Time zone A">
+                    <option value="UTC">UTC</option>
+                    <option value="America/New_York">America/New_York</option>
+                    <option value="America/Chicago">America/Chicago</option>
+                    <option value="America/Denver">America/Denver</option>
+                    <option value="America/Los_Angeles">America/Los_Angeles</option>
+                    <option value="America/Phoenix">America/Phoenix</option>
+                    <option value="Europe/London">Europe/London</option>
+                    <option value="Europe/Paris">Europe/Paris</option>
+                    <option value="Europe/Berlin">Europe/Berlin</option>
+                    <option value="Asia/Kolkata">Asia/Kolkata</option>
+                    <option value="Asia/Singapore">Asia/Singapore</option>
+                    <option value="Asia/Tokyo">Asia/Tokyo</option>
+                    <option value="Australia/Sydney">Australia/Sydney</option>
+                </select>
+                <label style="font-weight:600; color:var(--text-muted);">Zone B</label>
+                <select id="tzB" aria-label="Time zone B">
+                    <option value="UTC">UTC</option>
+                    <option value="America/New_York">America/New_York</option>
+                    <option value="America/Chicago">America/Chicago</option>
+                    <option value="America/Denver">America/Denver</option>
+                    <option value="America/Los_Angeles">America/Los_Angeles</option>
+                    <option value="America/Phoenix">America/Phoenix</option>
+                    <option value="Europe/London">Europe/London</option>
+                    <option value="Europe/Paris">Europe/Paris</option>
+                    <option value="Europe/Berlin">Europe/Berlin</option>
+                    <option value="Asia/Kolkata">Asia/Kolkata</option>
+                    <option value="Asia/Singapore">Asia/Singapore</option>
+                    <option value="Asia/Tokyo">Asia/Tokyo</option>
+                    <option value="Australia/Sydney">Australia/Sydney</option>
+                </select>
+            </div>
             <div id="tzOutput" class="node-summary">Enter IANA zones to compare.</div>
         </div>
                 <div class="utility-card" id="tool-signature">
@@ -247,6 +282,10 @@
             <input type="text" id="sigTitle" placeholder="Title / Team" aria-label="Title">
             <input type="text" id="sigPhone" placeholder="Phone" aria-label="Phone">
             <input type="url" id="sigLink" placeholder="Link (optional)" aria-label="Link">
+            <div style="display:flex; flex-wrap:wrap; gap:8px;">
+                <input type="file" id="sigImage" accept="image/*" aria-label="Small logo image" style="flex:1 1 220px;">
+                <small style="color:var(--text-muted);">Optional small logo (will embed as data URI).</small>
+            </div>
             <textarea id="sigPreview" rows="4" readonly placeholder="Signature preview will appear here"></textarea>
             <div style="display:flex; gap:8px; flex-wrap:wrap;">
                 <button class="ghost" type="button" id="sigBuild">Build</button>
@@ -322,7 +361,7 @@
             <input type="text" id="wmText" placeholder="Watermark text">
             <button class="ghost" type="button" id="wmApply">Apply watermark</button>
             <div id="wmInfo" class="node-summary"></div>
-            <a id="wmDownload" class="ghost" style="display:none; margin-top:6px;" download="watermarked.jpg">Download watermarked</a>
+            <a id="wmDownload" class="ghost" style="display:none; margin-top:6px;" download="watermarked.jpeg">Download JPEG (HQ)</a>
         </div>
                 <div class="utility-card" id="tool-timers">
                     <h3>Timers & focus</h3>
@@ -498,6 +537,8 @@
             const pdfProcess = document.getElementById('pdfProcess');
             const pdfOutput = document.getElementById('pdfOutput');
             const pdfDownload = document.getElementById('pdfDownload');
+            const pdfDownloadBtn = document.getElementById('pdfDownloadBtn');
+            let pdfUrl = null;
             const readFile = (file, mode = 'arraybuffer') =>
                 new Promise((resolve, reject) => {
                     const reader = new FileReader();
@@ -518,6 +559,7 @@
                 if (!files.length) {
                     pdfOutput.textContent = 'Choose one or more images or a .txt file to convert.';
                     if (pdfDownload) pdfDownload.style.display = 'none';
+                    if (pdfDownloadBtn) pdfDownloadBtn.disabled = true;
                     return;
                 }
                 const { PDFDocument, StandardFonts } = PDFLib;
@@ -581,19 +623,30 @@
                 if (!added) {
                     pdfOutput.textContent = 'No supported files were added. Use images or .txt files.';
                     if (pdfDownload) pdfDownload.style.display = 'none';
+                    if (pdfDownloadBtn) pdfDownloadBtn.disabled = true;
                     return;
                 }
 
                 const pdfBytes = await pdfDoc.save();
                 const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-                const url = URL.createObjectURL(blob);
+                if (pdfUrl) URL.revokeObjectURL(pdfUrl);
+                pdfUrl = URL.createObjectURL(blob);
                 if (pdfDownload) {
-                    pdfDownload.href = url;
+                    pdfDownload.href = pdfUrl;
                     pdfDownload.style.display = 'inline-flex';
+                }
+                if (pdfDownloadBtn) {
+                    pdfDownloadBtn.disabled = false;
                 }
                 pdfOutput.textContent = skipped
                     ? `Built a PDF with ${added} file(s). Skipped ${skipped} unsupported type(s).`
                     : `Built a PDF with ${added} file(s).`;
+            });
+
+            pdfDownloadBtn?.addEventListener('click', () => {
+                if (pdfUrl) {
+                    window.open(pdfUrl, '_blank');
+                }
             });
 
             const snippetInput = document.getElementById('snippetInput');
@@ -637,26 +690,38 @@
             const sigTitle = document.getElementById('sigTitle');
             const sigPhone = document.getElementById('sigPhone');
             const sigLink = document.getElementById('sigLink');
+            const sigImage = document.getElementById('sigImage');
             const sigPreview = document.getElementById('sigPreview');
             const sigBuild = document.getElementById('sigBuild');
             const sigCopy = document.getElementById('sigCopy');
-            const buildSig = () => {
+            let sigImageData = '';
+            const readSigImage = () => new Promise((resolve) => {
+                const file = sigImage?.files?.[0];
+                if (!file) return resolve(sigImageData);
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result || '');
+                reader.onerror = () => resolve(sigImageData);
+                reader.readAsDataURL(file);
+            });
+            const buildSig = async () => {
                 const name = (sigName?.value || '').trim();
                 const title = (sigTitle?.value || '').trim();
                 const phone = (sigPhone?.value || '').trim();
                 const link = (sigLink?.value || '').trim();
-                const parts = [];
-                if (name) parts.push(name);
-                if (title) parts.push(title);
-                if (phone) parts.push(` ${phone}`);
-                if (link) parts.push(link);
-                const result = parts.join('\n');
+                sigImageData = await readSigImage();
+                const lines = [];
+                if (sigImageData) lines.push(`<div><img src="${sigImageData}" alt="Logo" style="height:48px;width:auto;border-radius:6px;"></div>`);
+                if (name) lines.push(`<div style="font-weight:700;">${name}</div>`);
+                if (title) lines.push(`<div style="color:gray;">${title}</div>`);
+                if (phone) lines.push(`<div>${phone}</div>`);
+                if (link) lines.push(`<div><a href="${link}" target="_blank" rel="noopener">${link}</a></div>`);
+                const result = lines.join('\n');
                 if (sigPreview) sigPreview.value = result || 'Add details to build your signature.';
                 return result;
             };
             sigBuild?.addEventListener('click', buildSig);
             sigCopy?.addEventListener('click', async () => {
-                const text = buildSig();
+                const text = await buildSig();
                 try {
                     await navigator.clipboard.writeText(text);
                     sigCopy.textContent = 'Copied';
@@ -937,6 +1002,7 @@
             const wmApply = document.getElementById('wmApply');
             const wmInfo = document.getElementById('wmInfo');
             const wmDownload = document.getElementById('wmDownload');
+            let wmUrl = null;
             wmApply?.addEventListener('click', () => {
                 const file = wmInput?.files?.[0];
                 const text = (wmText?.value || 'CONFIDENTIAL').trim();
@@ -963,14 +1029,15 @@
                         ctx.fillText(text, 0, 0);
                         canvas.toBlob((blob) => {
                             if (blob) {
-                                const url = URL.createObjectURL(blob);
+                                if (wmUrl) URL.revokeObjectURL(wmUrl);
+                                wmUrl = URL.createObjectURL(blob);
                                 if (wmDownload) {
-                                    wmDownload.href = url;
+                                    wmDownload.href = wmUrl;
                                     wmDownload.style.display = 'inline-flex';
                                 }
                                 if (wmInfo) wmInfo.textContent = 'Watermark applied. Download below.';
                             }
-                        }, 'image/jpeg', 0.92);
+                        }, 'image/jpeg', 0.95);
                     };
                     img.src = e.target?.result;
                 };
