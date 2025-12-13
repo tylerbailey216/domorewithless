@@ -8,6 +8,7 @@
     <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
     <script src="./libs/jspdf.umd.min.js"></script>
     <script src="./libs/mammoth.browser.min.js"></script>
+    <script src="./libs/three.min.js"></script>
     <style>
         .floating-nav {
             position: fixed;
@@ -345,24 +346,7 @@
             <p>Roll a calm pair of glassy 3D cubes in-browser.</p>
             <div class="rand3d-card">
               <div class="rand3d-stage">
-                <div class="rand3d-scene" aria-hidden="true" tabindex="0" id="rand3dScene">
-                  <div class="rand3d-cube rand3dA" id="rand3dCubeA">
-                    <div class="rand3d-face f1"><span class="num">1</span></div>
-                    <div class="rand3d-face f2"><span class="num">2</span></div>
-                    <div class="rand3d-face f3"><span class="num">3</span></div>
-                    <div class="rand3d-face f4"><span class="num">4</span></div>
-                    <div class="rand3d-face f5"><span class="num">5</span></div>
-                    <div class="rand3d-face f6"><span class="num">6</span></div>
-                  </div>
-                  <div class="rand3d-cube rand3dB" id="rand3dCubeB">
-                    <div class="rand3d-face f1"><span class="num">1</span></div>
-                    <div class="rand3d-face f2"><span class="num">2</span></div>
-                    <div class="rand3d-face f3"><span class="num">3</span></div>
-                    <div class="rand3d-face f4"><span class="num">4</span></div>
-                    <div class="rand3d-face f5"><span class="num">5</span></div>
-                    <div class="rand3d-face f6"><span class="num">6</span></div>
-                  </div>
-                </div>
+                <div class="rand3d-webgl" id="rand3dWebgl" aria-hidden="true" tabindex="0"></div>
               </div>
               <div class="rand3d-meta">
                 <div class="rand3d-meta-line"><span>Die</span><strong id="rand3dDieLabel">D6</strong></div>
@@ -1023,71 +1007,281 @@
             });
             updateSW();
 
-            // Randomizer: glassy paired D6 cubes (browser-only)
-            const randScene = document.getElementById('rand3dScene');
-            const randCubeA = document.getElementById('rand3dCubeA');
-            const randCubeB = document.getElementById('rand3dCubeB');
-            const randRollBtn = document.getElementById('rand3dRollBtn');
-            const randResult = document.getElementById('rand3dResult');
-            const randSum = document.getElementById('rand3dSum');
-            const randDieLabel = document.getElementById('rand3dDieLabel');
+            // Randomizer: WebGL glassy paired D6 (Three.js)
+            (() => {
+                const container = document.getElementById('rand3dWebgl');
+                if (!container) return;
 
-            const rotationForD6 = (value) => {
-                switch (value) {
-                    case 1: return { x: 0, y: 0 };
-                    case 2: return { x: 0, y: 180 };
-                    case 3: return { x: 0, y: -90 };
-                    case 4: return { x: 0, y: 90 };
-                    case 5: return { x: -90, y: 0 };
-                    case 6: return { x: 90, y: 0 };
-                    default: return { x: 0, y: 0 };
-                }
-            };
+                const boot = () => {
+                    const rollBtn = document.getElementById('rand3dRollBtn');
+                    const resultEl = document.getElementById('rand3dResult');
+                    const sumEl = document.getElementById('rand3dSum');
+                    const dieLabelEl = document.getElementById('rand3dDieLabel');
+                    if (!window.THREE) {
+                        console.warn('Three.js not loaded; falling back to empty state.');
+                        if (resultEl) resultEl.textContent = 'Unavailable';
+                        if (sumEl) sumEl.textContent = '-';
+                        return;
+                    }
+                    const {
+                        Scene,
+                        PerspectiveCamera,
+                        WebGLRenderer,
+                        AmbientLight,
+                        HemisphereLight,
+                        DirectionalLight,
+                        MeshStandardMaterial,
+                        BoxGeometry,
+                        Mesh,
+                        Color,
+                        Vector3,
+                        Quaternion,
+                        CanvasTexture,
+                        sRGBEncoding,
+                        Clock,
+                        MathUtils,
+                        Euler,
+                    } = THREE;
 
-            const baseTilt = { x: -18, y: 30, z: -6 };
-            const spinCube = (el, value, animate = true) => {
-                if (!el) return;
-                const rot = rotationForD6(value);
-                const extraX = animate ? (Math.floor(Math.random() * 3) + 1) * 360 : 0;
-                const extraY = animate ? (Math.floor(Math.random() * 3) + 1) * 360 : 0;
-                const tiltZ = animate ? (Math.random() * 12 - 6) : 0;
-                if (!animate) el.style.transition = 'none';
-                el.style.transform = `translate(-50%, -50%) rotateX(${baseTilt.x + rot.x + extraX}deg) rotateY(${baseTilt.y + rot.y + extraY}deg) rotateZ(${baseTilt.z + tiltZ}deg)`;
-                if (!animate) requestAnimationFrame(() => { el.style.transition = ''; });
-            };
+                    const scene = new Scene();
+                    const camera = new PerspectiveCamera(28, 1, 0.1, 100);
+                    camera.position.set(0, 0, 7);
 
-            const rollRand = () => {
-                if (!randCubeA || !randCubeB || !randRollBtn || !randResult || !randSum) return;
-                randRollBtn.disabled = true;
-                const a = Math.floor(Math.random() * 6) + 1;
-                const b = Math.floor(Math.random() * 6) + 1;
-                randCubeA.classList.add('rolling');
-                randCubeB.classList.add('rolling');
-                spinCube(randCubeA, a, true);
-                spinCube(randCubeB, b, true);
-                setTimeout(() => {
-                    randCubeA.classList.remove('rolling');
-                    randCubeB.classList.remove('rolling');
-                    randResult.textContent = `${a} / ${b}`;
-                    randSum.textContent = String(a + b);
-                    randRollBtn.disabled = false;
-                }, 820);
-            };
+                    let renderer;
+                    try {
+                        renderer = new WebGLRenderer({ antialias: true, alpha: true });
+                    } catch (err) {
+                        console.error('WebGL not available', err);
+                        if (resultEl) resultEl.textContent = 'WebGL blocked';
+                        return;
+                    }
+                    renderer.outputEncoding = sRGBEncoding;
+                    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+                    renderer.setClearColor(0x000000, 0);
+                    container.appendChild(renderer.domElement);
 
-            randRollBtn?.addEventListener('click', rollRand);
-            randScene?.addEventListener('click', rollRand);
-            randScene?.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    rollRand();
-                }
-            });
-            if (randScene) randScene.tabIndex = 0;
-            if (randDieLabel) randDieLabel.textContent = 'D6';
-            spinCube(randCubeA, 1, false);
-            spinCube(randCubeB, 2, false);
-            if (randResult) randResult.textContent = 'Ready';
-            if (randSum) randSum.textContent = '-';
+                    // Lights
+                    scene.add(new AmbientLight(0xffffff, 0.55));
+                    scene.add(new HemisphereLight(0xcde8ff, 0x101418, 0.6));
+                    const keyLight = new DirectionalLight(0xffffff, 1.05);
+                    keyLight.position.set(5, 6, 9);
+                    scene.add(keyLight);
+                    const rimLight = new DirectionalLight(0x7fcaff, 0.65);
+                    rimLight.position.set(-6, -4, -6);
+                    scene.add(rimLight);
+
+                    // Helper to draw pip textures
+                    const pipPositions = {
+                        1: [[0, 0]],
+                        2: [[-0.35, -0.35], [0.35, 0.35]],
+                        3: [[-0.35, -0.35], [0, 0], [0.35, 0.35]],
+                        4: [[-0.35, -0.35], [0.35, -0.35], [-0.35, 0.35], [0.35, 0.35]],
+                        5: [[-0.35, -0.35], [0.35, -0.35], [-0.35, 0.35], [0.35, 0.35], [0, 0]],
+                        6: [[-0.35, -0.35], [0.35, -0.35], [-0.35, 0], [0.35, 0], [-0.35, 0.35], [0.35, 0.35]],
+                    };
+
+                    const makeFaceTexture = (value) => {
+                        const size = 256;
+                        const canvas = document.createElement('canvas');
+                        canvas.width = canvas.height = size;
+                        const ctx = canvas.getContext('2d');
+                        const grad = ctx.createLinearGradient(0, 0, size, size);
+                        grad.addColorStop(0, 'rgba(255,255,255,0.9)');
+                        grad.addColorStop(1, 'rgba(200,230,255,0.55)');
+                        ctx.fillStyle = grad;
+                        ctx.fillRect(0, 0, size, size);
+
+                        ctx.fillStyle = 'rgba(10,16,22,0.9)';
+                        ctx.shadowColor = 'rgba(0,0,0,0.35)';
+                        ctx.shadowBlur = 10;
+                        const radius = size * 0.09;
+                        pipPositions[value].forEach(([x, y]) => {
+                            ctx.beginPath();
+                            ctx.arc(size * (0.5 + x * 0.5), size * (0.5 + y * 0.5), radius, 0, Math.PI * 2);
+                            ctx.fill();
+                        });
+                        const tex = new CanvasTexture(canvas);
+                        tex.anisotropy = renderer.capabilities.getMaxAnisotropy?.() || 1;
+                        tex.needsUpdate = true;
+                        return tex;
+                    };
+
+                    const faceOrderValues = [3, 4, 5, 6, 1, 2]; // px, nx, py, ny, pz, nz
+                    const makeDieMaterials = () =>
+                        faceOrderValues.map((v) => new MeshStandardMaterial({
+                            map: makeFaceTexture(v),
+                            metalness: 0.18,
+                            roughness: 0.28,
+                            envMapIntensity: 0.9,
+                            color: new Color(0xb5d7ff),
+                        }));
+
+                    const dieGeometry = new BoxGeometry(1.9, 1.9, 1.9, 1, 1, 1);
+                    const dice = [];
+                    const makeDie = (x) => {
+                        const mesh = new Mesh(dieGeometry, makeDieMaterials());
+                        mesh.position.set(x, 0, 0);
+                        mesh.castShadow = false;
+                        mesh.receiveShadow = false;
+                        scene.add(mesh);
+                        dice.push(mesh);
+                        return mesh;
+                    };
+
+                    const dieA = makeDie(-1.1);
+                    const dieB = makeDie(1.1);
+
+                    const baseTilt = new Vector3(MathUtils.degToRad(-18), MathUtils.degToRad(30), MathUtils.degToRad(-6));
+                    const rotationFor = (value) => {
+                        switch (value) {
+                            case 1: return new Vector3(0, 0, 0);
+                            case 2: return new Vector3(0, Math.PI, 0);
+                            case 3: return new Vector3(0, -Math.PI / 2, 0);
+                            case 4: return new Vector3(0, Math.PI / 2, 0);
+                            case 5: return new Vector3(-Math.PI / 2, 0, 0);
+                            case 6: return new Vector3(Math.PI / 2, 0, 0);
+                            default: return new Vector3(0, 0, 0);
+                        }
+                    };
+
+                    const activeAnims = new Map();
+                    let rolling = false;
+                    let pendingVals = [1, 2];
+
+                    const resize = () => {
+                        const rect = container.getBoundingClientRect();
+                        const size = Math.min(rect.width, 320);
+                        renderer.setSize(size, size, false);
+                        camera.aspect = 1;
+                        camera.updateProjectionMatrix();
+                    };
+                    requestAnimationFrame(resize);
+                    window.addEventListener('resize', resize);
+
+                    const clock = new Clock();
+                    const spinPhase = 0.68 * 1000;
+                    const settlePhase = 0.42 * 1000;
+
+                    const setFace = (mesh, value, instant = false) => {
+                        const rot = rotationFor(value);
+                        const target = new Quaternion().setFromEuler(
+                            new Euler(
+                                rot.x + baseTilt.x,
+                                rot.y + baseTilt.y,
+                                baseTilt.z
+                            )
+                        );
+                        if (instant) {
+                            mesh.quaternion.copy(target);
+                            return;
+                        }
+                        mesh.quaternion.slerp(target, 0.92);
+                    };
+
+                    const launchRoll = (mesh, value) => {
+                        const now = performance.now();
+                        const rot = rotationFor(value);
+                        const extraX = Math.floor(Math.random() * 3 + 1) * Math.PI * 2;
+                        const extraY = Math.floor(Math.random() * 3 + 1) * Math.PI * 2;
+                        const finalQuat = new Quaternion().setFromEuler(
+                            new Euler(
+                                rot.x + baseTilt.x + extraX,
+                                rot.y + baseTilt.y + extraY,
+                                baseTilt.z + MathUtils.degToRad(Math.random() * 20 - 10)
+                            )
+                        );
+                        activeAnims.set(mesh.uuid, {
+                            mesh,
+                            start: now,
+                            finalQuat,
+                            spinAxis: new Vector3(Math.random() - 0.5, Math.random() - 0.5, Math.random() - 0.5).normalize(),
+                            spinSpeed: Math.random() * 6 + 6,
+                        });
+                    };
+
+                    const renderLoop = () => {
+                        requestAnimationFrame(renderLoop);
+                        const now = performance.now();
+                        const delta = clock.getDelta();
+                        activeAnims.forEach((anim, key) => {
+                            const { mesh, start, finalQuat, spinAxis, spinSpeed } = anim;
+                            const elapsed = now - start;
+                            if (elapsed < spinPhase) {
+                                mesh.rotateOnAxis(spinAxis, spinSpeed * delta);
+                            } else {
+                                const t = Math.min(1, (elapsed - spinPhase) / settlePhase);
+                                mesh.quaternion.slerp(finalQuat, t * 0.9 + 0.05);
+                                if (t >= 1) {
+                                    mesh.quaternion.copy(finalQuat);
+                                    activeAnims.delete(key);
+                                }
+                            }
+                        });
+
+                        renderer.render(scene, camera);
+
+                        if (rolling && activeAnims.size === 0) {
+                            rolling = false;
+                            rollBtn.disabled = false;
+                            if (resultEl) resultEl.textContent = `${pendingVals[0]} / ${pendingVals[1]}`;
+                            if (sumEl) sumEl.textContent = String(pendingVals[0] + pendingVals[1]);
+                        }
+                    };
+                    renderLoop();
+
+                    const roll = () => {
+                        if (rolling) return;
+                        rolling = true;
+                        rollBtn.disabled = true;
+                        if (resultEl) resultEl.textContent = '…';
+                        if (sumEl) sumEl.textContent = '…';
+                        const a = Math.floor(Math.random() * 6) + 1;
+                        const b = Math.floor(Math.random() * 6) + 1;
+                        pendingVals = [a, b];
+                        launchRoll(dieA, a);
+                        launchRoll(dieB, b);
+                    };
+
+                    rollBtn?.addEventListener('click', roll);
+                    container?.addEventListener('click', roll);
+                    container?.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            roll();
+                        }
+                    });
+                    container.tabIndex = 0;
+                    if (dieLabelEl) dieLabelEl.textContent = 'D6';
+                    setFace(dieA, 1, true);
+                    setFace(dieB, 2, true);
+                    if (resultEl) resultEl.textContent = 'Ready';
+                    if (sumEl) sumEl.textContent = '-';
+                };
+
+                const loadFallback = () => new Promise((resolve, reject) => {
+                    const script = document.createElement('script');
+                    script.src = './libs/three.min.js';
+                    script.async = true;
+                    script.onload = resolve;
+                    script.onerror = reject;
+                    document.head.appendChild(script);
+                });
+
+                const start = async () => {
+                    if (!window.THREE) {
+                        try {
+                            await loadFallback();
+                        } catch (err) {
+                            console.error('Failed to load Three.js fallback', err);
+                            return;
+                        }
+                    }
+                    boot();
+                };
+
+                // start after load to ensure container sized
+                window.addEventListener('load', start, { once: true });
+            })();
 
             // Fake login detector (URL heuristics)
             const loginUrl = document.getElementById('loginUrl');
