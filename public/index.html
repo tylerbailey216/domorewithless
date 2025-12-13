@@ -327,19 +327,42 @@
                 <div class="utility-card" id="tool-timers">
                     <h3>Timers & focus</h3>
             <p>Pomodoro, stopwatch, and a basic timer.</p>
-            <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                <input type="number" id="pomoFocus" value="25" style="width:80px"> <span>min focus</span>
-                <input type="number" id="pomoBreak" value="5" style="width:80px"> <span>min break</span>
+            <div class="timer-card">
+              <div class="timer-hero">
+                <div class="timer-glass">
+                  <div class="timer-led" id="timerHeroDisplay">00:00</div>
+                  <div class="timer-led-sub" id="timerHeroLabel">STOPWATCH</div>
+                </div>
+              </div>
+              <div class="timer-controls">
+                <div class="timer-group">
+                  <div class="timer-row">
+                    <label for="pomoFocus">Focus (min)</label>
+                    <input type="number" id="pomoFocus" value="25">
+                  </div>
+                  <div class="timer-row">
+                    <label for="pomoBreak">Break (min)</label>
+                    <input type="number" id="pomoBreak" value="5">
+                  </div>
+                  <div class="timer-actions">
+                    <button class="ghost" type="button" id="pomoStart">Start Pomodoro</button>
+                    <button class="ghost" type="button" id="pomoStop">Stop</button>
+                  </div>
+                  <div class="timer-status" id="pomoStatus">Idle</div>
+                </div>
+                <hr class="timer-divider">
+                <div class="timer-group">
+                  <div class="timer-row">
+                    <span class="timer-label">Stopwatch</span>
+                    <div class="timer-status" id="swStatus">00:00</div>
+                  </div>
+                  <div class="timer-actions">
+                    <button class="ghost" type="button" id="swStart">Start/Stop</button>
+                    <button class="ghost" type="button" id="swReset">Reset</button>
+                  </div>
+                </div>
+              </div>
             </div>
-            <button class="ghost" type="button" id="pomoStart">Start Pomodoro</button>
-            <button class="ghost" type="button" id="pomoStop">Stop</button>
-            <div id="pomoStatus" class="node-summary">Idle</div>
-            <hr style="border-color:rgba(255,255,255,0.08);">
-            <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                <button class="ghost" type="button" id="swStart">Start/Stop</button>
-                <button class="ghost" type="button" id="swReset">Reset</button>
-            </div>
-            <div id="swStatus" class="node-summary">00:00</div>
         </div>
                 <div class="utility-card" id="tool-random">
                     <h3>Randomizer</h3>
@@ -368,9 +391,24 @@
                 <div class="utility-card" id="tool-countdown">
                     <h3>Meeting countdown</h3>
             <p>Pick a meeting time to see remaining time.</p>
-            <input type="datetime-local" id="meetTime">
-            <button class="ghost" type="button" id="meetStart">Start countdown</button>
-            <div id="meetStatus" class="node-summary">Not set</div>
+            <div class="countdown-card">
+              <div class="countdown-hero">
+                <div class="countdown-glass">
+                  <div class="countdown-led" id="meetHeroDisplay">00:00:00</div>
+                  <div class="countdown-led-sub" id="meetHeroLabel">MEETING</div>
+                  <div class="countdown-led-date" id="meetHeroDate">No date set</div>
+                </div>
+              </div>
+              <div class="countdown-controls">
+                <input type="datetime-local" id="meetTime">
+                <div class="countdown-actions">
+                  <button class="ghost" type="button" id="meetStart">Start countdown</button>
+                  <button class="ghost" type="button" id="meetReset">Reset</button>
+                </div>
+                <div id="meetTarget" class="node-summary">No meeting selected.</div>
+                <div id="meetStatus" class="node-summary">Not set</div>
+              </div>
+            </div>
         </div>
     </div>
 </section>
@@ -945,9 +983,54 @@
             const pomoStart = document.getElementById('pomoStart');
             const pomoStop = document.getElementById('pomoStop');
             const pomoStatus = document.getElementById('pomoStatus');
+            const timerHeroDisplay = document.getElementById('timerHeroDisplay');
+            const timerHeroLabel = document.getElementById('timerHeroLabel');
+            const meetTime = document.getElementById('meetTime');
+            const meetStart = document.getElementById('meetStart');
+            const meetReset = document.getElementById('meetReset');
+            const meetStatus = document.getElementById('meetStatus');
+            const meetHeroDisplay = document.getElementById('meetHeroDisplay');
+            const meetHeroLabel = document.getElementById('meetHeroLabel');
+            const meetTarget = document.getElementById('meetTarget');
+            const meetHeroDate = document.getElementById('meetHeroDate');
+            const setHero = (val, label) => {
+                if (timerHeroDisplay && val != null) timerHeroDisplay.textContent = val;
+                if (timerHeroLabel && label) timerHeroLabel.textContent = label;
+            };
             let pomoTimer = null;
             let pomoMode = 'focus';
             let pomoRemaining = 0;
+            const playChime = (() => {
+                let ctx;
+                return () => {
+                    try {
+                        ctx = ctx || new (window.AudioContext || window.webkitAudioContext)();
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(880, ctx.currentTime);
+                        gain.gain.setValueAtTime(0.12, ctx.currentTime);
+                        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.6);
+                        osc.connect(gain).connect(ctx.destination);
+                        osc.start();
+                        osc.stop(ctx.currentTime + 0.6);
+                    } catch (e) {
+                        // ignore autoplay failures
+                    }
+                };
+            })();
+            let chimeInterval = null;
+            const startChimeLoop = () => {
+                if (chimeInterval) return;
+                playChime();
+                chimeInterval = setInterval(playChime, 1500);
+            };
+            const stopChimeLoop = () => {
+                if (chimeInterval) {
+                    clearInterval(chimeInterval);
+                    chimeInterval = null;
+                }
+            };
             const fmtTime = (s) => {
                 const m = Math.floor(s / 60).toString().padStart(2, '0');
                 const sec = Math.floor(s % 60).toString().padStart(2, '0');
@@ -955,6 +1038,7 @@
             };
             const tickPomo = () => {
                 if (pomoRemaining <= 0) {
+                    startChimeLoop();
                     if (pomoMode === 'focus') {
                         pomoMode = 'break';
                         pomoRemaining = Math.max(1, parseInt(pomoBreak?.value || '5', 10) * 60);
@@ -963,11 +1047,14 @@
                         pomoRemaining = Math.max(1, parseInt(pomoFocus?.value || '25', 10) * 60);
                     }
                 }
-                if (pomoStatus) pomoStatus.textContent = `${pomoMode} - ${fmtTime(pomoRemaining)}`;
+                const msg = `${pomoMode} - ${fmtTime(pomoRemaining)}`;
+                if (pomoStatus) pomoStatus.textContent = msg;
+                setHero(fmtTime(pomoRemaining), pomoMode.toUpperCase());
                 pomoRemaining -= 1;
             };
             pomoStart?.addEventListener('click', () => {
                 clearInterval(pomoTimer);
+                stopChimeLoop();
                 pomoMode = 'focus';
                 pomoRemaining = Math.max(1, parseInt(pomoFocus?.value || '25', 10) * 60);
                 tickPomo();
@@ -976,6 +1063,8 @@
             pomoStop?.addEventListener('click', () => {
                 clearInterval(pomoTimer);
                 if (pomoStatus) pomoStatus.textContent = 'Idle';
+                setHero('00:00', 'STOPWATCH');
+                stopChimeLoop();
             });
 
             const swStart = document.getElementById('swStart');
@@ -986,6 +1075,7 @@
             let swElapsed = 0;
             const updateSW = () => {
                 if (swStatus) swStatus.textContent = fmtTime(swElapsed);
+                setHero(fmtTime(swElapsed), 'STOPWATCH');
             };
             swStart?.addEventListener('click', () => {
                 if (swRunning) {
@@ -1006,6 +1096,64 @@
                 updateSW();
             });
             updateSW();
+
+            // Meeting countdown
+            let meetTimer = null;
+            const fmtTarget = (date) => date.toLocaleString(undefined, {
+                weekday: 'short',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            const updateMeet = () => {
+                if (!meetTime?.value) {
+                    if (meetStatus) meetStatus.textContent = 'Not set';
+                    if (meetHeroDisplay) meetHeroDisplay.textContent = '00:00:00';
+                    if (meetHeroLabel) meetHeroLabel.textContent = 'MEETING';
+                    if (meetTarget) meetTarget.textContent = 'No meeting selected.';
+                    if (meetHeroDate) meetHeroDate.textContent = 'No date set';
+                    stopChimeLoop();
+                    return;
+                }
+                const target = new Date(meetTime.value);
+                const now = new Date();
+                const diff = (target.getTime() - now.getTime()) / 1000;
+                if (diff <= 0) {
+                    startChimeLoop();
+                    if (meetStatus) meetStatus.textContent = 'Meeting time reached.';
+                    if (meetHeroDisplay) meetHeroDisplay.textContent = '00:00:00';
+                    if (meetHeroLabel) meetHeroLabel.textContent = 'MEETING';
+                    if (meetTarget) meetTarget.textContent = fmtTarget(target);
+                    if (meetHeroDate) meetHeroDate.textContent = fmtTarget(target);
+                    clearInterval(meetTimer);
+                    return;
+                }
+                const hours = Math.floor(diff / 3600);
+                const minutes = Math.floor((diff % 3600) / 60);
+                const seconds = Math.floor(diff % 60);
+                const label = `${hours}h ${minutes}m ${seconds}s remaining`;
+                if (meetStatus) meetStatus.textContent = label;
+                if (meetHeroDisplay) meetHeroDisplay.textContent = `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+                if (meetHeroLabel) meetHeroLabel.textContent = 'MEETING';
+                if (meetTarget) meetTarget.textContent = fmtTarget(target);
+                if (meetHeroDate) meetHeroDate.textContent = fmtTarget(target);
+            };
+            meetStart?.addEventListener('click', () => {
+                clearInterval(meetTimer);
+                stopChimeLoop();
+                updateMeet();
+                meetTimer = setInterval(updateMeet, 1000);
+            });
+            meetReset?.addEventListener('click', () => {
+                clearInterval(meetTimer);
+                if (meetStatus) meetStatus.textContent = 'Not set';
+                if (meetHeroDisplay) meetHeroDisplay.textContent = '00:00:00';
+                if (meetHeroLabel) meetHeroLabel.textContent = 'MEETING';
+                if (meetTarget) meetTarget.textContent = 'No meeting selected.';
+                if (meetHeroDate) meetHeroDate.textContent = 'No date set';
+                stopChimeLoop();
+            });
 
             // Randomizer: WebGL glassy paired D6 (Three.js)
             (() => {
@@ -1359,35 +1507,6 @@
                 note.className = 'node-summary';
                 note.textContent = 'Heuristic only: always verify the domain and use your normal security checks.';
                 loginResult.insertAdjacentElement('afterend', note);
-            });
-
-            // Meeting countdown
-            const meetTime = document.getElementById('meetTime');
-            const meetStart = document.getElementById('meetStart');
-            const meetStatus = document.getElementById('meetStatus');
-            let meetTimer = null;
-            const updateMeet = () => {
-                if (!meetTime?.value) {
-                    if (meetStatus) meetStatus.textContent = 'Not set';
-                    return;
-                }
-                const target = new Date(meetTime.value);
-                const now = new Date();
-                const diff = (target.getTime() - now.getTime()) / 1000;
-                if (diff <= 0) {
-                    if (meetStatus) meetStatus.textContent = 'Meeting time reached.';
-                    clearInterval(meetTimer);
-                    return;
-                }
-                const hours = Math.floor(diff / 3600);
-                const minutes = Math.floor((diff % 3600) / 60);
-                const seconds = Math.floor(diff % 60);
-                if (meetStatus) meetStatus.textContent = `${hours}h ${minutes}m ${seconds}s remaining`;
-            };
-            meetStart?.addEventListener('click', () => {
-                clearInterval(meetTimer);
-                updateMeet();
-                meetTimer = setInterval(updateMeet, 1000);
             });
 
             const linkInput = document.getElementById('linkInput');
