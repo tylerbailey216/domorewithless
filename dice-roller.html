@@ -1,0 +1,657 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Do More With Less · Dice Roller</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root{
+      --text:#f3f3f3;
+      --muted:#a7a7a7;
+      --btn:#f5f5f5;
+      --btnText:#111;
+      --pill:999px;
+      --font:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+
+    body{margin:0;padding:18px;font-family:var(--font);background:#0f0f0f;color:var(--text);}
+    .wrap{max-width:980px;margin:0 auto;}
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius:22px;
+      padding:20px;
+      box-shadow:0 12px 50px rgba(0,0,0,0.35);
+    }
+    h1{margin:0 0 6px;font-size:26px;letter-spacing:0.2px;}
+    .sub{margin:0 0 14px;color:var(--muted);line-height:1.55;max-width:860px;font-size:14px;}
+
+    .layout{display:grid;grid-template-columns:1.05fr 0.95fr;gap:14px;align-items:start;}
+    @media (max-width: 900px){.layout{grid-template-columns:1fr;}}
+
+    .panel{
+      background:rgba(0,0,0,0.25);
+      border:1px solid rgba(255,255,255,0.08);
+      border-radius:20px;
+      padding:14px;
+    }
+    .panel.left{max-height:calc(100vh - 150px);overflow:auto;}
+    @media (max-width: 900px){.panel.left{max-height:none;overflow:visible;}}
+
+    .rows{display:flex;flex-direction:column;gap:9px;margin-top:6px;}
+    .row{
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+      padding:10px 10px;border-radius:14px;
+      background:rgba(255,255,255,0.02);
+      border:1px solid rgba(255,255,255,0.06);
+    }
+    .diceTag{font-weight:700;color:var(--text);}
+    .row small{color:var(--muted);font-size:12px;margin-left:6px;}
+
+    .stepper{
+      display:inline-flex;align-items:center;gap:10px;
+      padding:6px 10px;border-radius:var(--pill);
+      background:rgba(0,0,0,0.25);
+      border:1px solid rgba(255,255,255,0.10);
+    }
+    .stepper button{
+      width:34px;height:28px;border-radius:var(--pill);
+      border:1px solid rgba(255,255,255,0.10);
+      background:rgba(255,255,255,0.02);
+      color:var(--text);
+      cursor:pointer;
+    }
+    .stepper button:hover{background:rgba(255,255,255,0.06);}
+    .stepper .val{width:22px;text-align:center;font-weight:700;}
+
+    .modifier{
+      width:92px;padding:8px 10px;border-radius:var(--pill);
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(0,0,0,0.25);
+      color:var(--text);text-align:center;outline:none;
+    }
+
+    .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;align-items:center;}
+    .btn{
+      padding:12px 18px;border-radius:var(--pill);
+      border:1px solid rgba(255,255,255,0.12);
+      background:var(--btn);color:var(--btnText);
+      font-weight:750;cursor:pointer;
+    }
+    .btn:disabled{opacity:.45;cursor:default;}
+    .btnGhost{
+      padding:12px 16px;border-radius:var(--pill);
+      border:1px solid rgba(255,255,255,0.12);
+      background:rgba(255,255,255,0.02);
+      color:var(--text);cursor:pointer;
+    }
+
+    .resultBox{
+      margin-top:12px;padding:14px;border-radius:16px;
+      background:rgba(0,0,0,0.25);
+      border:1px solid rgba(255,255,255,0.10);
+    }
+    .resultTop{display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;justify-content:space-between;}
+    .resultTop .big{font-size:20px;font-weight:800;}
+    .resultTop .small{color:var(--muted);font-size:13px;}
+    .breakdown{margin-top:10px;color:var(--muted);font-size:13px;line-height:1.5;white-space:pre-wrap;}
+
+    .rightStack{display:flex;flex-direction:column;gap:14px;}
+    .rightTop{display:grid;grid-template-columns: 220px 1fr;gap:12px;align-items:center;}
+    @media (max-width: 900px){.rightTop{grid-template-columns:1fr;text-align:center;}}
+
+    /* --- HERO: true 3D cube, now paired --- */
+    .scene{width:240px;height:170px;perspective:920px;margin:0 auto;position:relative;}
+    .cubePair{position:relative;width:240px;height:170px;margin:0 auto;}
+    .cube{
+      width:140px;height:140px;position:absolute;
+      transform-style:preserve-3d;
+      transition:transform .95s cubic-bezier(.19,1,.22,1);
+    }
+    .cubeA{left:0;top:16px;}
+    .cubeB{right:0;top:0;}
+    .cube.rolling{animation: dmwlShake 0.95s cubic-bezier(.19,1,.22,1) both;}
+    @keyframes dmwlShake{
+      0%   { transform: rotateX(0deg) rotateY(0deg) translateY(0px); }
+      25%  { transform: rotateX(120deg) rotateY(140deg) translateY(-2px); }
+      55%  { transform: rotateX(260deg) rotateY(320deg) translateY(1px); }
+      85%  { transform: rotateX(420deg) rotateY(520deg) translateY(0px); }
+      100% { transform: rotateX(540deg) rotateY(720deg) translateY(0px); }
+    }
+
+    .face{
+      position:absolute;width:140px;height:140px;border-radius:26px;
+      border:1px solid rgba(255,255,255,0.16);
+      background:
+        radial-gradient(140px 140px at 30% 25%, rgba(255,255,255,0.14), rgba(255,255,255,0) 55%),
+        radial-gradient(190px 190px at 70% 80%, rgba(255,255,255,0.06), rgba(255,255,255,0) 60%),
+        rgba(0,0,0,0.22);
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+      display:flex;align-items:center;justify-content:center;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
+    }
+    .face .num{
+      display:inline-flex;align-items:center;justify-content:center;
+      min-width:58px;height:58px;padding:0 16px;border-radius:18px;
+      background:rgba(0,0,0,0.60);
+      border:1px solid rgba(255,255,255,0.14);
+      color:#fff;text-shadow:0 2px 10px rgba(0,0,0,0.75);
+      font-weight:900;font-size:50px;line-height:1;letter-spacing:0.5px;
+    }
+
+    .f1{transform:translateZ(70px);}
+    .f2{transform:rotateY(180deg) translateZ(70px);}
+    .f3{transform:rotateY(90deg) translateZ(70px);}
+    .f4{transform:rotateY(-90deg) translateZ(70px);}
+    .f5{transform:rotateX(90deg) translateZ(70px);}
+    .f6{transform:rotateX(-90deg) translateZ(70px);}
+
+    .heroOverlay{
+      position:absolute;inset:0;
+      display:flex;align-items:center;justify-content:center;
+      pointer-events:none;
+      opacity:0;
+      transform: perspective(920px) rotateX(16deg) rotateY(-18deg);
+      filter: drop-shadow(0 14px 24px rgba(0,0,0,0.55));
+      transition: opacity .18s ease;
+    }
+    .heroOverlay.show{opacity:1;}
+    .heroOverlay svg{
+      width:96px;height:96px;
+      stroke: rgba(255,255,255,0.30);
+      fill: rgba(255,255,255,0.05);
+      stroke-width: 2.6;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+    }
+    .heroMeta{
+      position:absolute;left:10px;right:10px;bottom:10px;
+      display:flex;justify-content:space-between;align-items:center;gap:10px;
+      color: rgba(255,255,255,0.85);
+      font-size:12px;
+      pointer-events:none;
+    }
+    .pill{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:6px 10px;border-radius:999px;
+      background:rgba(0,0,0,0.45);
+      border:1px solid rgba(255,255,255,0.12);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+      white-space:nowrap;
+    }
+    .pill b{font-weight:900;letter-spacing:0.2px;}
+    .pill span{color:rgba(255,255,255,0.75);}
+
+    .dice-visuals{margin-top:12px;display:grid;grid-template-columns:repeat(4, minmax(0,1fr));gap:10px;}
+    @media (max-width: 900px){.dice-visuals{grid-template-columns:repeat(3, minmax(0,1fr));}}
+
+    .die-card{
+      position:relative;border-radius:16px;padding:10px;
+      background:rgba(0,0,0,0.22);
+      border:1px solid rgba(255,255,255,0.10);
+      overflow:hidden;min-height:84px;
+    }
+    .die-card::before{
+      content:"";position:absolute;inset:-30px;
+      background:
+        radial-gradient(120px 120px at 25% 20%, rgba(255,255,255,0.12), rgba(255,255,255,0) 60%),
+        radial-gradient(160px 160px at 80% 85%, rgba(255,255,255,0.06), rgba(255,255,255,0) 60%);
+      pointer-events:none;
+    }
+    .die-shape{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0.9;pointer-events:none;filter: drop-shadow(0 10px 22px rgba(0,0,0,0.45));}
+    .die-shape svg{width:64px;height:64px;stroke: rgba(255,255,255,0.22);fill: rgba(255,255,255,0.03);stroke-width: 2.2;stroke-linejoin: round;stroke-linecap: round;}
+    .die-top{display:flex;justify-content:space-between;align-items:center;gap:10px;position:relative;z-index:1;}
+    .die-name{font-weight:800;letter-spacing:0.2px;}
+    .die-sides{color:var(--muted);font-size:12px;}
+    .die-value{
+      margin-top:12px;position:relative;z-index:1;
+      display:flex;align-items:center;justify-content:center;
+      height:38px;border-radius:14px;
+      background:rgba(0,0,0,0.62);
+      border:1px solid rgba(255,255,255,0.12);
+      font-weight:900;font-size:18px;color:#fff;
+      text-shadow:0 2px 10px rgba(0,0,0,0.75);
+    }
+    .die-card.rolled{animation: diePulse 0.45s ease both;}
+    @keyframes diePulse{0%{transform:scale(1);}40%{transform:scale(1.03);}100%{transform:scale(1);}}
+
+    .hist{padding:14px;border-radius:20px;background:rgba(0,0,0,0.25);border:1px solid rgba(255,255,255,0.10);}
+    .histTop{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;}
+    .histTop h3{margin:0;font-size:14px;color:var(--muted);font-weight:750;}
+    .histList{list-style:none;margin:0;padding:0;max-height:180px;overflow:auto;font-size:13px;color:var(--muted);}
+    .histList li{padding:5px 0;border-bottom:1px dashed rgba(255,255,255,0.08);}
+    .histList li:last-child{border-bottom:none;}
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>Dice roll (browser-only)</h1>
+      <p class="sub">Roll one or more dice and optionally add a small modifier. Calm UI, no tracking, no accounts.</p>
+
+      <div class="layout">
+        <!-- LEFT -->
+        <div class="panel left">
+          <div class="rows" id="diceRows"></div>
+
+          <div class="row" style="margin-top:10px;">
+            <div><span class="diceTag">Modifier</span><small>(optional)</small></div>
+            <input class="modifier" id="modifier" type="number" value="0" inputmode="numeric" />
+          </div>
+
+          <div class="actions">
+            <button class="btn" id="rollBtn">Roll</button>
+            <button class="btnGhost" id="resetBtn" type="button">Reset</button>
+            <button class="btnGhost" id="clearHistoryBtn" type="button">Clear history</button>
+          </div>
+
+          <div class="resultBox">
+            <div class="resultTop">
+              <div class="big">Result: <span id="total">–</span></div>
+              <div class="small" id="summary">No roll yet.</div>
+            </div>
+            <div class="breakdown" id="breakdown"></div>
+          </div>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="rightStack">
+          <div class="panel">
+            <div class="rightTop">
+              <div class="scene" aria-hidden="true">
+                <div class="cubePair">
+                  <div class="cube cubeA" id="cubeA">
+                    <div class="face f1"><span class="num">1</span></div>
+                    <div class="face f2"><span class="num">2</span></div>
+                    <div class="face f3"><span class="num">3</span></div>
+                    <div class="face f4"><span class="num">4</span></div>
+                    <div class="face f5"><span class="num">5</span></div>
+                    <div class="face f6"><span class="num">6</span></div>
+                  </div>
+                  <div class="cube cubeB" id="cubeB">
+                    <div class="face f1"><span class="num">1</span></div>
+                    <div class="face f2"><span class="num">2</span></div>
+                    <div class="face f3"><span class="num">3</span></div>
+                    <div class="face f4"><span class="num">4</span></div>
+                    <div class="face f5"><span class="num">5</span></div>
+                    <div class="face f6"><span class="num">6</span></div>
+                  </div>
+                </div>
+                <div class="heroOverlay" id="heroOverlay"></div>
+                <div class="heroMeta">
+                  <div class="pill"><b id="heroType">D6</b> <span>active</span></div>
+                  <div class="pill"><span>last</span> <b id="heroLast">—</b></div>
+                </div>
+              </div>
+
+              <p class="sub" style="margin:0;">
+                3D cube stays 3D. When you roll other dice (d20, d12, etc.), the overlay updates to match the last die type & value.
+              </p>
+            </div>
+
+            <div class="dice-visuals" id="diceVisuals"></div>
+          </div>
+
+          <div class="hist">
+            <div class="histTop">
+              <h3>Recent rolls</h3>
+              <span class="sub" style="margin:0;" id="histCount">0</span>
+            </div>
+            <ul class="histList" id="history"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+(() => {
+  const DICE = [
+    { key: "d4",  sides: 4  },
+    { key: "d6",  sides: 6  },
+    { key: "d8",  sides: 8  },
+    { key: "d10", sides: 10 },
+    { key: "d12", sides: 12 },
+    { key: "d20", sides: 20 },
+    { key: "d100", sides: 100 }
+  ];
+
+  const counts = Object.fromEntries(DICE.map(d => [d.key, 0]));
+  counts.d6 = 2;
+
+  let history = [];
+  const HISTORY_MAX = 10;
+
+  const diceRows = document.getElementById("diceRows");
+  const modifierEl = document.getElementById("modifier");
+  const rollBtn = document.getElementById("rollBtn");
+  const resetBtn = document.getElementById("resetBtn");
+  const clearHistoryBtn = document.getElementById("clearHistoryBtn");
+  const totalEl = document.getElementById("total");
+  const summaryEl = document.getElementById("summary");
+  const breakdownEl = document.getElementById("breakdown");
+  const cubeA = document.getElementById("cubeA");
+  const cubeB = document.getElementById("cubeB");
+  const historyEl = document.getElementById("history");
+  const histCountEl = document.getElementById("histCount");
+  const diceVisualsEl = document.getElementById("diceVisuals");
+
+  const heroOverlayEl = document.getElementById("heroOverlay");
+  const heroTypeEl = document.getElementById("heroType");
+  const heroLastEl = document.getElementById("heroLast");
+
+  function buildRows() {
+    diceRows.innerHTML = "";
+    DICE.forEach(d => {
+      const row = document.createElement("div");
+      row.className = "row";
+
+      const left = document.createElement("div");
+      left.innerHTML = `<span class="diceTag">${d.key}</span><small>(${d.sides}-sided)</small>`;
+
+      const stepper = document.createElement("div");
+      stepper.className = "stepper";
+      stepper.innerHTML = `
+        <button type="button" data-key="${d.key}" data-dir="-1">−</button>
+        <div class="val" id="val-${d.key}">${counts[d.key]}</div>
+        <button type="button" data-key="${d.key}" data-dir="1">+</button>
+      `;
+
+      row.appendChild(left);
+      row.appendChild(stepper);
+      diceRows.appendChild(row);
+    });
+
+    diceRows.addEventListener("click", (e) => {
+      const btn = e.target.closest("button[data-key]");
+      if (!btn) return;
+      const key = btn.dataset.key;
+      const dir = Number(btn.dataset.dir);
+      const next = Math.max(0, Math.min(30, counts[key] + dir));
+      counts[key] = next;
+      document.getElementById(`val-${key}`).textContent = String(next);
+      refreshRollButtonState();
+    });
+  }
+
+  function refreshCountsUI() {
+    DICE.forEach(d => {
+      const el = document.getElementById(`val-${d.key}`);
+      if (el) el.textContent = String(counts[d.key]);
+    });
+    refreshRollButtonState();
+  }
+
+  function refreshRollButtonState() {
+    const totalDice = DICE.reduce((sum, d) => sum + counts[d.key], 0);
+    rollBtn.disabled = totalDice === 0;
+  }
+
+  function rotationForD6(value) {
+    switch (value) {
+      case 1: return { x: 0, y: 0 };
+      case 2: return { x: 0, y: 180 };
+      case 3: return { x: 0, y: -90 };
+      case 4: return { x: 0, y: 90 };
+      case 5: return { x: -90, y: 0 };
+      case 6: return { x: 90, y: 0 };
+      default: return { x: 0, y: 0 };
+    }
+  }
+
+  function clampModifier(n) {
+    if (Number.isNaN(n)) return 0;
+    return Math.max(-99, Math.min(99, n));
+  }
+
+  function rollOne(sides) {
+    const max = Math.floor(0xFFFFFFFF / sides) * sides;
+    let x = 0xFFFFFFFF;
+    while (x >= max) {
+      x = crypto.getRandomValues(new Uint32Array(1))[0];
+    }
+    return (x % sides) + 1;
+  }
+
+  function animateCubesPair(finalValues) {
+    const vals = [
+      finalValues && finalValues[0] ? finalValues[0] : rollOne(6),
+      finalValues && finalValues[1] ? finalValues[1] : rollOne(6)
+    ];
+    [cubeA, cubeB].forEach((cube, idx) => {
+      if (!cube) return;
+      cube.classList.add("rolling");
+      const settleAfterMs = 950;
+      setTimeout(() => {
+        cube.classList.remove("rolling");
+        const base = rotationForD6(vals[idx]);
+        const extraX = (Math.floor(Math.random() * 3) + 1) * 360;
+        const extraY = (Math.floor(Math.random() * 3) + 1) * 360;
+        cube.style.transform = `rotateX(${base.x + extraX}deg) rotateY(${base.y + extraY}deg)`;
+      }, settleAfterMs - 40);
+    });
+  }
+
+  function getDieSVG(key) {
+    switch (key) {
+      case "d4":
+        return `<svg viewBox="0 0 100 100" aria-hidden="true">
+          <path d="M50 12 L90 82 L10 82 Z"></path>
+          <path d="M50 12 L50 82"></path>
+          <path d="M10 82 L90 82"></path>
+        </svg>`;
+      case "d6":
+        return `<svg viewBox="0 0 100 100" aria-hidden="true">
+          <rect x="18" y="18" width="64" height="64" rx="14"></rect>
+          <path d="M18 50 H82"></path>
+          <path d="M50 18 V82"></path>
+        </svg>`;
+      case "d8":
+        return `<svg viewBox="0 0 100 100" aria-hidden="true">
+          <path d="M50 10 L86 50 L50 90 L14 50 Z"></path>
+          <path d="M50 10 L50 90"></path>
+          <path d="M14 50 H86"></path>
+        </svg>`;
+      case "d10":
+        return `<svg viewBox="0 0 100 100" aria-hidden="true">
+          <path d="M50 8 L86 38 L72 90 L28 90 L14 38 Z"></path>
+          <path d="M50 8 L50 90"></path>
+          <path d="M14 38 L86 38"></path>
+        </svg>`;
+      case "d12":
+        return `<svg viewBox="0 0 100 100" aria-hidden="true">
+          <path d="M50 10 L80 26 L90 55 L72 86 L28 86 L10 55 L20 26 Z"></path>
+          <path d="M50 10 L50 86"></path>
+        </svg>`;
+      case "d20":
+        return `<svg viewBox="0 0 100 100" aria-hidden="true">
+          <path d="M50 10 L92 78 L8 78 Z"></path>
+          <path d="M50 10 L50 78"></path>
+          <path d="M8 78 L50 44 L92 78"></path>
+        </svg>`;
+      case "d100":
+        return `<svg viewBox="0 0 100 100" aria-hidden="true">
+          <circle cx="50" cy="50" r="38"></circle>
+          <path d="M50 12 V88"></path>
+          <path d="M12 50 H88"></path>
+        </svg>`;
+      default:
+        return `<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="38"></circle></svg>`;
+    }
+  }
+
+  function setHeroOverlay(key, value, value2 = null) {
+    heroTypeEl.textContent = key.toUpperCase();
+    heroLastEl.textContent = value2 != null ? `${value} / ${value2}` : String(value ?? "—");
+
+    if (key === "d6") {
+      heroOverlayEl.classList.remove("show");
+      heroOverlayEl.innerHTML = "";
+      return;
+    }
+    heroOverlayEl.innerHTML = getDieSVG(key);
+    heroOverlayEl.classList.add("show");
+  }
+
+  function renderDiceVisuals() {
+    if (!diceVisualsEl) return;
+    diceVisualsEl.innerHTML = "";
+    DICE.forEach(d => {
+      const card = document.createElement("div");
+      card.className = "die-card";
+      card.id = `diecard-${d.key}`;
+      card.innerHTML = `
+        <div class="die-shape">${getDieSVG(d.key)}</div>
+        <div class="die-top">
+          <div class="die-name">${d.key.toUpperCase()}</div>
+          <div class="die-sides">${d.sides}-sided</div>
+        </div>
+        <div class="die-value" id="dieval-${d.key}">–</div>
+      `;
+      diceVisualsEl.appendChild(card);
+    });
+  }
+
+  function updateDiceVisuals(resultsByDie) {
+    if (!diceVisualsEl) return;
+    DICE.forEach(d => {
+      const valEl = document.getElementById(`dieval-${d.key}`);
+      const cardEl = document.getElementById(`diecard-${d.key}`);
+      if (!valEl || !cardEl) return;
+
+      const arr = resultsByDie[d.key];
+      if (!arr || arr.length === 0) {
+        valEl.textContent = "–";
+        cardEl.classList.remove("rolled");
+        return;
+      }
+      valEl.textContent = arr.length === 1 ? String(arr[0]) : `${arr.reduce((a,b)=>a+b,0)} (${arr.length})`;
+      cardEl.classList.remove("rolled");
+      void cardEl.offsetWidth;
+      cardEl.classList.add("rolled");
+    });
+  }
+
+  function rollAll() {
+    rollBtn.disabled = true;
+    totalEl.textContent = "…";
+    breakdownEl.textContent = "";
+
+    const mod = clampModifier(Number(modifierEl.value));
+    modifierEl.value = String(mod);
+
+    const resultsByDie = {};
+    let diceSum = 0;
+
+    let lastKey = null;
+    let lastVal = null;
+    let lastD6Values = null;
+
+    DICE.forEach(d => {
+      const c = counts[d.key];
+      if (c <= 0) return;
+      const arr = [];
+      for (let i = 0; i < c; i++) {
+        const r = rollOne(d.sides);
+        arr.push(r);
+        diceSum += r;
+
+        lastKey = d.key;
+        lastVal = r;
+
+        if (d.key === "d6") lastD6Values = arr.slice(-2);
+      }
+      resultsByDie[d.key] = arr;
+    });
+
+    const total = diceSum + mod;
+
+    animateCubesPair(lastD6Values || []);
+
+    if (lastD6Values && lastD6Values.length) {
+      setHeroOverlay("d6", lastD6Values[0], lastD6Values[1] ?? null);
+    } else if (lastKey && lastVal != null) {
+      setHeroOverlay(lastKey, lastVal);
+    }
+    updateDiceVisuals(resultsByDie);
+
+    const parts = [];
+    DICE.forEach(d => { if (counts[d.key] > 0) parts.push(`${counts[d.key]}${d.key}`); });
+    const modStr = mod === 0 ? "" : (mod > 0 ? ` + ${mod}` : ` − ${Math.abs(mod)}`);
+    const expr = `${parts.join(" + ")}${modStr}`;
+
+    let breakdown = "";
+    DICE.forEach(d => {
+      const arr = resultsByDie[d.key];
+      if (!arr) return;
+      const s = arr.reduce((a,b)=>a+b,0);
+      breakdown += `${counts[d.key]}${d.key}: [${arr.join(", ")}]  (sum: ${s})\n`;
+    });
+    if (mod !== 0) breakdown += `modifier: ${mod}\n`;
+    breakdown += `—\nTOTAL: ${total}`;
+
+    setTimeout(() => {
+      totalEl.textContent = String(total);
+      summaryEl.textContent = expr;
+      breakdownEl.textContent = breakdown;
+
+      const histLine = `${expr} → ${total}`;
+      history.unshift(histLine);
+      history = history.slice(0, HISTORY_MAX);
+      renderHistory();
+
+      rollBtn.disabled = false;
+      refreshRollButtonState();
+    }, 950);
+  }
+
+  function renderHistory() {
+    historyEl.innerHTML = "";
+    history.forEach(line => {
+      const li = document.createElement("li");
+      li.textContent = line;
+      historyEl.appendChild(li);
+    });
+    histCountEl.textContent = String(history.length);
+  }
+
+  function resetAll() {
+    DICE.forEach(d => counts[d.key] = 0);
+    counts.d6 = 2;
+    modifierEl.value = "0";
+    totalEl.textContent = "–";
+    summaryEl.textContent = "No roll yet.";
+    breakdownEl.textContent = "";
+    refreshCountsUI();
+
+    DICE.forEach(d => {
+      const valEl = document.getElementById(`dieval-${d.key}`);
+      const cardEl = document.getElementById(`diecard-${d.key}`);
+      if (valEl) valEl.textContent = "–";
+      if (cardEl) cardEl.classList.remove("rolled");
+    });
+
+    setHeroOverlay("d6", 1, 1);
+  }
+
+  function clearHistory() {
+    history = [];
+    renderHistory();
+  }
+
+  rollBtn.addEventListener("click", rollAll);
+  resetBtn.addEventListener("click", resetAll);
+  clearHistoryBtn.addEventListener("click", clearHistory);
+
+  buildRows();
+  refreshCountsUI();
+  renderDiceVisuals();
+  renderHistory();
+  setHeroOverlay("d6", 1, 1);
+})();
+</script>
+</body>
+</html>
