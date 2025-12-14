@@ -1814,10 +1814,11 @@
                     const isMobileUA = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent || '');
                     if (isMobileUA) {
                         [headsTex, tailsTex].forEach((tex) => {
-                            tex.wrapS = THREE.RepeatWrapping;
-                            tex.wrapT = THREE.RepeatWrapping;
-                            tex.repeat.set(-1, 1);
-                            tex.offset.set(1, 0);
+                            tex.flipY = true;
+                            tex.wrapS = THREE.ClampToEdgeWrapping;
+                            tex.wrapT = THREE.ClampToEdgeWrapping;
+                            tex.offset.set(0, 0);
+                            tex.repeat.set(1, 1);
                             tex.center.set(0.5, 0.5);
                             tex.needsUpdate = true;
                         });
