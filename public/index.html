@@ -437,9 +437,19 @@
               <div class="rand3d-meta">
                 <div class="rand3d-meta-line"><span>Die</span><strong id="rand3dDieLabel">D6</strong></div>
                 <div class="rand3d-meta-line"><span>Last roll</span><strong id="rand3dResult">– / –</strong></div>
-                <div class="rand3d-meta-line"><span>Sum</span><strong id="rand3dSum">–</strong></div>
+                <div class="rand3d-meta-line"><span>Sum</span><strong id="rand3dSum">-</strong></div>
                 <button class="ghost rand3d-btn" type="button" id="rand3dRollBtn">Roll both</button>
                 <div class="pair-note">Browser-only randomness. Tap to roll again.</div>
+              </div>
+            </div>
+            <div class="coin-card">
+              <div class="coin-stage">
+                <div class="coin-webgl" id="coinWebgl" aria-hidden="true" tabindex="0"></div>
+              </div>
+              <div class="coin-meta">
+                <div class="rand3d-meta-line"><span>Coin</span><strong id="coinResult">Ready</strong></div>
+                <button class="ghost rand3d-btn" type="button" id="coinFlipBtn">Flip coin</button>
+                <div class="pair-note">Tap the coin or button to flip.</div>
               </div>
             </div>
         </div>
@@ -1689,6 +1699,201 @@
 
                 // start after load to ensure container sized
                 window.addEventListener('load', start, { once: true });
+            })();
+
+            // Coin flip (3D)
+            (() => {
+                const container = document.getElementById('coinWebgl');
+                if (!container) return;
+
+                const flipBtn = document.getElementById('coinFlipBtn');
+                const resultEl = document.getElementById('coinResult');
+
+                const ensureThree = () => new Promise((resolve, reject) => {
+                    if (window.THREE) return resolve();
+                    const existing = Array.from(document.getElementsByTagName('script')).find((s) => (s.src || '').includes('three.min.js'));
+                    const script = existing || (() => {
+                        const scr = document.createElement('script');
+                        scr.src = './libs/three.min.js';
+                        scr.async = true;
+                        document.head.appendChild(scr);
+                        return scr;
+                    })();
+                    script.addEventListener('load', () => resolve(), { once: true });
+                    script.addEventListener('error', (e) => reject(e), { once: true });
+                });
+
+                const boot = async () => {
+                    try {
+                        await ensureThree();
+                    } catch (err) {
+                        console.error('Failed to load Three.js for coin', err);
+                        if (resultEl) resultEl.textContent = 'Unavailable';
+                        return;
+                    }
+                    const {
+                        Scene,
+                        PerspectiveCamera,
+                        WebGLRenderer,
+                        AmbientLight,
+                        HemisphereLight,
+                        DirectionalLight,
+                        MeshStandardMaterial,
+                        CylinderGeometry,
+                        Mesh,
+                        TextureLoader,
+                        Color,
+                        Clock,
+                        Quaternion,
+                        Euler,
+                        MathUtils,
+                        Vector3,
+                    } = THREE;
+
+                    const scene = new Scene();
+                    const camera = new PerspectiveCamera(32, 1, 0.1, 100);
+                    camera.position.set(0, 0.4, 6.6);
+
+                    let renderer;
+                    try {
+                        renderer = new WebGLRenderer({ antialias: true, alpha: true });
+                    } catch (err) {
+                        console.error('WebGL not available', err);
+                        if (resultEl) resultEl.textContent = 'WebGL blocked';
+                        return;
+                    }
+                    renderer.outputEncoding = THREE.sRGBEncoding || renderer.outputEncoding;
+                    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+                    renderer.setClearColor(0x000000, 0);
+                    container.appendChild(renderer.domElement);
+
+                    scene.add(new AmbientLight(0xffffff, 0.65));
+                    scene.add(new HemisphereLight(0xcde8ff, 0x0a0f14, 0.7));
+                    const key = new DirectionalLight(0xffffff, 0.95);
+                    key.position.set(6, 6, 8);
+                    scene.add(key);
+                    const rim = new DirectionalLight(0x7fcaff, 0.6);
+                    rim.position.set(-6, -4, -6);
+                    scene.add(rim);
+
+                    const loader = new TextureLoader();
+                    const headsTex = loader.load('./heads.png');
+                    const tailsTex = loader.load('./tails.png');
+                    [headsTex, tailsTex].forEach((tex) => {
+                        tex.anisotropy = renderer.capabilities.getMaxAnisotropy?.() || 1;
+                        tex.encoding = THREE.sRGBEncoding || tex.encoding;
+                    });
+
+                    const coinGeo = new CylinderGeometry(1.05, 1.05, 0.14, 80, 1, false);
+                    const paletteForTheme = () => {
+                        const isLight = document.body.classList.contains('theme-light');
+                        return isLight
+                            ? { edge: new Color(0xcfd8e3), metalness: 0.55, roughness: 0.28, env: 1.1 }
+                            : { edge: new Color(0x9aa7b5), metalness: 0.7, roughness: 0.24, env: 1.25 };
+                    };
+                    let palette = paletteForTheme();
+                    const makeMaterials = () => ([
+                        new MeshStandardMaterial({ color: palette.edge, metalness: palette.metalness, roughness: palette.roughness, envMapIntensity: palette.env }),
+                        new MeshStandardMaterial({ map: headsTex, metalness: 0.35, roughness: 0.42, envMapIntensity: palette.env }),
+                        new MeshStandardMaterial({ map: tailsTex, metalness: 0.35, roughness: 0.42, envMapIntensity: palette.env }),
+                    ]);
+
+                    const coin = new Mesh(coinGeo, makeMaterials());
+                    coin.rotation.x = Math.PI / 2;
+                    scene.add(coin);
+
+                    const updateMaterials = () => {
+                        palette = paletteForTheme();
+                        coin.material = makeMaterials();
+                    };
+
+                    const resize = () => {
+                        const rect = container.getBoundingClientRect();
+                        const size = Math.min(rect.width, 280);
+                        renderer.setSize(size, size, false);
+                        camera.aspect = 1;
+                        camera.updateProjectionMatrix();
+                    };
+                    resize();
+                    window.addEventListener('resize', resize);
+
+                    const clock = new Clock();
+                    let anim = null;
+
+                    const flip = () => {
+                        if (anim) return;
+                        const val = Math.random() < 0.5 ? 'Heads' : 'Tails';
+                        if (resultEl) resultEl.textContent = '…';
+                        flipBtn?.setAttribute('aria-busy', 'true');
+                        const baseX = Math.PI / 2;
+                        const extraSpins = 2 + Math.floor(Math.random() * 3);
+                        const wobbleY = MathUtils.degToRad(Math.random() * 14 - 7);
+                        const wobbleZ = MathUtils.degToRad(Math.random() * 10 - 5);
+                        const targetEuler = new Euler(
+                            baseX + (val === 'Tails' ? Math.PI : 0) + extraSpins * Math.PI * 2,
+                            wobbleY,
+                            wobbleZ
+                        );
+                        const targetQuat = new Quaternion().setFromEuler(targetEuler);
+                        anim = {
+                            start: performance.now(),
+                            dur: 1200,
+                            from: coin.quaternion.clone(),
+                            to: targetQuat,
+                            val,
+                        };
+                        setTimeout(() => {
+                            if (anim && (performance.now() - anim.start) >= anim.dur) {
+                                coin.quaternion.copy(anim.to);
+                                if (resultEl) resultEl.textContent = anim.val;
+                                flipBtn?.removeAttribute('aria-busy');
+                                anim = null;
+                            }
+                        }, 1400);
+                    };
+
+                    const renderLoop = () => {
+                        requestAnimationFrame(renderLoop);
+                        const now = performance.now();
+                        const delta = clock.getDelta();
+
+                        if (anim) {
+                            const t = Math.min(1, (now - anim.start) / anim.dur);
+                            const eased = t * t * (3 - 2 * t);
+                            coin.quaternion.slerpQuaternions(anim.from, anim.to, eased);
+                            if (t >= 1) {
+                                const finalVal = anim.val;
+                                coin.quaternion.copy(anim.to);
+                                anim = null;
+                                if (resultEl) resultEl.textContent = finalVal;
+                                flipBtn?.removeAttribute('aria-busy');
+                            }
+                        }
+
+                        renderer.render(scene, camera);
+                    };
+                    renderLoop();
+
+                    flipBtn?.addEventListener('click', () => flip());
+                    container?.addEventListener('click', () => flip());
+                    container?.addEventListener('keydown', (e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            flip();
+                        }
+                    });
+                    container.tabIndex = 0;
+                    if (resultEl) resultEl.textContent = 'Ready';
+                    const themeToggle = document.getElementById('themeToggle');
+                    themeToggle?.addEventListener('click', () => {
+                        setTimeout(updateMaterials, 30);
+                    });
+
+                    // Start with a gentle reset
+                    coin.quaternion.copy(new Quaternion().setFromEuler(new Euler(Math.PI / 2, 0, 0)));
+                };
+
+                window.addEventListener('load', boot, { once: true });
             })();
 
             // Fake login detector (URL heuristics)
