@@ -304,6 +304,13 @@
             <div style="display:flex; gap:8px; flex-wrap:wrap;">
                 <button class="ghost" type="button" id="sigBuild">Build</button>
                 <button class="ghost" type="button" id="sigCopy">Copy</button>
+                <select id="sigFormat" aria-label="Signature export format">
+                    <option value="txt">Text (.txt)</option>
+                    <option value="htm">HTML (.htm)</option>
+                    <option value="rtf">Rich Text (.rtf)</option>
+                    <option value="bmp">Bitmap (.bmp)</option>
+                </select>
+                <button class="ghost" type="button" id="sigDownload" disabled>Download</button>
             </div>
         </div>
                 <div class="utility-card" id="tool-qr">
@@ -708,7 +715,10 @@
             const sigPreview = document.getElementById('sigPreview');
             const sigBuild = document.getElementById('sigBuild');
             const sigCopy = document.getElementById('sigCopy');
+            const sigDownload = document.getElementById('sigDownload');
+            const sigFormat = document.getElementById('sigFormat');
             let sigImageData = '';
+            let lastSig = null;
             const readSigImage = () => new Promise((resolve) => {
                 const file = sigImage?.files?.[0];
                 if (!file) return resolve(sigImageData);
@@ -729,9 +739,18 @@
                 if (title) lines.push(`<div style="color:gray;">${title}</div>`);
                 if (phone) lines.push(`<div>${phone}</div>`);
                 if (link) lines.push(`<div><a href="${link}" target="_blank" rel="noopener">${link}</a></div>`);
-                const result = lines.join('\n');
-                if (sigPreview) sigPreview.value = result || 'Add details to build your signature.';
-                return result;
+                const html = lines.join('\n');
+                const plainLines = [];
+                if (name) plainLines.push(name);
+                if (title) plainLines.push(title);
+                if (phone) plainLines.push(phone);
+                if (link) plainLines.push(link);
+                if (sigImageData) plainLines.push('[Logo embedded]');
+                const text = plainLines.join('\n');
+                if (sigPreview) sigPreview.value = html || 'Add details to build your signature.';
+                lastSig = { html, text, lines: plainLines, logo: sigImageData };
+                if (sigDownload) sigDownload.disabled = !html;
+                return html;
             };
             sigBuild?.addEventListener('click', buildSig);
             sigCopy?.addEventListener('click', async () => {
@@ -743,6 +762,76 @@
                 } catch (e) {
                     alert('Copy failed. You can copy manually:\n\n' + text);
                 }
+            });
+            const makeRtf = (lines) => {
+                const esc = (s) => s.replace(/\\/g, '\\\\').replace(/{/g, '\\{').replace(/}/g, '\\}');
+                const body = lines.map((l) => `${esc(l)}\\par`).join('\n');
+                return `{\\rtf1\\ansi\n${body}\n}`;
+            };
+            const makeBmpFromSig = async (sig) => {
+                const canvas = document.createElement('canvas');
+                const width = 640;
+                const height = 360;
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, width, height);
+                let y = 32;
+                ctx.fillStyle = '#000000';
+                ctx.font = '20px Arial';
+                if (sig.logo) {
+                    const img = new Image();
+                    img.src = sig.logo;
+                    await new Promise((resolve) => {
+                        img.onload = resolve;
+                        img.onerror = resolve;
+                    });
+                    const ratio = img.width / img.height;
+                    const targetW = Math.min(width - 64, 240);
+                    const targetH = targetW / ratio;
+                    ctx.drawImage(img, 32, y, targetW, targetH);
+                    y += targetH + 16;
+                }
+                ctx.font = '22px Arial';
+                sig.lines.forEach((line) => {
+                    ctx.fillText(line, 32, y);
+                    y += 28;
+                });
+                return new Promise((resolve) => {
+                    canvas.toBlob((blob) => resolve(blob), 'image/png', 0.95);
+                });
+            };
+            sigDownload?.addEventListener('click', async () => {
+                if (!sigFormat) return;
+                if (!lastSig) await buildSig();
+                const sig = lastSig || {};
+                const fmt = sigFormat.value;
+                let blob = null;
+                let name = 'signature';
+                if (fmt === 'txt') {
+                    blob = new Blob([sig.text || ''], { type: 'text/plain' });
+                    name += '.txt';
+                } else if (fmt === 'htm') {
+                    const doc = `<html><body>${sig.html || ''}</body></html>`;
+                    blob = new Blob([doc], { type: 'text/html' });
+                    name += '.htm';
+                } else if (fmt === 'rtf') {
+                    blob = new Blob([makeRtf(sig.lines || [])], { type: 'application/rtf' });
+                    name += '.rtf';
+                } else if (fmt === 'bmp') {
+                    blob = await makeBmpFromSig(sig);
+                    name += '.bmp';
+                }
+                if (!blob) return;
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = name;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                setTimeout(() => URL.revokeObjectURL(url), 5000);
             });
 
             // Wi-Fi / business QR
