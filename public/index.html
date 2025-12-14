@@ -1787,8 +1787,9 @@
                                 if (THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
                                 else tex.encoding = THREE.sRGBEncoding || tex.encoding;
                                 tex.flipY = false;
-                                tex.repeat.set(-1, 1); // mirror horizontally to correct orientation
-                                tex.offset.x = 1;
+                                tex.repeat.set(1, 1);
+                                tex.offset.set(0, 0);
+                                tex.center.set(0.5, 0.5);
                                 tex.needsUpdate = true;
                                 resolve(tex);
                             };
@@ -1805,6 +1806,7 @@
                     const candidatePathsTails = ['tails.png', './tails.png', '/tails.png', './public/tails.png'];
                     const headsTex = await loadImageTexture(candidatePaths);
                     const tailsTex = await loadImageTexture(candidatePathsTails);
+                    if (tailsTex) tailsTex.rotation = Math.PI; // rotate bottom cap so text reads correctly
                     if (!headsTex || !tailsTex) {
                         if (resultEl) resultEl.textContent = 'Image load failed';
                         flipBtn?.setAttribute('disabled', 'true');
