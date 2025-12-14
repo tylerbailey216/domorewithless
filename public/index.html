@@ -1510,17 +1510,19 @@
                         });
                     };
 
-                    const baseTilt = new Vector3(MathUtils.degToRad(-18), MathUtils.degToRad(30), MathUtils.degToRad(-6));
+                    const baseTilt = new Euler(MathUtils.degToRad(-18), MathUtils.degToRad(30), MathUtils.degToRad(-6));
+                    const baseQuat = new Quaternion().setFromEuler(baseTilt);
+                    const faceNormals = {
+                        1: new Vector3(0, 0, 1),
+                        2: new Vector3(0, 0, -1),
+                        3: new Vector3(1, 0, 0),
+                        4: new Vector3(-1, 0, 0),
+                        5: new Vector3(0, 1, 0),
+                        6: new Vector3(0, -1, 0),
+                    };
                     const rotationFor = (value) => {
-                        switch (value) {
-                            case 1: return new Vector3(0, 0, 0);
-                            case 2: return new Vector3(0, Math.PI, 0);
-                            case 3: return new Vector3(0, -Math.PI / 2, 0);
-                            case 4: return new Vector3(0, Math.PI / 2, 0);
-                            case 5: return new Vector3(-Math.PI / 2, 0, 0);
-                            case 6: return new Vector3(Math.PI / 2, 0, 0);
-                            default: return new Vector3(0, 0, 0);
-                        }
+                        const normal = faceNormals[value] || faceNormals[1];
+                        return new Quaternion().setFromUnitVectors(normal, new Vector3(0, 1, 0));
                     };
 
                     const activeAnims = new Map();
@@ -1542,14 +1544,7 @@
                     const settlePhase = 0.42 * 1000;
 
                     const setFace = (mesh, value, instant = false) => {
-                        const rot = rotationFor(value);
-                        const target = new Quaternion().setFromEuler(
-                            new Euler(
-                                rot.x + baseTilt.x,
-                                rot.y + baseTilt.y,
-                                baseTilt.z
-                            )
-                        );
+                        const target = baseQuat.clone().multiply(rotationFor(value));
                         if (instant) {
                             mesh.quaternion.copy(target);
                             return;
@@ -1559,16 +1554,13 @@
 
                     const launchRoll = (mesh, value) => {
                         const now = performance.now();
-                        const rot = rotationFor(value);
-                        const extraX = Math.floor(Math.random() * 3 + 1) * Math.PI * 2;
-                        const extraY = Math.floor(Math.random() * 3 + 1) * Math.PI * 2;
-                        const finalQuat = new Quaternion().setFromEuler(
-                            new Euler(
-                                rot.x + baseTilt.x + extraX,
-                                rot.y + baseTilt.y + extraY,
-                                baseTilt.z + MathUtils.degToRad(Math.random() * 20 - 10)
-                            )
-                        );
+                        const rotQ = rotationFor(value);
+                        const spinQ = new Quaternion().setFromEuler(new Euler(
+                            (Math.floor(Math.random() * 3 + 1) * Math.PI * 2),
+                            (Math.floor(Math.random() * 3 + 1) * Math.PI * 2),
+                            MathUtils.degToRad(Math.random() * 20 - 10)
+                        ));
+                        const finalQuat = baseQuat.clone().multiply(spinQ).multiply(rotQ);
                         activeAnims.set(mesh.uuid, {
                             mesh,
                             start: now,
@@ -1619,6 +1611,14 @@
                         pendingVals = [a, b];
                         launchRoll(dieA, a);
                         launchRoll(dieB, b);
+                        setTimeout(() => {
+                            if (rolling) {
+                                rolling = false;
+                                rollBtn.disabled = false;
+                                if (resultEl) resultEl.textContent = `${pendingVals[0]} / ${pendingVals[1]}`;
+                                if (sumEl) sumEl.textContent = String(pendingVals[0] + pendingVals[1]);
+                            }
+                        }, 1200);
                     };
 
                     rollBtn?.addEventListener('click', roll);
