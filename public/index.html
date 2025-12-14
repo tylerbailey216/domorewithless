@@ -1796,9 +1796,8 @@
                             }
                         );
                     });
-                    const assetPath = './';
-                    const headsTex = await loadTex(`${assetPath}heads.png`);
-                    const tailsTex = await loadTex(`${assetPath}tails.png`);
+                    const headsTex = await loadTex('/heads.png');
+                    const tailsTex = await loadTex('/tails.png');
                     if (!headsTex || !tailsTex) {
                         if (resultEl) resultEl.textContent = 'Image load failed';
                         flipBtn?.setAttribute('disabled', 'true');
