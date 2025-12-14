@@ -733,39 +733,38 @@
                 const phone = (sigPhone?.value || '').trim();
                 const link = (sigLink?.value || '').trim();
                 sigImageData = await readSigImage();
-                const lines = [];
-                let html = '';
-                if (sigImageData) {
-                    html = `<table cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
-                        <tr>
-                            <td style="vertical-align:top;">
-                                <img src="${sigImageData}" alt="Logo" style="height:64px;width:auto;border-radius:6px;">
-                            </td>
-                            <td style="vertical-align:top; font-family: Arial, sans-serif; font-size:14px; line-height:1.5;">
-                                ${name ? `<div style="font-weight:700;">${name}</div>` : ''}
-                                ${title ? `<div style="color:gray;">${title}</div>` : ''}
-                                ${phone ? `<div>${phone}</div>` : ''}
-                                ${link ? `<div><a href="${link}" target="_blank" rel="noopener">${link}</a></div>` : ''}
-                            </td>
-                        </tr>
-                    </table>`;
-                } else {
-                    if (name) lines.push(`<div style="font-weight:700;">${name}</div>`);
-                    if (title) lines.push(`<div style="color:gray;">${title}</div>`);
-                    if (phone) lines.push(`<div>${phone}</div>`);
-                    if (link) lines.push(`<div><a href="${link}" target="_blank" rel="noopener">${link}</a></div>`);
-                    html = lines.join('\n');
-                }
-                const plainLines = [];
-                if (name) plainLines.push(name);
-                if (title) plainLines.push(title);
-                if (phone) plainLines.push(phone);
-                if (link) plainLines.push(link);
-                if (sigImageData) plainLines.push('[Logo embedded]');
-                const text = plainLines.join('\n');
+
+                const textLines = [];
+                if (name) textLines.push(name);
+                if (title) textLines.push(title);
+                if (phone) textLines.push(phone);
+                if (link) textLines.push(link);
+                if (sigImageData) textLines.push('[Logo embedded]');
+
+                const textCell = `
+                    <td style="vertical-align:top; font-family: Arial, sans-serif; font-size:14px; line-height:1.5;">
+                        ${name ? `<div style="font-weight:700;">${name}</div>` : ''}
+                        ${title ? `<div style="color:gray;">${title}</div>` : ''}
+                        ${phone ? `<div>${phone}</div>` : ''}
+                        ${link ? `<div><a href="${link}" target="_blank" rel="noopener">${link}</a></div>` : ''}
+                    </td>`;
+                const logoCell = sigImageData
+                    ? `<td style="vertical-align:top; padding-right:10px;">
+                            <img src="${sigImageData}" alt="Logo" style="height:64px;width:auto;border-radius:6px; display:block;">
+                       </td>`
+                    : `<td style="width:1px; padding-right:10px;"></td>`;
+
+                const html = `<table cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
+                    <tr>
+                        ${logoCell}
+                        ${textCell}
+                    </tr>
+                </table>`;
+
+                const text = textLines.join('\n');
                 if (sigPreview) sigPreview.value = html || 'Add details to build your signature.';
-                lastSig = { html, text, lines: plainLines, logo: sigImageData };
-                if (sigDownload) sigDownload.disabled = !html;
+                lastSig = { html, text, lines: textLines, logo: sigImageData };
+                if (sigDownload) sigDownload.disabled = !textLines.length;
                 return html;
             };
             sigBuild?.addEventListener('click', buildSig);
