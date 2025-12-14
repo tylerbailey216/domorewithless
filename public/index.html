@@ -1511,19 +1511,23 @@
                     };
 
                     const baseTilt = new Euler(MathUtils.degToRad(-18), MathUtils.degToRad(30), MathUtils.degToRad(-6));
-                    const baseQuat = new Quaternion().setFromEuler(baseTilt);
-                    const faceNormals = {
-                        1: new Vector3(0, 0, 1),   // front
-                        2: new Vector3(0, 0, -1),  // back
-                        3: new Vector3(1, 0, 0),   // right
-                        4: new Vector3(-1, 0, 0),  // left
-                        5: new Vector3(0, 1, 0),   // top
-                        6: new Vector3(0, -1, 0),  // bottom
+                    const faceAngles = {
+                        1: { x: 0, y: 0 },
+                        2: { x: 0, y: Math.PI },
+                        3: { x: 0, y: -Math.PI / 2 },
+                        4: { x: 0, y: Math.PI / 2 },
+                        5: { x: -Math.PI / 2, y: 0 },
+                        6: { x: Math.PI / 2, y: 0 },
                     };
-                    const rotationFor = (value) => {
-                        const normal = faceNormals[value] || faceNormals[1];
-                        // Rotate chosen face normal to face the camera (0,0,1), then apply base tilt.
-                        return new Quaternion().setFromUnitVectors(normal, new Vector3(0, 0, 1));
+                    const quatForValue = (value, extraX = 0, extraY = 0, extraZ = 0) => {
+                        const ang = faceAngles[value] || faceAngles[1];
+                        return new Quaternion().setFromEuler(
+                            new Euler(
+                                ang.x + baseTilt.x + extraX,
+                                ang.y + baseTilt.y + extraY,
+                                baseTilt.z + extraZ
+                            )
+                        );
                     };
 
                     const activeAnims = new Map();
@@ -1553,7 +1557,7 @@
                     const settlePhase = 0.42 * 1000;
 
                     const setFace = (mesh, value, instant = false) => {
-                        const target = baseQuat.clone().multiply(rotationFor(value));
+                        const target = quatForValue(value);
                         if (instant) {
                             mesh.quaternion.copy(target);
                             return;
@@ -1563,13 +1567,10 @@
 
                     const launchRoll = (mesh, value) => {
                         const now = performance.now();
-                        const rotQ = rotationFor(value);
-                        const spinQ = new Quaternion().setFromEuler(new Euler(
-                            (Math.floor(Math.random() * 3 + 1) * Math.PI * 2),
-                            (Math.floor(Math.random() * 3 + 1) * Math.PI * 2),
-                            MathUtils.degToRad(Math.random() * 20 - 10)
-                        ));
-                        const finalQuat = baseQuat.clone().multiply(spinQ).multiply(rotQ);
+                        const extraX = (Math.floor(Math.random() * 3 + 1) * Math.PI * 2);
+                        const extraY = (Math.floor(Math.random() * 3 + 1) * Math.PI * 2);
+                        const extraZ = MathUtils.degToRad(Math.random() * 20 - 10);
+                        const finalQuat = quatForValue(value, extraX, extraY, extraZ);
                         activeAnims.set(mesh.uuid, {
                             mesh,
                             start: now,
