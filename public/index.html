@@ -1708,49 +1708,6 @@
 
                 const flipBtn = document.getElementById('coinFlipBtn');
                 const resultEl = document.getElementById('coinResult');
-                const useFallback = window.location.protocol === 'file:';
-                const resolvedHeadsUrl = new URL('heads.png', window.location.href).href;
-                const resolvedTailsUrl = new URL('tails.png', window.location.href).href;
-
-                const mountFallback = () => {
-                    const fallback = document.createElement('div');
-                    fallback.className = 'coin-fallback show';
-                    container.innerHTML = '';
-                    container.appendChild(fallback);
-                    let current = 'Heads';
-                    const showFace = (face, animate = true) => {
-                        current = face;
-                        fallback.style.backgroundImage = `url(${face === 'Heads' ? resolvedHeadsUrl : resolvedTailsUrl})`;
-                        if (animate) {
-                            fallback.classList.remove('flip');
-                            void fallback.offsetWidth;
-                            fallback.classList.add('flip');
-                        }
-                        if (resultEl) resultEl.textContent = face;
-                        flipBtn?.removeAttribute('aria-busy');
-                        flipBtn?.removeAttribute('disabled');
-                    };
-                    const flipFallback = () => {
-                        flipBtn?.setAttribute('aria-busy', 'true');
-                        const val = Math.random() < 0.5 ? 'Heads' : 'Tails';
-                        showFace(val, true);
-                    };
-                    flipBtn?.addEventListener('click', flipFallback);
-                    container?.addEventListener('click', flipFallback);
-                    container?.addEventListener('keydown', (e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                            e.preventDefault();
-                            flipFallback();
-                        }
-                    });
-                    showFace('Heads', false);
-                    return true;
-                };
-
-                if (useFallback) {
-                    mountFallback();
-                    return;
-                }
 
                 const ensureThree = () => new Promise((resolve, reject) => {
                     if (window.THREE) return resolve();
