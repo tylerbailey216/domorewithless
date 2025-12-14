@@ -1806,7 +1806,6 @@
                     const candidatePathsTails = ['tails.png', './tails.png', '/tails.png', './public/tails.png'];
                     const headsTex = await loadImageTexture(candidatePaths);
                     const tailsTex = await loadImageTexture(candidatePathsTails);
-                    if (tailsTex) tailsTex.rotation = Math.PI; // rotate bottom cap so text reads correctly
                     if (!headsTex || !tailsTex) {
                         if (resultEl) resultEl.textContent = 'Image load failed';
                         flipBtn?.setAttribute('disabled', 'true');
