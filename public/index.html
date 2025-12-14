@@ -1788,7 +1788,7 @@
                         tex.needsUpdate = true;
                     });
 
-                    const coinGeo = new CylinderGeometry(1.05, 1.05, 0.14, 80, 1, false);
+                    const coinGeo = new CylinderGeometry(1.05, 1.05, 0.14, 120, 1, false);
                     const paletteForTheme = () => {
                         const isLight = document.body.classList.contains('theme-light');
                         return isLight
@@ -1822,38 +1822,35 @@
                     window.addEventListener('resize', resize);
 
                     const clock = new Clock();
-                    let anim = null;
+                    let state = null;
+                    const tmpAxis = new Vector3();
+                    const tmpQuat = new Quaternion();
 
                     const flip = () => {
-                        if (anim) return;
+                        if (state) return;
                         const val = Math.random() < 0.5 ? 'Heads' : 'Tails';
                         if (resultEl) resultEl.textContent = '…';
                         flipBtn?.setAttribute('aria-busy', 'true');
                         const baseX = Math.PI / 2;
-                        const extraSpins = 2 + Math.floor(Math.random() * 3);
-                        const wobbleY = MathUtils.degToRad(Math.random() * 14 - 7);
-                        const wobbleZ = MathUtils.degToRad(Math.random() * 10 - 5);
-                        const targetEuler = new Euler(
-                            baseX + (val === 'Tails' ? Math.PI : 0) + extraSpins * Math.PI * 2,
-                            wobbleY,
-                            wobbleZ
+                        const wobbleY = MathUtils.degToRad(Math.random() * 24 - 12);
+                        const wobbleZ = MathUtils.degToRad(Math.random() * 18 - 9);
+                        const targetQuat = new Quaternion().setFromEuler(
+                            new Euler(baseX + (val === 'Tails' ? Math.PI : 0), wobbleY, wobbleZ)
                         );
-                        const targetQuat = new Quaternion().setFromEuler(targetEuler);
-                        anim = {
+                        const spinMag = MathUtils.degToRad(900 + Math.random() * 900); // total rotation spread
+                        const spinAxis = new Vector3(
+                            Math.random() * 0.4 + 0.8, // favor x axis
+                            Math.random() * 0.6 - 0.3,
+                            Math.random() * 0.4 - 0.2
+                        ).normalize();
+                        const angVel = spinAxis.multiplyScalar(spinMag);
+                        state = {
                             start: performance.now(),
-                            dur: 1200,
-                            from: coin.quaternion.clone(),
-                            to: targetQuat,
-                            val,
+                            targetQuat,
+                            targetVal: val,
+                            angVel,
+                            minSettle: 650,
                         };
-                        setTimeout(() => {
-                            if (anim && (performance.now() - anim.start) >= anim.dur) {
-                                coin.quaternion.copy(anim.to);
-                                if (resultEl) resultEl.textContent = anim.val;
-                                flipBtn?.removeAttribute('aria-busy');
-                                anim = null;
-                            }
-                        }, 1400);
                     };
 
                     const renderLoop = () => {
@@ -1861,15 +1858,27 @@
                         const now = performance.now();
                         const delta = clock.getDelta();
 
-                        if (anim) {
-                            const t = Math.min(1, (now - anim.start) / anim.dur);
-                            const eased = t * t * (3 - 2 * t);
-                            coin.quaternion.slerpQuaternions(anim.from, anim.to, eased);
-                            if (t >= 1) {
-                                const finalVal = anim.val;
-                                coin.quaternion.copy(anim.to);
-                                anim = null;
-                                if (resultEl) resultEl.textContent = finalVal;
+                        if (state) {
+                            const elapsed = now - state.start;
+                            const { angVel, targetQuat, targetVal } = state;
+                            const omega = angVel.length();
+                            if (omega > 1e-4) {
+                                tmpAxis.copy(angVel).normalize();
+                                tmpQuat.setFromAxisAngle(tmpAxis, omega * delta);
+                                coin.quaternion.multiply(tmpQuat);
+                                coin.quaternion.normalize();
+                            }
+                            angVel.multiplyScalar(0.985);
+
+                            if (elapsed > state.minSettle) {
+                                const settleT = Math.min(1, (elapsed - state.minSettle) / 600);
+                                coin.quaternion.slerp(targetQuat, settleT * 0.16);
+                            }
+
+                            if (elapsed > 1400 && angVel.length() < 0.25) {
+                                coin.quaternion.copy(targetQuat);
+                                state = null;
+                                if (resultEl) resultEl.textContent = targetVal;
                                 flipBtn?.removeAttribute('aria-busy');
                             }
                         } else {
