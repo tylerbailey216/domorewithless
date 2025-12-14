@@ -2027,7 +2027,7 @@
                             const slice = (Math.PI * 2) / opts.length;
                             let normalized = angle % (Math.PI * 2);
                             if (normalized < 0) normalized += Math.PI * 2;
-                            const pointerAngle = -Math.PI / 2;
+                            const pointerAngle = Math.PI / 2; // bottom pointer
                             const delta = (pointerAngle - normalized + Math.PI * 2) % (Math.PI * 2);
                             const index = Math.floor(delta / slice) % opts.length;
                             const val = opts[index] || opts[0];
