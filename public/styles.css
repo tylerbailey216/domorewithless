@@ -3048,6 +3048,33 @@ body.theme-light .countdown-led-date {
         0 0 24px rgba(120,200,255,0.45);
 }
 
+.tz-map {
+    margin-top: 12px;
+    border-radius: 12px;
+    background: radial-gradient(circle at 30% 30%, rgba(120,200,255,0.08), rgba(0,0,0,0) 60%), rgba(0,0,0,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    padding: 10px;
+}
+.tz-map svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    opacity: 0.9;
+}
+.tz-map path {
+    fill: none;
+    stroke: rgba(120,200,255,0.35);
+    stroke-width: 2;
+}
+.tz-map circle {
+    fill: rgba(120,200,255,0.8);
+    filter: drop-shadow(0 0 6px rgba(120,200,255,0.45));
+}
+body.theme-light .tz-map {
+    background: radial-gradient(circle at 30% 30%, rgba(120,200,255,0.1), rgba(0,0,0,0) 60%), rgba(255,255,255,0.7);
+    border-color: rgba(0,0,0,0.08);
+}
+
 body.theme-light .rand3d-scene {
     background: radial-gradient(circle at 50% 45%, rgba(0,0,0,0.04), rgba(0,0,0,0) 60%);
 }

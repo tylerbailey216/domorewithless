@@ -242,8 +242,8 @@
             <div style="display:flex; flex-direction:column; gap:8px;">
                 <label style="font-weight:600; color:var(--text-muted);">Zone A</label>
                 <select id="tzA" aria-label="Time zone A">
-                    <option value="UTC">UTC — Coordinated Universal Time</option>
-                    <option value="America/New_York">ET — Eastern Time (America/New_York)</option>
+                    <option value="UTC">UTC - Coordinated Universal Time</option>
+                    <option value="America/New_York">ET - Eastern Time (America/New_York)</option>
                     <option value="America/Chicago">CT — Central Time (America/Chicago)</option>
                     <option value="America/Denver">MT — Mountain Time (America/Denver)</option>
                     <option value="America/Los_Angeles">PT — Pacific Time (America/Los_Angeles)</option>
@@ -261,11 +261,11 @@
                     <option value="Asia/Tokyo">JST — Japan (Asia/Tokyo)</option>
                     <option value="Australia/Sydney">AEST/AEDT — Sydney</option>
                     <option value="Australia/Perth">AWST — Perth</option>
-                    <option value="Pacific/Auckland">NZST/NZDT — Auckland</option>
+                    <option value="Pacific/Auckland">NZST/NZDT - Auckland</option>
                 </select>
                 <label style="font-weight:600; color:var(--text-muted);">Zone B</label>
                 <select id="tzB" aria-label="Time zone B">
-                    <option value="UTC">UTC — Coordinated Universal Time</option>
+                    <option value="UTC">UTC - Coordinated Universal Time</option>
                     <option value="America/New_York">ET — Eastern Time (America/New_York)</option>
                     <option value="America/Chicago">CT — Central Time (America/Chicago)</option>
                     <option value="America/Denver">MT — Mountain Time (America/Denver)</option>
@@ -284,10 +284,25 @@
                     <option value="Asia/Tokyo">JST — Japan (Asia/Tokyo)</option>
                     <option value="Australia/Sydney">AEST/AEDT — Sydney</option>
                     <option value="Australia/Perth">AWST — Perth</option>
-                    <option value="Pacific/Auckland">NZST/NZDT — Auckland</option>
+                    <option value="Pacific/Auckland">NZST/NZDT - Auckland</option>
                 </select>
             </div>
             <div id="tzOutput" class="node-summary">Enter IANA zones to compare.</div>
+            <div class="tz-map" aria-hidden="true">
+                <svg viewBox="0 0 800 400" role="presentation">
+                    <path d="M68 186c36-26 78-36 123-44 46-9 95-15 147-16 52-2 107 1 162 10 56 9 113 25 170 48 10 4 16 10 17 17 0 4-2 8-7 11-20 14-48 18-75 18-34-1-67-8-97-19-33-12-64-28-97-41-41-16-83-28-126-35-48-7-98-9-148-3-34 4-67 12-98 22-9 3-17 4-25 3-7-1-13-4-15-10-2-6 1-12 6-16z" />
+                    <circle cx="180" cy="130" r="3" />
+                    <circle cx="310" cy="140" r="3" />
+                    <circle cx="440" cy="160" r="3" />
+                    <circle cx="560" cy="190" r="3" />
+                    <circle cx="640" cy="210" r="3" />
+                    <circle cx="720" cy="230" r="3" />
+                    <circle cx="95" cy="200" r="3" />
+                    <circle cx="250" cy="210" r="3" />
+                    <circle cx="360" cy="190" r="3" />
+                    <circle cx="500" cy="220" r="3" />
+                </svg>
+            </div>
         </div>
                 <div class="utility-card" id="tool-signature">
                     <h3>Email signatures</h3>
