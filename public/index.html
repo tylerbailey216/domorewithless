@@ -1778,15 +1778,31 @@
                     scene.add(rim);
 
                     const loader = new TextureLoader();
-                    const headsTex = loader.load('./heads.png');
-                    const tailsTex = loader.load('./tails.png');
-                    [headsTex, tailsTex].forEach((tex) => {
-                        tex.anisotropy = renderer.capabilities.getMaxAnisotropy?.() || 1;
-                        if (THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
-                        else tex.encoding = THREE.sRGBEncoding || tex.encoding;
-                        tex.flipY = false;
-                        tex.needsUpdate = true;
+                    loader.setCrossOrigin('anonymous');
+                    const loadTex = (url) => new Promise((resolve, reject) => {
+                        loader.load(
+                            url,
+                            (tex) => {
+                                tex.anisotropy = renderer.capabilities.getMaxAnisotropy?.() || 1;
+                                if (THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
+                                else tex.encoding = THREE.sRGBEncoding || tex.encoding;
+                                tex.flipY = false;
+                                tex.needsUpdate = true;
+                                resolve(tex);
+                            },
+                            undefined,
+                            (err) => {
+                                console.error('Failed to load texture', url, err);
+                                resolve(null);
+                            }
+                        );
                     });
+                    const headsTex = await loadTex('heads.png');
+                    const tailsTex = await loadTex('tails.png');
+                    if (!headsTex || !tailsTex) {
+                        if (resultEl) resultEl.textContent = 'Image load failed';
+                        return;
+                    }
 
                     const coinGeo = new CylinderGeometry(1.05, 1.05, 0.14, 120, 1, false);
                     const paletteForTheme = () => {
