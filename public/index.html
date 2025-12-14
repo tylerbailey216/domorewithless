@@ -1748,6 +1748,7 @@
                         Euler,
                         MathUtils,
                         Vector3,
+                        DoubleSide,
                     } = THREE;
 
                     const scene = new Scene();
@@ -1781,7 +1782,10 @@
                     const tailsTex = loader.load('./tails.png');
                     [headsTex, tailsTex].forEach((tex) => {
                         tex.anisotropy = renderer.capabilities.getMaxAnisotropy?.() || 1;
-                        tex.encoding = THREE.sRGBEncoding || tex.encoding;
+                        if (THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
+                        else tex.encoding = THREE.sRGBEncoding || tex.encoding;
+                        tex.flipY = false;
+                        tex.needsUpdate = true;
                     });
 
                     const coinGeo = new CylinderGeometry(1.05, 1.05, 0.14, 80, 1, false);
@@ -1794,8 +1798,8 @@
                     let palette = paletteForTheme();
                     const makeMaterials = () => ([
                         new MeshStandardMaterial({ color: palette.edge, metalness: palette.metalness, roughness: palette.roughness, envMapIntensity: palette.env }),
-                        new MeshStandardMaterial({ map: headsTex, metalness: 0.35, roughness: 0.42, envMapIntensity: palette.env }),
-                        new MeshStandardMaterial({ map: tailsTex, metalness: 0.35, roughness: 0.42, envMapIntensity: palette.env }),
+                        new MeshStandardMaterial({ map: headsTex, metalness: 0.35, roughness: 0.42, envMapIntensity: palette.env, side: DoubleSide }),
+                        new MeshStandardMaterial({ map: tailsTex, metalness: 0.35, roughness: 0.42, envMapIntensity: palette.env, side: DoubleSide }),
                     ]);
 
                     const coin = new Mesh(coinGeo, makeMaterials());
@@ -1868,6 +1872,9 @@
                                 if (resultEl) resultEl.textContent = finalVal;
                                 flipBtn?.removeAttribute('aria-busy');
                             }
+                        } else {
+                            coin.rotateY(delta * 0.6);
+                            coin.rotateX(delta * 0.08);
                         }
 
                         renderer.render(scene, camera);
