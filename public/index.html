@@ -452,6 +452,18 @@
                 <div class="pair-note">Tap the coin or button to flip.</div>
               </div>
             </div>
+            <div class="wheel-card">
+              <div class="wheel-stage">
+                <canvas id="wheelCanvas" width="280" height="280" aria-hidden="true"></canvas>
+                <div class="wheel-pointer" aria-hidden="true"></div>
+              </div>
+              <div class="wheel-meta">
+                <label class="wheel-label" for="wheelOptions">Choices (comma-separated)</label>
+                <textarea id="wheelOptions" rows="2" class="wheel-input" placeholder="Yes, No, Maybe"></textarea>
+                <div class="rand3d-meta-line"><span>Result</span><strong id="wheelResult">Ready</strong></div>
+                <button class="ghost rand3d-btn" type="button" id="wheelSpinBtn">Spin the wheel</button>
+              </div>
+            </div>
         </div>
                 <div class="utility-card" id="tool-login">
                     <h3>Fake login detector</h3>
@@ -1934,6 +1946,110 @@
                 };
 
                 window.addEventListener('load', boot, { once: true });
+            })();
+
+            // Wheel spinner
+            (() => {
+                const canvas = document.getElementById('wheelCanvas');
+                const optionsEl = document.getElementById('wheelOptions');
+                const spinBtn = document.getElementById('wheelSpinBtn');
+                const resultEl = document.getElementById('wheelResult');
+                if (!canvas || !optionsEl || !spinBtn || !resultEl) return;
+                const ctx = canvas.getContext('2d');
+                const colors = ['#88c5ff', '#9be3d1', '#f7c07a', '#f28b82', '#c3a6ff', '#7bdcb5'];
+                let angle = 0;
+                let spinning = false;
+
+                const getOptions = () => {
+                    const raw = optionsEl.value || '';
+                    return raw.split(',').map((s) => s.trim()).filter(Boolean);
+                };
+                optionsEl.placeholder = 'Yes, No, Maybe';
+                if (!optionsEl.value) optionsEl.value = 'Yes,No,Maybe';
+
+                const draw = (opts) => {
+                    const size = canvas.width;
+                    ctx.clearRect(0, 0, size, size);
+                    if (!opts.length) return;
+                    const cx = size / 2;
+                    const cy = size / 2;
+                    const radius = size / 2 - 10;
+                    const slice = (Math.PI * 2) / opts.length;
+                    ctx.save();
+                    ctx.translate(cx, cy);
+                    ctx.rotate(angle);
+                    for (let i = 0; i < opts.length; i++) {
+                        const start = i * slice;
+                        const end = start + slice;
+                        ctx.beginPath();
+                        ctx.moveTo(0, 0);
+                        ctx.arc(0, 0, radius, start, end);
+                        ctx.fillStyle = colors[i % colors.length];
+                        ctx.fill();
+                        ctx.save();
+                        ctx.rotate(start + slice / 2);
+                        ctx.textAlign = 'right';
+                        ctx.fillStyle = '#0e171f';
+                        ctx.font = '600 14px "Segoe UI", sans-serif';
+                        ctx.fillText(opts[i], radius - 14, 5);
+                        ctx.restore();
+                    }
+                    ctx.restore();
+                };
+
+                const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+
+                const spin = () => {
+                    const opts = getOptions();
+                    if (!opts.length) {
+                        resultEl.textContent = 'Add options';
+                        return;
+                    }
+                    if (spinning) return;
+                    spinning = true;
+                    spinBtn.disabled = true;
+                    resultEl.textContent = '…';
+                    const extra = Math.PI * 2 * (5 + Math.random() * 3);
+                    const target = angle + extra + Math.random() * Math.PI * 2;
+                    const start = angle;
+                    const dur = 1600;
+                    const startTime = performance.now();
+
+                    const tick = (now) => {
+                        const t = Math.min(1, (now - startTime) / dur);
+                        const eased = easeOut(t);
+                        angle = start + (target - start) * eased;
+                        draw(opts);
+                        if (t < 1) {
+                            requestAnimationFrame(tick);
+                        } else {
+                            angle = target;
+                            const slice = (Math.PI * 2) / opts.length;
+                            let normalized = angle % (Math.PI * 2);
+                            if (normalized < 0) normalized += Math.PI * 2;
+                            const pointerAngle = -Math.PI / 2;
+                            const delta = (pointerAngle - normalized + Math.PI * 2) % (Math.PI * 2);
+                            const index = Math.floor(delta / slice) % opts.length;
+                            const val = opts[index] || opts[0];
+                            resultEl.textContent = val;
+                            spinBtn.disabled = false;
+                            spinning = false;
+                        }
+                    };
+                    requestAnimationFrame(tick);
+                };
+
+                optionsEl.addEventListener('input', () => draw(getOptions()));
+                spinBtn.addEventListener('click', spin);
+                canvas.addEventListener('click', spin);
+                canvas.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        spin();
+                    }
+                });
+                canvas.tabIndex = 0;
+                draw(getOptions());
             })();
 
             // Fake login detector (URL heuristics)
