@@ -1787,6 +1787,8 @@
                                 if (THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
                                 else tex.encoding = THREE.sRGBEncoding || tex.encoding;
                                 tex.flipY = false;
+                                tex.repeat.set(-1, 1); // mirror horizontally to correct orientation
+                                tex.offset.x = 1;
                                 tex.needsUpdate = true;
                                 resolve(tex);
                             };
