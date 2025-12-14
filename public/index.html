@@ -1545,7 +1545,8 @@
                         });
                     };
 
-                    const baseTilt = new Euler(MathUtils.degToRad(-18), MathUtils.degToRad(30), MathUtils.degToRad(-6));
+                    // Settle with faces square to the viewer (no tilt) so the stopped face points directly up.
+                    const baseTilt = new Euler(0, 0, 0);
                     const faceAngles = {
                         1: { x: 0, y: 0 },
                         2: { x: 0, y: Math.PI },
