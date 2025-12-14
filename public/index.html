@@ -734,12 +734,28 @@
                 const link = (sigLink?.value || '').trim();
                 sigImageData = await readSigImage();
                 const lines = [];
-                if (sigImageData) lines.push(`<div><img src="${sigImageData}" alt="Logo" style="height:48px;width:auto;border-radius:6px;"></div>`);
-                if (name) lines.push(`<div style="font-weight:700;">${name}</div>`);
-                if (title) lines.push(`<div style="color:gray;">${title}</div>`);
-                if (phone) lines.push(`<div>${phone}</div>`);
-                if (link) lines.push(`<div><a href="${link}" target="_blank" rel="noopener">${link}</a></div>`);
-                const html = lines.join('\n');
+                let html = '';
+                if (sigImageData) {
+                    html = `<table cellpadding="6" cellspacing="0" style="border-collapse:collapse;">
+                        <tr>
+                            <td style="vertical-align:top;">
+                                <img src="${sigImageData}" alt="Logo" style="height:64px;width:auto;border-radius:6px;">
+                            </td>
+                            <td style="vertical-align:top; font-family: Arial, sans-serif; font-size:14px; line-height:1.5;">
+                                ${name ? `<div style="font-weight:700;">${name}</div>` : ''}
+                                ${title ? `<div style="color:gray;">${title}</div>` : ''}
+                                ${phone ? `<div>${phone}</div>` : ''}
+                                ${link ? `<div><a href="${link}" target="_blank" rel="noopener">${link}</a></div>` : ''}
+                            </td>
+                        </tr>
+                    </table>`;
+                } else {
+                    if (name) lines.push(`<div style="font-weight:700;">${name}</div>`);
+                    if (title) lines.push(`<div style="color:gray;">${title}</div>`);
+                    if (phone) lines.push(`<div>${phone}</div>`);
+                    if (link) lines.push(`<div><a href="${link}" target="_blank" rel="noopener">${link}</a></div>`);
+                    html = lines.join('\n');
+                }
                 const plainLines = [];
                 if (name) plainLines.push(name);
                 if (title) plainLines.push(title);
