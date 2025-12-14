@@ -1796,10 +1796,7 @@
                                 console.warn('Coin texture load failed for', paths[idx]);
                                 tryNext(idx + 1);
                             };
-                            // cache-bust to dodge stale responses
-                            const url = new URL(paths[idx], window.location.href);
-                            url.searchParams.set('v', Date.now());
-                            img.src = url.toString();
+                            img.src = paths[idx];
                         };
                         tryNext(0);
                     });
