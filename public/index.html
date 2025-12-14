@@ -1776,6 +1776,7 @@
                     rim.position.set(-6, -4, -6);
                     scene.add(rim);
 
+                    const baseUrl = new URL('.', window.location.href);
                     const loadImageTexture = (paths) => new Promise((resolve) => {
                         const tryNext = (idx) => {
                             if (idx >= paths.length) return resolve(null);
@@ -1793,10 +1794,11 @@
                                 resolve(tex);
                             };
                             img.onerror = () => {
-                                console.warn('Coin texture load failed for', paths[idx]);
+                                console.warn('Coin texture load failed for', resolved);
                                 tryNext(idx + 1);
                             };
-                            img.src = paths[idx];
+                            const resolved = new URL(paths[idx], baseUrl).href;
+                            img.src = resolved;
                         };
                         tryNext(0);
                     });
