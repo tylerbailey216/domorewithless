@@ -1778,8 +1778,7 @@
                     scene.add(rim);
 
                     const loader = new TextureLoader();
-                    loader.setCrossOrigin('anonymous');
-                    const loadTex = (url) => new Promise((resolve, reject) => {
+                    const loadTex = (url) => new Promise((resolve) => {
                         loader.load(
                             url,
                             (tex) => {
@@ -1797,10 +1796,12 @@
                             }
                         );
                     });
-                    const headsTex = await loadTex('heads.png');
-                    const tailsTex = await loadTex('tails.png');
+                    const assetPath = './';
+                    const headsTex = await loadTex(`${assetPath}heads.png`);
+                    const tailsTex = await loadTex(`${assetPath}tails.png`);
                     if (!headsTex || !tailsTex) {
                         if (resultEl) resultEl.textContent = 'Image load failed';
+                        flipBtn?.setAttribute('disabled', 'true');
                         return;
                     }
 
