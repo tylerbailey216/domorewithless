@@ -1513,21 +1513,30 @@
                     const baseTilt = new Euler(MathUtils.degToRad(-18), MathUtils.degToRad(30), MathUtils.degToRad(-6));
                     const baseQuat = new Quaternion().setFromEuler(baseTilt);
                     const faceNormals = {
-                        1: new Vector3(0, 0, 1),
-                        2: new Vector3(0, 0, -1),
-                        3: new Vector3(1, 0, 0),
-                        4: new Vector3(-1, 0, 0),
-                        5: new Vector3(0, 1, 0),
-                        6: new Vector3(0, -1, 0),
+                        1: new Vector3(0, 0, 1),   // front
+                        2: new Vector3(0, 0, -1),  // back
+                        3: new Vector3(1, 0, 0),   // right
+                        4: new Vector3(-1, 0, 0),  // left
+                        5: new Vector3(0, 1, 0),   // top
+                        6: new Vector3(0, -1, 0),  // bottom
                     };
                     const rotationFor = (value) => {
                         const normal = faceNormals[value] || faceNormals[1];
-                        return new Quaternion().setFromUnitVectors(normal, new Vector3(0, 1, 0));
+                        // Rotate chosen face normal to face the camera (0,0,1), then apply base tilt.
+                        return new Quaternion().setFromUnitVectors(normal, new Vector3(0, 0, 1));
                     };
 
                     const activeAnims = new Map();
                     let rolling = false;
                     let pendingVals = [1, 2];
+                    const randFace = () => {
+                        if (window.crypto && window.crypto.getRandomValues) {
+                            const buf = new Uint32Array(1);
+                            window.crypto.getRandomValues(buf);
+                            return (buf[0] % 6) + 1;
+                        }
+                        return Math.floor(Math.random() * 6) + 1;
+                    };
 
                     const resize = () => {
                         const rect = container.getBoundingClientRect();
@@ -1606,8 +1615,8 @@
                         rollBtn.disabled = true;
                         if (resultEl) resultEl.textContent = '…';
                         if (sumEl) sumEl.textContent = '…';
-                        const a = Math.floor(Math.random() * 6) + 1;
-                        const b = Math.floor(Math.random() * 6) + 1;
+                        const a = randFace();
+                        const b = randFace();
                         pendingVals = [a, b];
                         launchRoll(dieA, a);
                         launchRoll(dieB, b);
