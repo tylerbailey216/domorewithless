@@ -2900,9 +2900,9 @@ body.theme-light .coin-fallback {
 }
 .wheel-pointer {
     position: absolute;
-    top: 8px;
+    bottom: 8px;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) rotate(180deg);
     width: 0;
     height: 0;
     border-left: 10px solid transparent;
