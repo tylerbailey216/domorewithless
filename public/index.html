@@ -242,35 +242,49 @@
             <div style="display:flex; flex-direction:column; gap:8px;">
                 <label style="font-weight:600; color:var(--text-muted);">Zone A</label>
                 <select id="tzA" aria-label="Time zone A">
-                    <option value="UTC">UTC</option>
-                    <option value="America/New_York">America/New_York</option>
-                    <option value="America/Chicago">America/Chicago</option>
-                    <option value="America/Denver">America/Denver</option>
-                    <option value="America/Los_Angeles">America/Los_Angeles</option>
-                    <option value="America/Phoenix">America/Phoenix</option>
-                    <option value="Europe/London">Europe/London</option>
-                    <option value="Europe/Paris">Europe/Paris</option>
-                    <option value="Europe/Berlin">Europe/Berlin</option>
-                    <option value="Asia/Kolkata">Asia/Kolkata</option>
-                    <option value="Asia/Singapore">Asia/Singapore</option>
-                    <option value="Asia/Tokyo">Asia/Tokyo</option>
-                    <option value="Australia/Sydney">Australia/Sydney</option>
+                    <option value="UTC">UTC — Coordinated Universal Time</option>
+                    <option value="America/New_York">ET — Eastern Time (America/New_York)</option>
+                    <option value="America/Chicago">CT — Central Time (America/Chicago)</option>
+                    <option value="America/Denver">MT — Mountain Time (America/Denver)</option>
+                    <option value="America/Los_Angeles">PT — Pacific Time (America/Los_Angeles)</option>
+                    <option value="America/Phoenix">MT (no DST) — America/Phoenix</option>
+                    <option value="America/Toronto">ET — Toronto</option>
+                    <option value="America/Vancouver">PT — Vancouver</option>
+                    <option value="Pacific/Honolulu">HST — Hawaii (Pacific/Honolulu)</option>
+                    <option value="Europe/London">GMT/BST — London</option>
+                    <option value="Europe/Paris">CET/CEST — Paris</option>
+                    <option value="Europe/Berlin">CET/CEST — Berlin</option>
+                    <option value="Europe/Moscow">MSK — Moscow</option>
+                    <option value="Asia/Kolkata">IST — India (Asia/Kolkata)</option>
+                    <option value="Asia/Singapore">SGT — Singapore</option>
+                    <option value="Asia/Shanghai">CST — China (Asia/Shanghai)</option>
+                    <option value="Asia/Tokyo">JST — Japan (Asia/Tokyo)</option>
+                    <option value="Australia/Sydney">AEST/AEDT — Sydney</option>
+                    <option value="Australia/Perth">AWST — Perth</option>
+                    <option value="Pacific/Auckland">NZST/NZDT — Auckland</option>
                 </select>
                 <label style="font-weight:600; color:var(--text-muted);">Zone B</label>
                 <select id="tzB" aria-label="Time zone B">
-                    <option value="UTC">UTC</option>
-                    <option value="America/New_York">America/New_York</option>
-                    <option value="America/Chicago">America/Chicago</option>
-                    <option value="America/Denver">America/Denver</option>
-                    <option value="America/Los_Angeles">America/Los_Angeles</option>
-                    <option value="America/Phoenix">America/Phoenix</option>
-                    <option value="Europe/London">Europe/London</option>
-                    <option value="Europe/Paris">Europe/Paris</option>
-                    <option value="Europe/Berlin">Europe/Berlin</option>
-                    <option value="Asia/Kolkata">Asia/Kolkata</option>
-                    <option value="Asia/Singapore">Asia/Singapore</option>
-                    <option value="Asia/Tokyo">Asia/Tokyo</option>
-                    <option value="Australia/Sydney">Australia/Sydney</option>
+                    <option value="UTC">UTC — Coordinated Universal Time</option>
+                    <option value="America/New_York">ET — Eastern Time (America/New_York)</option>
+                    <option value="America/Chicago">CT — Central Time (America/Chicago)</option>
+                    <option value="America/Denver">MT — Mountain Time (America/Denver)</option>
+                    <option value="America/Los_Angeles">PT — Pacific Time (America/Los_Angeles)</option>
+                    <option value="America/Phoenix">MT (no DST) — America/Phoenix</option>
+                    <option value="America/Toronto">ET — Toronto</option>
+                    <option value="America/Vancouver">PT — Vancouver</option>
+                    <option value="Pacific/Honolulu">HST — Hawaii (Pacific/Honolulu)</option>
+                    <option value="Europe/London">GMT/BST — London</option>
+                    <option value="Europe/Paris">CET/CEST — Paris</option>
+                    <option value="Europe/Berlin">CET/CEST — Berlin</option>
+                    <option value="Europe/Moscow">MSK — Moscow</option>
+                    <option value="Asia/Kolkata">IST — India (Asia/Kolkata)</option>
+                    <option value="Asia/Singapore">SGT — Singapore</option>
+                    <option value="Asia/Shanghai">CST — China (Asia/Shanghai)</option>
+                    <option value="Asia/Tokyo">JST — Japan (Asia/Tokyo)</option>
+                    <option value="Australia/Sydney">AEST/AEDT — Sydney</option>
+                    <option value="Australia/Perth">AWST — Perth</option>
+                    <option value="Pacific/Auckland">NZST/NZDT — Auckland</option>
                 </select>
             </div>
             <div id="tzOutput" class="node-summary">Enter IANA zones to compare.</div>
@@ -1615,14 +1629,18 @@
                 }
             };
             const updateTZ = () => {
-                const a = tzA?.value.trim();
-                const b = tzB?.value.trim();
+                const aSel = tzA?.selectedOptions?.[0];
+                const bSel = tzB?.selectedOptions?.[0];
+                const a = aSel?.value?.trim();
+                const b = bSel?.value?.trim();
+                const aLabel = aSel?.textContent || a || '';
+                const bLabel = bSel?.textContent || b || '';
                 const fa = a ? formatZone(a) : null;
                 const fb = b ? formatZone(b) : null;
                 if (fa && fb) {
-                    tzOutput.textContent = `${a}: ${fa} | ${b}: ${fb}`;
+                    tzOutput.innerHTML = `<div><strong>Zone A:</strong> ${aLabel}<br>${fa}</div><div style="margin-top:6px;"><strong>Zone B:</strong> ${bLabel}<br>${fb}</div>`;
                 } else {
-                    tzOutput.textContent = 'Enter IANA time zones (e.g., America/New_York, Europe/London).';
+                    tzOutput.textContent = 'Pick two zones to see their current local times.';
                 }
             };
             tzA?.addEventListener('change', updateTZ);
