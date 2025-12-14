@@ -1780,7 +1780,6 @@
                         const tryNext = (idx) => {
                             if (idx >= paths.length) return resolve(null);
                             const img = new Image();
-                            img.crossOrigin = 'anonymous';
                             img.onload = () => {
                                 const tex = new THREE.Texture(img);
                                 tex.anisotropy = renderer.capabilities.getMaxAnisotropy?.() || 1;
@@ -1798,7 +1797,9 @@
                                 tryNext(idx + 1);
                             };
                             // cache-bust to dodge stale responses
-                            img.src = `${paths[idx]}?v=${Date.now()}`;
+                            const url = new URL(paths[idx], window.location.href);
+                            url.searchParams.set('v', Date.now());
+                            img.src = url.toString();
                         };
                         tryNext(0);
                     });
