@@ -1620,6 +1620,28 @@
                         requestAnimationFrame(renderLoop);
                         const now = performance.now();
                         const delta = clock.getDelta();
+                        const cameraForward = new Vector3(0, 0, 1);
+                        const faceNormals = {
+                            1: new Vector3(0, 0, 1),   // +Z
+                            2: new Vector3(0, 0, -1),  // -Z
+                            3: new Vector3(-1, 0, 0),  // -X (right face texture)
+                            4: new Vector3(1, 0, 0),   // +X
+                            5: new Vector3(0, 1, 0),   // +Y
+                            6: new Vector3(0, -1, 0),  // -Y
+                        };
+                        const valueFromQuat = (quat) => {
+                            let bestVal = 1;
+                            let bestDot = -Infinity;
+                            Object.entries(faceNormals).forEach(([val, normal]) => {
+                                const worldNormal = normal.clone().applyQuaternion(quat);
+                                const d = worldNormal.dot(cameraForward);
+                                if (d > bestDot) {
+                                    bestDot = d;
+                                    bestVal = Number(val);
+                                }
+                            });
+                            return bestVal;
+                        };
                         activeAnims.forEach((anim, key) => {
                             const { mesh, start, finalQuat, spinAxis, spinSpeed } = anim;
                             const elapsed = now - start;
@@ -1640,8 +1662,10 @@
                         if (rolling && activeAnims.size === 0) {
                             rolling = false;
                             rollBtn.disabled = false;
-                            if (resultEl) resultEl.textContent = `${pendingVals[0]} / ${pendingVals[1]}`;
-                            if (sumEl) sumEl.textContent = String(pendingVals[0] + pendingVals[1]);
+                            const shownA = valueFromQuat(dieA.quaternion);
+                            const shownB = valueFromQuat(dieB.quaternion);
+                            if (resultEl) resultEl.textContent = `${shownA} / ${shownB}`;
+                            if (sumEl) sumEl.textContent = String(shownA + shownB);
                         }
                     };
                     renderLoop();
