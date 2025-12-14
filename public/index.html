@@ -1741,7 +1741,6 @@
                         MeshStandardMaterial,
                         CylinderGeometry,
                         Mesh,
-                        TextureLoader,
                         Color,
                         Clock,
                         Quaternion,
@@ -1777,27 +1776,33 @@
                     rim.position.set(-6, -4, -6);
                     scene.add(rim);
 
-                    const loader = new TextureLoader();
-                    const loadTex = (url) => new Promise((resolve) => {
-                        loader.load(
-                            url,
-                            (tex) => {
+                    const loadImageTexture = (paths) => new Promise((resolve) => {
+                        const tryNext = (idx) => {
+                            if (idx >= paths.length) return resolve(null);
+                            const img = new Image();
+                            img.crossOrigin = 'anonymous';
+                            img.onload = () => {
+                                const tex = new THREE.Texture(img);
                                 tex.anisotropy = renderer.capabilities.getMaxAnisotropy?.() || 1;
                                 if (THREE.SRGBColorSpace) tex.colorSpace = THREE.SRGBColorSpace;
                                 else tex.encoding = THREE.sRGBEncoding || tex.encoding;
                                 tex.flipY = false;
                                 tex.needsUpdate = true;
                                 resolve(tex);
-                            },
-                            undefined,
-                            (err) => {
-                                console.error('Failed to load texture', url, err);
-                                resolve(null);
-                            }
-                        );
+                            };
+                            img.onerror = () => {
+                                console.warn('Coin texture load failed for', paths[idx]);
+                                tryNext(idx + 1);
+                            };
+                            // cache-bust to dodge stale responses
+                            img.src = `${paths[idx]}?v=${Date.now()}`;
+                        };
+                        tryNext(0);
                     });
-                    const headsTex = await loadTex('/heads.png');
-                    const tailsTex = await loadTex('/tails.png');
+                    const candidatePaths = ['heads.png', './heads.png', '/heads.png', './public/heads.png'];
+                    const candidatePathsTails = ['tails.png', './tails.png', '/tails.png', './public/tails.png'];
+                    const headsTex = await loadImageTexture(candidatePaths);
+                    const tailsTex = await loadImageTexture(candidatePathsTails);
                     if (!headsTex || !tailsTex) {
                         if (resultEl) resultEl.textContent = 'Image load failed';
                         flipBtn?.setAttribute('disabled', 'true');
