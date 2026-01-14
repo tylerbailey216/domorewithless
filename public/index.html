@@ -537,6 +537,22 @@
             </div>
         </section>
 
+        <section class="tree-card" id="visit-counter">
+            <div class="tree-header">
+                <div>
+                    <p class="node-path">Counter</p>
+                    <h2>Site visits</h2>
+                    <p class="node-summary">Public, global count of visits to this page.</p>
+                </div>
+            </div>
+            <div class="node-body">
+                <div class="counter-shell">
+                    <div class="counter-display" id="visitCounter">—</div>
+                </div>
+                <div class="node-summary counter-note">Counts page views only. No personal data stored.</div>
+            </div>
+        </section>
+
         <section class="privacy-note" id="privacy">
             Privacy: We don't collect personal data. This tool runs locally in your browser; no analytics or telemetry are sent.
         </section>
@@ -2217,6 +2233,24 @@
                 };
                 reader.readAsDataURL(file);
             });
+
+            // Global visit counter
+            const visitCounter = document.getElementById('visitCounter');
+            const updateVisitCounter = async () => {
+                if (!visitCounter) return;
+                try {
+                    const res = await fetch('https://api.countapi.xyz/hit/domorewithless/site-visits');
+                    const data = await res.json();
+                    if (data && typeof data.value === 'number') {
+                        visitCounter.textContent = data.value.toLocaleString('en-US');
+                    } else {
+                        visitCounter.textContent = '—';
+                    }
+                } catch (err) {
+                    visitCounter.textContent = '—';
+                }
+            };
+            updateVisitCounter();
         })();
 
     </script>
