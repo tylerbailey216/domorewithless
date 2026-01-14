@@ -2239,7 +2239,9 @@
             const updateVisitCounter = async () => {
                 if (!visitCounter) return;
                 try {
-                    const res = await fetch('https://api.countapi.xyz/hit/domorewithless/site-visits');
+                    const res = await fetch('https://api.countapi.xyz/update/domorewithless/site-visits?amount=1', {
+                        cache: 'no-store',
+                    });
                     const data = await res.json();
                     if (data && typeof data.value === 'number') {
                         visitCounter.textContent = data.value.toLocaleString('en-US');
