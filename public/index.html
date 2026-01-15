@@ -547,7 +547,9 @@
             </div>
             <div class="node-body">
                 <div class="counter-shell">
-                    <div class="counter-display" id="visitCounter">—</div>
+                    <div class="counter-display">
+                        <span class="counter-digits" id="visitCounter">0000000000</span>
+                    </div>
                 </div>
                 <div class="node-summary counter-note">Counts page views only. No personal data stored.</div>
             </div>
@@ -2239,17 +2241,18 @@
             const updateVisitCounter = async () => {
                 if (!visitCounter) return;
                 try {
-                    const res = await fetch('https://api.countapi.xyz/update/domorewithless/site-visits?amount=1', {
+                    const res = await fetch('https://api.counterapi.dev/v1/domorewithless/visits/up', {
                         cache: 'no-store',
                     });
                     const data = await res.json();
-                    if (data && typeof data.value === 'number') {
-                        visitCounter.textContent = data.value.toLocaleString('en-US');
+                    if (data && typeof data.count === 'number') {
+                        const padded = String(data.count).padStart(10, '0');
+                        visitCounter.textContent = padded;
                     } else {
-                        visitCounter.textContent = '—';
+                        visitCounter.textContent = '0000000000';
                     }
                 } catch (err) {
-                    visitCounter.textContent = '—';
+                    visitCounter.textContent = '0000000000';
                 }
             };
             updateVisitCounter();
