@@ -479,10 +479,26 @@
                 apply();
             });
 
+            const trackToolOpen = (targetSelector) => {
+                if (!targetSelector || !targetSelector.startsWith('#tool-')) {
+                    return;
+                }
+                const toolKey = targetSelector.slice('#tool-'.length).trim().toLowerCase();
+                if (!toolKey) {
+                    return;
+                }
+                fetch(`https://api.counterapi.dev/v1/domorewithless-tools/${encodeURIComponent(toolKey)}/up`, {
+                    cache: 'no-store',
+                    keepalive: true,
+                }).catch(() => {});
+            };
+
             const scrollButtons = document.querySelectorAll('[data-target]');
             scrollButtons.forEach((btn) => {
                 btn.addEventListener('click', () => {
-                    const target = document.querySelector(btn.getAttribute('data-target'));
+                    const targetSelector = btn.getAttribute('data-target');
+                    trackToolOpen(targetSelector);
+                    const target = document.querySelector(targetSelector);
                     if (target) {
                         target.classList.add('pulse');
                         target.scrollIntoView({ behavior: 'smooth', block: 'start' });
