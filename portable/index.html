@@ -479,6 +479,355 @@
                 apply();
             });
 
+            const DMWL_METRICS_CONFIG = {
+                ga4MeasurementId: String(window.DMWL_METRICS_CONFIG?.ga4MeasurementId || '').trim(),
+                clarityProjectId: String(window.DMWL_METRICS_CONFIG?.clarityProjectId || '').trim(),
+                cloudflareBeaconToken: String(window.DMWL_METRICS_CONFIG?.cloudflareBeaconToken || '').trim(),
+                googleSiteVerification: String(window.DMWL_METRICS_CONFIG?.googleSiteVerification || '').trim(),
+            };
+
+            const injectScript = (src, attrs = {}) => {
+                if (!src || document.querySelector(`script[src="${src}"]`)) return;
+                const script = document.createElement('script');
+                script.src = src;
+                Object.entries(attrs).forEach(([k, v]) => script.setAttribute(k, String(v)));
+                document.head.appendChild(script);
+            };
+
+            const initExternalMetricsProviders = () => {
+                if (DMWL_METRICS_CONFIG.googleSiteVerification) {
+                    const existing = document.querySelector('meta[name="google-site-verification"]');
+                    if (!existing) {
+                        const meta = document.createElement('meta');
+                        meta.name = 'google-site-verification';
+                        meta.content = DMWL_METRICS_CONFIG.googleSiteVerification;
+                        document.head.appendChild(meta);
+                    }
+                }
+
+                if (DMWL_METRICS_CONFIG.ga4MeasurementId) {
+                    window.dataLayer = window.dataLayer || [];
+                    window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+                    window.gtag('js', new Date());
+                    window.gtag('config', DMWL_METRICS_CONFIG.ga4MeasurementId, {
+                        anonymize_ip: true,
+                        send_page_view: true,
+                    });
+                    injectScript(`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(DMWL_METRICS_CONFIG.ga4MeasurementId)}`, { async: 'true' });
+                }
+
+                if (DMWL_METRICS_CONFIG.clarityProjectId && !window.clarity) {
+                    (function (c, l, a, r, i, t, y) {
+                        c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
+                        t = l.createElement(r);
+                        t.async = 1;
+                        t.src = `https://www.clarity.ms/tag/${i}`;
+                        y = l.getElementsByTagName(r)[0];
+                        y.parentNode.insertBefore(t, y);
+                    })(window, document, 'clarity', 'script', DMWL_METRICS_CONFIG.clarityProjectId);
+                }
+
+                if (DMWL_METRICS_CONFIG.cloudflareBeaconToken) {
+                    injectScript('https://static.cloudflareinsights.com/beacon.min.js', {
+                        defer: 'true',
+                        'data-cf-beacon': JSON.stringify({ token: DMWL_METRICS_CONFIG.cloudflareBeaconToken }),
+                    });
+                }
+            };
+            initExternalMetricsProviders();
+
+            const COUNTERAPI_NAMESPACES = {
+                toolOpens: 'domorewithless-tools',
+                toolEvents: 'domorewithless-tool-events',
+                devices: 'domorewithless-devices',
+            };
+
+            const counterApiIncrement = (namespace, key) => {
+                if (!namespace || !key) return;
+                fetch(`https://api.counterapi.dev/v1/${encodeURIComponent(namespace)}/${encodeURIComponent(key)}/up`, {
+                    cache: 'no-store',
+                    keepalive: true,
+                }).catch(() => {});
+            };
+
+            const detectDeviceClass = () => {
+                const ua = String(navigator.userAgent || '').toLowerCase();
+                if (/ipad|tablet|playbook|silk/.test(ua) || (/android/.test(ua) && !/mobile/.test(ua))) return 'tablet';
+                if (/mobi|iphone|ipod|android/.test(ua)) return 'mobile';
+                return 'desktop';
+            };
+
+            const metricsProviderEvent = (eventName, params = {}) => {
+                const safeParams = {};
+                for (const [key, value] of Object.entries(params)) {
+                    if (value == null) continue;
+                    if (['tool_key', 'event_source', 'button_id', 'device_class', 'outcome'].includes(key)) {
+                        safeParams[key] = String(value).slice(0, 64);
+                    } else if (typeof value === 'number' && Number.isFinite(value)) {
+                        safeParams[key] = value;
+                    }
+                }
+                if (typeof window.gtag === 'function') {
+                    try { window.gtag('event', eventName, safeParams); } catch (_) {}
+                }
+                if (typeof window.clarity === 'function') {
+                    try { window.clarity('event', `dmwl_${eventName}`); } catch (_) {}
+                }
+            };
+
+            const TOOL_RUN_BUTTONS = {
+                pdfProcess: 'pdf',
+                imageProcess: 'image',
+                linkMake: 'links',
+                sigBuild: 'signature',
+                qrMake: 'qr',
+                secEncrypt: 'secure',
+                secDecrypt: 'secure',
+                exifStrip: 'exif',
+                urlCheck: 'url',
+                recBuild: 'receipt',
+                wmApply: 'watermark',
+                pomoStart: 'timers',
+                swStart: 'timers',
+                rand3dRollBtn: 'random',
+                coinFlipBtn: 'random',
+                wheelSpinBtn: 'random',
+                loginCheck: 'login',
+                meetStart: 'countdown',
+            };
+
+            const TOOL_RESULT_SELECTORS = {
+                pdf: ['#pdfOutput', '#pdfDownload', '#pdfDownloadBtn'],
+                image: ['#imageInfo', '#imageDownload'],
+                links: ['#linkOutput', '#qrImage'],
+                signature: ['#sigPreview', '#sigDownload'],
+                qr: ['#qrOut'],
+                secure: ['#secCipher'],
+                exif: ['#exifInfo', '#exifDownload'],
+                url: ['#urlResult'],
+                receipt: ['#recOut'],
+                watermark: ['#wmInfo', '#wmDownload'],
+                timers: ['#pomoStatus', '#swStatus', '#timerHeroLabel'],
+                random: ['#coinResult', '#wheelResult'],
+                login: ['#loginResult'],
+                countdown: ['#meetTarget', '#meetStatus', '#meetHeroLabel'],
+            };
+
+            const toolMetricState = new Map();
+            const getToolMetricState = (toolKey) => {
+                if (!toolMetricState.has(toolKey)) {
+                    toolMetricState.set(toolKey, {
+                        opened: false,
+                        completed: false,
+                        dropoffSent: false,
+                        runSeq: 0,
+                        resultRecordedForRun: 0,
+                    });
+                }
+                return toolMetricState.get(toolKey);
+            };
+
+            const markToolOpen = (toolKey) => {
+                const state = getToolMetricState(toolKey);
+                state.opened = true;
+                state.completed = false;
+                state.dropoffSent = false;
+                state.lastOpenAt = Date.now();
+                counterApiIncrement(COUNTERAPI_NAMESPACES.toolOpens, toolKey);
+                metricsProviderEvent('tool_open', { tool_key: toolKey, event_source: 'scroll_button' });
+            };
+
+            const markToolRun = (toolKey, buttonId) => {
+                const state = getToolMetricState(toolKey);
+                state.opened = true;
+                state.completed = false;
+                state.dropoffSent = false;
+                state.runSeq = (state.runSeq || 0) + 1;
+                state.lastRunAt = Date.now();
+                counterApiIncrement(COUNTERAPI_NAMESPACES.toolEvents, `${toolKey}--run`);
+                metricsProviderEvent('tool_run', { tool_key: toolKey, button_id: buttonId || '', event_source: 'tool_button' });
+                return state.runSeq;
+            };
+
+            const markToolOutcome = (toolKey, outcome) => {
+                const state = getToolMetricState(toolKey);
+                if (outcome === 'success') {
+                    state.completed = true;
+                    state.dropoffSent = false;
+                    state.lastSuccessAt = Date.now();
+                    counterApiIncrement(COUNTERAPI_NAMESPACES.toolEvents, `${toolKey}--success`);
+                    metricsProviderEvent('tool_success', { tool_key: toolKey, outcome: 'success' });
+                    return;
+                }
+                if (outcome === 'error') {
+                    state.lastErrorAt = Date.now();
+                    counterApiIncrement(COUNTERAPI_NAMESPACES.toolEvents, `${toolKey}--error`);
+                    metricsProviderEvent('tool_error', { tool_key: toolKey, outcome: 'error' });
+                }
+            };
+
+            const countDeviceOncePerSession = () => {
+                try {
+                    const key = 'dmwl-device-counted-v2';
+                    if (sessionStorage.getItem(key)) return;
+                    const deviceClass = detectDeviceClass();
+                    counterApiIncrement(COUNTERAPI_NAMESPACES.devices, deviceClass);
+                    metricsProviderEvent('session_start', { device_class: deviceClass });
+                    sessionStorage.setItem(key, String(Date.now()));
+                } catch (_) {
+                    // Ignore storage availability issues.
+                }
+            };
+            countDeviceOncePerSession();
+
+            const getToolSignalFingerprint = (toolKey) => {
+                const selectors = TOOL_RESULT_SELECTORS[toolKey] || [];
+                if (!selectors.length) return '';
+                const card = document.getElementById(`tool-${toolKey}`);
+                if (!card) return '';
+                const parts = [];
+                selectors.forEach((selector) => {
+                    const el = card.querySelector(selector) || document.querySelector(selector);
+                    if (!el) return;
+                    if (el instanceof HTMLImageElement) {
+                        parts.push(`img:${el.id}:${el.src || ''}:${el.style?.display || ''}`);
+                        return;
+                    }
+                    if (el instanceof HTMLAnchorElement) {
+                        parts.push(`a:${el.id}:${el.href || ''}:${el.style?.display || ''}:${el.hasAttribute('download')}`);
+                        return;
+                    }
+                    if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
+                        parts.push(`field:${el.id}:${(el.value || '').trim()}`);
+                        return;
+                    }
+                    parts.push(`node:${el.id}:${(el.textContent || '').trim()}`);
+                });
+                return parts.join('|');
+            };
+
+            const classifyToolOutcomeFromDom = (toolKey) => {
+                const card = document.getElementById(`tool-${toolKey}`);
+                if (!card) return null;
+                const selectors = TOOL_RESULT_SELECTORS[toolKey] || [];
+                if (!selectors.length) return null;
+
+                let sawSuccess = false;
+                let sawError = false;
+                const errorPattern = /\b(error|failed|invalid|not valid|unable|unavailable|retry|choose\b|enter\b|no supported|read failed)\b/i;
+                const neutralPattern = /\b(ready|idle|stopwatch|no date set|no meeting selected|not set|pick two zones)\b/i;
+
+                selectors.forEach((selector) => {
+                    const el = card.querySelector(selector) || document.querySelector(selector);
+                    if (!el) return;
+
+                    if (el instanceof HTMLImageElement) {
+                        const visible = (el.style.display || '').toLowerCase() !== 'none';
+                        if (visible && el.src) sawSuccess = true;
+                        return;
+                    }
+
+                    if (el instanceof HTMLAnchorElement) {
+                        const visible = (el.style.display || '').toLowerCase() !== 'none';
+                        if (visible && el.href) sawSuccess = true;
+                        return;
+                    }
+
+                    if (el instanceof HTMLButtonElement) {
+                        if (!el.disabled) sawSuccess = true;
+                        return;
+                    }
+
+                    const raw = el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement
+                        ? (el.value || '')
+                        : (el.textContent || '');
+                    const text = raw.trim();
+                    if (!text) return;
+
+                    if (errorPattern.test(text)) {
+                        sawError = true;
+                        return;
+                    }
+                    if (!neutralPattern.test(text)) {
+                        sawSuccess = true;
+                    }
+                });
+
+                if (sawSuccess) return 'success';
+                if (sawError) return 'error';
+                return null;
+            };
+
+            const scheduleToolOutcomeProbe = (toolKey, runSeq, baselineFingerprint) => {
+                const probe = () => {
+                    const state = getToolMetricState(toolKey);
+                    if ((state.runSeq || 0) !== runSeq || (state.resultRecordedForRun || 0) >= runSeq) return;
+                    const fingerprint = getToolSignalFingerprint(toolKey);
+                    if (fingerprint === baselineFingerprint) return;
+                    const outcome = classifyToolOutcomeFromDom(toolKey);
+                    if (!outcome) return;
+                    state.resultRecordedForRun = runSeq;
+                    markToolOutcome(toolKey, outcome);
+                };
+                setTimeout(probe, 200);
+                setTimeout(probe, 1200);
+            };
+
+            const emitDropoffCounters = () => {
+                toolMetricState.forEach((state, toolKey) => {
+                    if (!state || !state.opened || state.completed || state.dropoffSent) return;
+                    state.dropoffSent = true;
+                    counterApiIncrement(COUNTERAPI_NAMESPACES.toolEvents, `${toolKey}--dropoff`);
+                    metricsProviderEvent('tool_dropoff', { tool_key: toolKey, outcome: 'dropoff' });
+                });
+            };
+            window.addEventListener('pagehide', emitDropoffCounters);
+            window.addEventListener('beforeunload', emitDropoffCounters);
+
+            window.addEventListener('error', () => {
+                metricsProviderEvent('site_error', { event_source: 'window_error' });
+            });
+            window.addEventListener('unhandledrejection', () => {
+                metricsProviderEvent('site_error', { event_source: 'unhandled_rejection' });
+            });
+
+            const originalAddEventListener = EventTarget.prototype.addEventListener;
+            EventTarget.prototype.addEventListener = function (type, listener, options) {
+                if (
+                    type === 'click' &&
+                    typeof listener === 'function' &&
+                    this instanceof Element &&
+                    this.id &&
+                    TOOL_RUN_BUTTONS[this.id]
+                ) {
+                    const toolKey = TOOL_RUN_BUTTONS[this.id];
+                    const buttonId = this.id;
+                    const wrapped = function (...args) {
+                        const beforeFingerprint = getToolSignalFingerprint(toolKey);
+                        const runSeq = markToolRun(toolKey, buttonId);
+                        try {
+                            const result = listener.apply(this, args);
+                            if (result && typeof result.then === 'function') {
+                                return result.then((value) => {
+                                    scheduleToolOutcomeProbe(toolKey, runSeq, beforeFingerprint);
+                                    return value;
+                                }).catch((err) => {
+                                    markToolOutcome(toolKey, 'error');
+                                    throw err;
+                                });
+                            }
+                            scheduleToolOutcomeProbe(toolKey, runSeq, beforeFingerprint);
+                            return result;
+                        } catch (err) {
+                            markToolOutcome(toolKey, 'error');
+                            throw err;
+                        }
+                    };
+                    return originalAddEventListener.call(this, type, wrapped, options);
+                }
+                return originalAddEventListener.call(this, type, listener, options);
+            };
+
             const trackToolOpen = (targetSelector) => {
                 if (!targetSelector || !targetSelector.startsWith('#tool-')) {
                     return;
@@ -487,10 +836,7 @@
                 if (!toolKey) {
                     return;
                 }
-                fetch(`https://api.counterapi.dev/v1/domorewithless-tools/${encodeURIComponent(toolKey)}/up`, {
-                    cache: 'no-store',
-                    keepalive: true,
-                }).catch(() => {});
+                markToolOpen(toolKey);
             };
 
             const scrollButtons = document.querySelectorAll('[data-target]');
