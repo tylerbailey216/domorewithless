@@ -562,6 +562,14 @@
     </main>
     <script src="./app.js?v=tsb8"></script>
     <script>
+        window.DMWL_METRICS_CONFIG = Object.assign({
+            ga4MeasurementId: '',
+            clarityProjectId: '',
+            cloudflareBeaconToken: '',
+            googleSiteVerification: '',
+        }, window.DMWL_METRICS_CONFIG || {});
+    </script>
+    <script>
         (() => {
             // Always start at top; prevent scroll restoration
             if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
